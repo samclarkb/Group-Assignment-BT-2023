@@ -13,6 +13,13 @@ const albumSchema = new mongoose.Schema({
 	Like: Boolean,
 })
 
+const testSchema = new mongoose.Schema({
+	Name: String,
+	Email: String,
+})
+
 const Albums = mongoose.model('Albums', albumSchema, 'Albums')
+const updateTest = mongoose.model('updateTest', testSchema, 'updateTest')
 
 module.exports = Albums
+module.exports = updateTest
