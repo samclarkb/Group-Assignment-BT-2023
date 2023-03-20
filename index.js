@@ -92,6 +92,9 @@ app.get('/', (req, res) => {
 		const fetchAlbums = await Albums.find({}).sort({ _id: -1 })
 		res.render('all', { data: fetchAlbums })
 	})
+	.get('/apiTest', async (req, res) => {
+		res.render('apiTest')
+	})
 	.get('*', (req, res) => {
 		res.status(404).render('404')
 	})
@@ -145,3 +148,5 @@ app.post('/results', async (req, res) => {
 app.listen(port, () => {
 	console.log(`server running on ${port}`)
 })
+
+//Spotify API
