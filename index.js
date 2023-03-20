@@ -6,6 +6,7 @@ const dotenv = require('dotenv').config()
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const Albums = require('./models/models')
+const Users = require('./models/models')
 
 // Defining express as app
 const app = express()
