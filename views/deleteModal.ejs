@@ -1,0 +1,29 @@
+<div class="deleteModal">
+	<form class="deleteForm" action="delete<%= data[0]._id %>" method="POST">
+		<h2>Are you sure you want to delete this Album?</h2>
+		<div>
+			<label for="<%= data[0]._id %>">Yes</label>
+			<input id="<%= data[0]._id %>" name="delete" type="submit" value="<%= data[0]._id %>" />
+			<a href="/all">No</a>
+		</div>
+	</form>
+
+	<a class="albumCard" id="albumcard" href="">
+		<% if( typeof data[0].Image.data != 'undefined' ){ %>
+		<div
+			class="albumImage"
+			style="background-image: url('/images/<%= data[0].Image.data %>')"
+		></div>
+		<% } else{ %>
+		<div class="albumImage" style="background-image: url('<%= data[0].Image %>')"></div>
+		<% } %>
+		<div>
+			<p><%= data[0].Title %></p>
+			<p><%= data[0].Genre %> | <%= data[0].Year %></p>
+		</div>
+
+		<p><%= data[0].Artist %></p>
+	</a>
+
+	<%- include('partials/navigation') %>
+</div>
