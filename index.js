@@ -93,11 +93,9 @@ app.get('/', (req, res) => {
 		const fetchAlbums = await Albums.find({}).sort({ _id: -1 })
 		res.render('all', { data: fetchAlbums })
 	})
+	//registreren pagina route aangemaakt.
 	.get('/register', async (req, res) => {
 	res.render('register')
-	})
-	.get('/register-succes', async (req, res) => {
-		res.render('register-succes')
 	})
 	.get('*', (req, res) => {
 		res.status(404).render('404')
@@ -147,6 +145,8 @@ app.post('/results', async (req, res) => {
 		})
 		res.render('all', { data: fetchAlbums })
 	})
+
+	//registreren content weergeven.
 	.post('/register', (req, res) => {
 		Users.insertMany([
 			{
