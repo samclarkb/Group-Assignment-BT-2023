@@ -8,6 +8,7 @@ const mongoose = require('mongoose')
 const Albums = require('./models/models')
 const Users = require('./models/models')
 
+
 // Defining express as app
 const app = express()
 
@@ -148,13 +149,48 @@ app.post('/results', async (req, res) => {
 
 	//registreren content weergeven.
 	.post('/register', (req, res) => {
-		Users.insertMany([
-			{
-				Username: req.body.username,
-				Password: req.body.password,
-				Email: req.body.email,
+		res.render('succesAdd')
+	})
+	.post('/delete:id', async (req, res) => {
+		const deleteAlbum = await Albums.find({ _id: req.params.id }).remove()
+		const fetchAlbums = await Albums.find({}).sort({ _id: -1 })
+		res.render('all', { data: fetchAlbums })
+	})
+	.post('/all', async (req, res) => {
+		const fetchAlbums = await Albums.find({
+			$or: [
+				{ Title: req.body.search },
+				{ Artist: req.body.search },
+				{ Year: req.body.search },
+				{ Genre: req.body.search },
+			],
+		})
+		res.render('all', { data: fetchAlbums })
+	})
+
+	//registreren content weergeven.
+	.post('/register', (req, res) => {
+
+		Users.findOne({ Email: req.body.email }, function(err, result) {
+			if (err) throw err;
+
+			if (result) {
+				// doe hier iets om te melden dat het e-mailadres al in gebruik is
+			} else {
+				// als de email niet in gebruik is, voor onderstaande commando uit
+				Users.insertMany([
+					{
+						Username: req.body.username,
+						Password: req.body.password,
+						Email: req.body.email,
+						Profilepic: {data: req.body.Profilepic, contentType: 'image/png'},
+
+					}
+				]).then(() => console.log('user saved'))
 			}
-		]).then(() => console.log('user saved'))
+		})
+
+
 		res.render('register', {data: req.body.username})
 	})
 
