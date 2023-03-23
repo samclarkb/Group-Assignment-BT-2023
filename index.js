@@ -8,7 +8,7 @@ const mongoose = require('mongoose')
 const {Users, Albums} = require('./models/models')
 
 
-// Defining express as app
+// Defining express as appPPP
 const app = express()
 
 // env variables
