@@ -177,13 +177,10 @@ app.post('/results', async (req, res) => {
 						Password: req.body.password,
 						Email: req.body.email,
 						Profilepic: {data: req.file.filename, contentType: 'image/png'}
-
 					}
 				]).then(() => console.log('user saved'))
 			}
 		})
-
-
 		res.render('register-succes')
 	})
 
