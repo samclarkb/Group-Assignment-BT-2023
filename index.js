@@ -97,7 +97,11 @@ app.get('/', (req, res) => {
 	app.get('/register', async (req, res) => {
 	res.render('register')
 	})
-	.get('*', (req, res) => {
+	app.get('/register-failed', async (req, res) => {
+	res.render('register-failed')
+	}).get('/register-succes', async (req, res) => {
+	res.render('register-succes')
+})	.get('*', (req, res) => {
 		res.status(404).render('404')
 	})
 
@@ -161,12 +165,14 @@ app.post('/results', async (req, res) => {
 		})
 		res.render('all', { data: fetchAlbums })
 	})
-	app.post('/register',upload.single('Profilepic'), (req, res) => {
+	.post('/register',upload.single('Profilepic'), (req, res) => {
 		Users.findOne({ Email: req.body.email }, function(err, result) {
 			if (err) throw err;
 
 			if (result) {
 				console.log('email komt al voor')
+				res.redirect('register-failed')
+
 				// doe hier iets om te melden dat het e-mailadres al in gebruik is
 			} else {
 				// als de email niet in gebruik is, voor onderstaande commando uit
@@ -178,9 +184,10 @@ app.post('/results', async (req, res) => {
 						Profilepic: {data: req.file.filename, contentType: 'image/png'}
 					}
 				]).then(() => console.log('user saved'))
+				res.redirect('register-succes')
+
 			}
 		})
-		res.render('register-succes')
 	})
 
 
