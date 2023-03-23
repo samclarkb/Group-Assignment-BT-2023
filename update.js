@@ -46,14 +46,14 @@ app.get('/update', (req, res) => {
 
 // update email
 app.post('/update', async (req, res) => {
-		console.log('req', req.body)
+		console.log('req', req.body.newEmail)
+
+		const { email, newEmail } = req.body
 		try{
-			const current = await updateTest.find({ Email: req.body.email })
+			const email = await updateTest.find({ Email: req.body.email })
 
 			updateTest.updateOne({ Email: req.body.newEmail })
 			.then(() => console.log('email updated'))
-
-			res.render('succes')
 		}
 		catch(e){
 			console.log('error', e)
