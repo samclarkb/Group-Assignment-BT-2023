@@ -5,7 +5,7 @@ const expressLayouts = require('express-ejs-layouts')
 const dotenv = require('dotenv').config()
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
-const {Albums, updateTest} = require('./models/models')
+const {Albums, Users} = require('./models/models')
 
 // Defining express as app
 const app = express()
@@ -143,45 +143,14 @@ app.post('/results', async (req, res) => {
 		})
 		res.render('all', { data: fetchAlbums })
 	})
-	
-	.post('/update',(req, res) => {
+
+	.post('/update', async(req, res) => {
 		console.log('request', req.body)
-
-				// vind current email in database
-		updateTest.find({ Email: req.body.email }, 
-			function(err, result) {
-	if (err) throw err
-
-	if (result) {
-	// update email
-		updateTest.updateOne({ Email: req.body.newEmail }, 
-		function(err, result) {
-			if (err) throw err
-		})
-	}
-})
+		const filter = { Email: req.body.email }
+		const update = { $set: { Email: req.body.newEmail } }
+		change = await Users.findOneAndUpdate(filter,update);
 		res.render('update')
 	})
-	
-// 	app.post('/update', (req, res) => {
-
-// 		console.log(req.body)
-// 		// vind current email in database
-// 		updateTest.find({ Email: req.body.email }, 
-// 			function(err, result) {
-// 	if (err) throw err
-
-// 	if (result) {
-// 	// update email
-// 		console.log(req.body.mail)
-// 		updateTest.updateOne({ Email: req.body.newEmail }, 
-// 		function(err, result) {
-// 			if (err) throw err
-// 			console.log(result)
-// 		})
-// 	}
-// })
-// })
 
 // Making sure the application is running on the port I defined in the env file
 app.listen(port, () => {
