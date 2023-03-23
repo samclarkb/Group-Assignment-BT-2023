@@ -21,5 +21,5 @@ const testSchema = new mongoose.Schema({
 const Albums = mongoose.model('Albums', albumSchema, 'Albums')
 const updateTest = mongoose.model('updateTest', testSchema, 'updateTest')
 
-module.exports = Albums
-module.exports = updateTest
+module.exports.Albums = Albums
+module.exports.updateTest = updateTest

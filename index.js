@@ -5,8 +5,7 @@ const expressLayouts = require('express-ejs-layouts')
 const dotenv = require('dotenv').config()
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
-const Albums = require('./models/models')
-const updateTest = require('./models/models')
+const {Albums, updateTest} = require('./models/models')
 
 // Defining express as app
 const app = express()
@@ -146,16 +145,19 @@ app.post('/results', async (req, res) => {
 	})
 	
 	.post('/update',(req, res) => {
-		console.log(req.body)
+		console.log('request', req.body)
 
 				// vind current email in database
-		Users.find({ Email: req.body.email }, 
+		updateTest.find({ Email: req.body.email }, 
 			function(err, result) {
 	if (err) throw err
 
 	if (result) {
 	// update email
-		Users.updateOne({ Email: req.body.newEmail })
+		updateTest.updateOne({ Email: req.body.newEmail }, 
+		function(err, result) {
+			if (err) throw err
+		})
 	}
 })
 		res.render('update')
@@ -185,5 +187,4 @@ app.post('/results', async (req, res) => {
 app.listen(port, () => {
 	console.log(`server running on ${port}`)
 })
-
 
