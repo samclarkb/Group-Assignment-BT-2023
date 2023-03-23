@@ -45,20 +45,24 @@ app.get('/update', (req, res) => {
 	})
 
 // update email
-app.post('/update', async (req, res) => {
-		console.log('req', req.body.newEmail)
+app.post('/update', (req, res) => {
+	// vind current email in database
+	updateTest.find({ Email: req.body.email }, 
+	function(err, result) {
+		if (err) throw err
 
-		const { email, newEmail } = req.body
-		try{
-			const email = await updateTest.find({ Email: req.body.email })
-
-			updateTest.updateOne({ Email: req.body.newEmail })
-			.then(() => console.log('email updated'))
-		}
-		catch(e){
-			console.log('error', e)
+		if (result) {
+		// update email
+			console.log(req.body.mail)
+			updateTest.updateOne({ Email: req.body.newEmail }, 
+			function(err, result) {
+				if (err) throw err
+				console.log(result)
+			})
 		}
 	})
+})
+
 // Making sure the application is running on the port I defined in the env file
 app.listen(3333, () => {
 	console.log(`server running on 3333`)

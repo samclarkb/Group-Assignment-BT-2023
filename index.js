@@ -6,6 +6,7 @@ const dotenv = require('dotenv').config()
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const Albums = require('./models/models')
+const updateTest = require('./models/models')
 
 // Defining express as app
 const app = express()
@@ -92,6 +93,9 @@ app.get('/', (req, res) => {
 		const fetchAlbums = await Albums.find({}).sort({ _id: -1 })
 		res.render('all', { data: fetchAlbums })
 	})
+	.get('/update', (req, res) => {
+		res.render('update')
+		})
 	.get('*', (req, res) => {
 		res.status(404).render('404')
 	})
@@ -139,9 +143,50 @@ app.post('/results', async (req, res) => {
 			],
 		})
 		res.render('all', { data: fetchAlbums })
+	}).post('/update',(req, res) => {
+		console.log('request', req.body)
+
+				// vind current email in database
+		updateTest.find({ Email: req.body.email }, 
+			function(err, result) {
+	if (err) throw err
+
+	if (result) {
+	// update email
+		console.log(req.body.mail)
+		updateTest.updateOne({ Email: req.body.newEmail }, 
+		function(err, result) {
+			if (err) throw err
+			console.log(result)
+		})
+	}
+})
+		res.render('update')
 	})
+	
+// 	app.post('/update', (req, res) => {
+
+// 		console.log(req.body)
+// 		// vind current email in database
+// 		updateTest.find({ Email: req.body.email }, 
+// 			function(err, result) {
+// 	if (err) throw err
+
+// 	if (result) {
+// 	// update email
+// 		console.log(req.body.mail)
+// 		updateTest.updateOne({ Email: req.body.newEmail }, 
+// 		function(err, result) {
+// 			if (err) throw err
+// 			console.log(result)
+// 		})
+// 	}
+// })
+// })
 
 // Making sure the application is running on the port I defined in the env file
 app.listen(port, () => {
 	console.log(`server running on ${port}`)
 })
+
+

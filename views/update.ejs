@@ -1,16 +1,16 @@
 <div>
 	<%- include('partials/header', {title: 'Edit Email'}) %>
 	<div class="addForm">
-		<form action="/update" method="POST" enctype="multipart/form-data" key="File">
+		<form action="/update" method="POST"  >
 			<div class="formText">
 				<label for="email"><h2>Current Email:</h2></label>
-				<input id="email" type="text" name="email" required />
+				<input id="email" type="email" name="email"  required />
 			</div>
 			<div class="formText">
 				<label for="newEmail"><h2>New Email:</h2></label>
-				<input id="newEmail" type="text" name="newEmail" required />
+				<input id="newEmail" type="email" name="newEmail" required />
 			</div>
-            <button type="submit"> Update Email </button>
+            <input type="submit" value="Update Email" /> 
         </form>
 	</div>
 	<%- include('partials/navigation') %>
