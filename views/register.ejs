@@ -1,5 +1,5 @@
 
-<form method='post' action="/register" class="formLogin">
+<form method='POST' action="/register" class="formLogin" enctype="multipart/form-data" key="Profilepic">
     <label for="username"> Username:</label><br>
     <input type="text" id="username" name="username"  required><br>
     <label for="password">Password:</label><br>
@@ -7,10 +7,10 @@
     <label for="email">E-mail:</label><br>
     <input type="email" id="email" name="email" required><br><br>
 
-    <div class="formLogin">
+    <div class="formLogin" >
         <label for="email">Upload your profile picture: </label><br>
-        <input id="Profilepic" type="File" name="Profilepic" required />
-        <label for="Profilepic"><img src="../images/plus.png" alt="" /></label>
+        <input id="Profilepic" type="File" name="Profilepic"/>
+        <label for="Profilepic"><img src="../images/plus.png" alt="add" /></label>
     </div>
 
     <input type="submit" value="Registreren">

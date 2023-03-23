@@ -95,7 +95,7 @@ app.get('/', (req, res) => {
 		res.render('all', { data: fetchAlbums })
 	})
 	//registreren pagina route aangemaakt.
-	.get('/register', async (req, res) => {
+	app.get('/register', async (req, res) => {
 	res.render('register')
 	})
 	.get('*', (req, res) => {
@@ -146,11 +146,6 @@ app.post('/results', async (req, res) => {
 		})
 		res.render('all', { data: fetchAlbums })
 	})
-
-	//registreren content weergeven.
-	.post('/register', (req, res) => {
-		res.render('succesAdd')
-	})
 	.post('/delete:id', async (req, res) => {
 		const deleteAlbum = await Albums.find({ _id: req.params.id }).remove()
 		const fetchAlbums = await Albums.find({}).sort({ _id: -1 })
@@ -167,14 +162,12 @@ app.post('/results', async (req, res) => {
 		})
 		res.render('all', { data: fetchAlbums })
 	})
-
-	//registreren content weergeven.
-	.post('/register', (req, res) => {
-
+	app.post('/register',upload.single('Profilepic'), (req, res) => {
 		Users.findOne({ Email: req.body.email }, function(err, result) {
 			if (err) throw err;
 
 			if (result) {
+				console.log('email komt al voor')
 				// doe hier iets om te melden dat het e-mailadres al in gebruik is
 			} else {
 				// als de email niet in gebruik is, voor onderstaande commando uit
@@ -183,7 +176,7 @@ app.post('/results', async (req, res) => {
 						Username: req.body.username,
 						Password: req.body.password,
 						Email: req.body.email,
-						Profilepic: {data: req.body.Profilepic, contentType: 'image/png'},
+						Profilepic: {data: req.file.filename, contentType: 'image/png'}
 
 					}
 				]).then(() => console.log('user saved'))
@@ -191,7 +184,7 @@ app.post('/results', async (req, res) => {
 		})
 
 
-		res.render('register', {data: req.body.username})
+		res.render('register-succes')
 	})
 
 
