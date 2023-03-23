@@ -13,9 +13,7 @@ const albumSchema = new mongoose.Schema({
 	Like: Boolean,
 })
 
-const Albums = mongoose.model('Albums', albumSchema, 'Albums')
 
-module.exports = Albums
 
 const userSchema = new mongoose.Schema( {
 	Email: String,
@@ -27,5 +25,6 @@ const userSchema = new mongoose.Schema( {
 	},
 	Username: String,
 })
+const Albums = mongoose.model('Albums', albumSchema, 'Albums')
 const Users = mongoose.model('Users', userSchema, 'Users')
-module.exports = Users
+module.exports = {Users, Albums}
