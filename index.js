@@ -143,22 +143,19 @@ app.post('/results', async (req, res) => {
 			],
 		})
 		res.render('all', { data: fetchAlbums })
-	}).post('/update',(req, res) => {
-		console.log('request', req.body)
+	})
+	
+	.post('/update',(req, res) => {
+		console.log(req.body)
 
 				// vind current email in database
-		updateTest.find({ Email: req.body.email }, 
+		Users.find({ Email: req.body.email }, 
 			function(err, result) {
 	if (err) throw err
 
 	if (result) {
 	// update email
-		console.log(req.body.mail)
-		updateTest.updateOne({ Email: req.body.newEmail }, 
-		function(err, result) {
-			if (err) throw err
-			console.log(result)
-		})
+		Users.updateOne({ Email: req.body.newEmail })
 	}
 })
 		res.render('update')
