@@ -14,7 +14,8 @@ a {
 	text-decoration: none;
 }
 
-body div {
+body div,
+.unauthorized {
 	font-family: Arial, Helvetica, sans-serif;
 	display: flex;
 	flex-direction: column;

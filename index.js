@@ -23,8 +23,7 @@ app.use(session({
 // check if user is authorized (logged in) to visit a page
 const authorizeUser = (req, res, next) => {
 	if (!req.session.user) {
-		// res.send('<h1>unauthorized</h1>');
-		res.render('unauthorized');
+		res.status(401).render('unauthorized');
 	} else {
 		next()
 	}
@@ -119,8 +118,7 @@ app.get('/', (req, res) => {
 // All Post requests
 app.post('/home', async (req, res) => {
 	const checkUser = await Users.find({ Email: req.body.email, Password: req.body.password });
-	// console.log(checkUser);
-	// console.log(checkUser[0]['_id']);
+	console.log(checkUser);
 	if (checkUser.length !== 0) {
 		req.session.user = { userID: checkUser[0]['_id'] }
 		console.log(req.session.user);

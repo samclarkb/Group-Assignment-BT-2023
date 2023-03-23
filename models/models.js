@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema({
 })
 
 const Albums = mongoose.model('Albums', albumSchema, 'Albums')
-const Users = mongoose.model('Users', userSchema, 'users')
+const Users = mongoose.model('Users', userSchema, 'Users')
 
 module.exports.Users = Users
 module.exports.Albums = Albums
