@@ -147,6 +147,10 @@ app.post('/results', async (req, res) => {
 	.post('/update', async(req, res) => {
 		console.log('request', req.body)
 
+		//change profile picture
+		const currentProfilePicture = { ProfilePicture: req.body.profilePicture }
+		const newProfilePicture = { $set: { ProfilePicture: req.body.newProfilePicture } }
+
 		//change username
 		const currentUsername = { Username: req.body.username }
 		const newUsername = { $set: { Username: req.body.newUsername } }

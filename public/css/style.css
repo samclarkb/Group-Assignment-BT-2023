@@ -369,6 +369,7 @@ i {
 	position: relative;
 }
 
+/* niels add: input type email and password */
 .formText > input[type='text'], .formText > input[type='email'], .formText > input[type='password'],
 .formText > textarea {
 	border: none;
@@ -397,21 +398,38 @@ i {
 	padding-bottom: 5em;
 }
 
-.addForm fieldset{
+
+/* Niels */
+.update fieldset{
 	margin: 1em;
+	margin-bottom: 3em;
 }
 
-.addForm h3{
+.update h3{
 	margin: 0;
 }
 
-.addForm h4{
+.update h4{
 	margin: 0;
 }
 
-.addForm input[type=submit]{
+.update input[type=submit]{
 	margin: 0;
 }
+
+.update input[type='file'] + label{
+	width: 45%;
+    aspect-ratio: 1/1;
+    border-radius: 8em;
+    padding: 0;
+	background-image: url(../images/wallpaper.jpeg);
+	background-size: cover;
+}
+
+.update input[type='file']{
+	bottom: -3em;
+}
+/* niels end */
 
 .search {
 	display: flex;
