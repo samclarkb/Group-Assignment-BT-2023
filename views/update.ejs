@@ -1,16 +1,47 @@
 <div>
-	<%- include('partials/header', {title: 'Edit Email'}) %>
+	<%- include('partials/header', {title: 'Edit Profile'}) %>
 	<div class="addForm">
-		<form action="/update" method="POST"  >
-			<div class="formText">
-				<label for="email"><h2>Current Email:</h2></label>
-				<input id="email" type="email" name="email"  required />
-			</div>
-			<div class="formText">
-				<label for="newEmail"><h2>New Email:</h2></label>
-				<input id="newEmail" type="email" name="newEmail" required />
-			</div>
-            <input type="submit" value="Update Email" /> 
+		<form action="/update" method="POST">
+			<!-- change profilePic -->
+			
+			<!-- change username -->
+			<fieldset>
+				<legend><h3>Change Username</h3></legend>
+				<div class="formText">
+					<label for="username"><h4>Username:</h4></label>
+					<input id="username" type="text" name="username"/>
+				</div>
+				<div class="formText">
+					<label for="newUsername"><h4>New Username:</h4></label>
+					<input id="newUsername" type="text" name="newUsername"/>
+				</div>
+			</fieldset>
+			<!-- change email -->
+			<fieldset>
+				<legend><h3>Change Email</h3></legend>
+				<div class="formText">
+					<label for="email"><h4>Current Email:</h4></label>
+					<input id="email" type="email" name="email"/>
+				</div>
+				<div class="formText">
+					<label for="newEmail"><h4>New Email:</h4></label>
+					<input id="newEmail" type="email" name="newEmail"/>
+				</div>
+			</fieldset>
+			<!-- change password -->
+			<fieldset>
+				<legend><h3>Change Password</h3></legend>
+				<div class="formText">
+					<label for="password"><h4>Current Password:</h4></label>
+					<input id="password" type="password" name="password"/>
+				</div>
+				<div class="formText">
+					<label for="newPassword"><h4>New Password:</h4></label>
+					<input id="newPassword" type="password" name="newPassword"/>
+				</div>
+
+			</fieldset>
+            <input type="submit" value="Save Changes" /> 
         </form>
 	</div>
 	<%- include('partials/navigation') %>

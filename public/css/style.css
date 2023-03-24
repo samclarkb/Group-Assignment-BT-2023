@@ -369,7 +369,7 @@ i {
 	position: relative;
 }
 
-.formText > input[type='text'], .formText > input[type='email'],
+.formText > input[type='text'], .formText > input[type='email'], .formText > input[type='password'],
 .formText > textarea {
 	border: none;
 	font-size: 1.5em;
@@ -395,6 +395,22 @@ i {
 
 .addForm {
 	padding-bottom: 5em;
+}
+
+.addForm fieldset{
+	margin: 1em;
+}
+
+.addForm h3{
+	margin: 0;
+}
+
+.addForm h4{
+	margin: 0;
+}
+
+.addForm input[type=submit]{
+	margin: 0;
 }
 
 .search {

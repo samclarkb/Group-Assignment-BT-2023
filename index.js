@@ -146,9 +146,22 @@ app.post('/results', async (req, res) => {
 
 	.post('/update', async(req, res) => {
 		console.log('request', req.body)
-		const filter = { Email: req.body.email }
-		const update = { $set: { Email: req.body.newEmail } }
-		change = await Users.findOneAndUpdate(filter,update);
+
+		//change username
+		const currentUsername = { Username: req.body.username }
+		const newUsername = { $set: { Username: req.body.newUsername } }
+		changeUsername = await Users.findOneAndUpdate(currentUsername,newUsername)
+
+		// change email
+		const currentEmail = { Email: req.body.email }
+		const newEmail = { $set: { Email: req.body.newEmail } }
+		changeEmail = await Users.findOneAndUpdate(currentEmail,newEmail)
+
+		// change password
+		const currentPassword = { Password: req.body.password }
+		const newPassword = { $set: { Password: req.body.newPassword } }
+		changePassword = await Users.findOneAndUpdate(currentPassword,newPassword)
+
 		res.render('update')
 	})
 
