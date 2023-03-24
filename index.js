@@ -173,6 +173,12 @@ app.post('/results', async (req, res) => {
 		res.render('update')
 	})
 
+		// dit werkt niet
+		// const currentImage = document.querySelector("#currentProfilePicture").style.backgroundImage
+		// const newProfilePicture = { $set: { ProfilePicture: req.file.newProfilePicture } }
+
+		// console.log(currentImage)
+
 
 // Making sure the application is running on the port I defined in the env file
 app.listen(port, () => {
