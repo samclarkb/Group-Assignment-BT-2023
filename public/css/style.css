@@ -400,6 +400,10 @@ i {
 
 
 /* Niels */
+.update{
+	margin-bottom: 2em;
+}
+
 .update fieldset{
 	margin: 1em;
 	margin-bottom: 3em;
@@ -422,7 +426,7 @@ i {
     aspect-ratio: 1/1;
     border-radius: 8em;
     padding: 0;
-	background-image: url(../images/wallpaper.jpeg);
+	background-image: url(../images/placeholder.png);
 	background-size: cover;
 }
 

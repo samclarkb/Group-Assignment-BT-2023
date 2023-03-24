@@ -148,8 +148,7 @@ app.post('/results', async (req, res) => {
 		console.log('request', req.body)
 
 		//change profile picture
-		const currentProfilePicture = { ProfilePicture: req.body.profilePicture }
-		const newProfilePicture = { $set: { ProfilePicture: req.body.newProfilePicture } }
+		
 
 		//change username
 		const currentUsername = { Username: req.body.username }
@@ -166,8 +165,14 @@ app.post('/results', async (req, res) => {
 		const newPassword = { $set: { Password: req.body.newPassword } }
 		changePassword = await Users.findOneAndUpdate(currentPassword,newPassword)
 
+		res.send('profile updated')
+	})
+
+	.post('/profilePic', upload.single('profilePicture'), (req, res) => {
+		console.log('req', req.file.filename)
 		res.render('update')
 	})
+
 
 // Making sure the application is running on the port I defined in the env file
 app.listen(port, () => {

@@ -1,7 +1,7 @@
 <div>
 	<%- include('partials/header', {title: 'Edit Profile'}) %>
 	<div class="addForm">
-		<form action="/update" method="POST" class="update">
+		<form action="/profilePic" method="POST" class="update" enctype="multipart/form-data">
 			<!-- change profilePic -->
 			<fieldset>
 				<legend><h3>Change Profile Picture</h3></legend>
@@ -10,6 +10,9 @@
 					<label for="profilePicture"></label>
 				</div>
 			</fieldset>
+			<input type="submit" value="Save Profile Picture">
+		</form>
+		<form action="/update" method="POST" class="update">
 			<!-- change username -->
 			<fieldset>
 				<legend><h3>Change Username</h3></legend>
