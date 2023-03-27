@@ -1,15 +1,21 @@
 <div class="detailPage">
 	<% if( typeof imageData != 'undefined' ){ %>
-	<img src="/images/<%= imageData %>" alt="" /> <% } else{ %>
+	<img id="titleImg" src="/images/<%= imageData %>" alt="" /> <% } else{ %>
 	<img src="<%= image %>" alt="" />
 	<% } %>
 	<div>
-		<h1><%- Title %></h1>
+		<h1 id="titleSong"></h1>
 		<p><%= Genre %> | <%= Year %></p>
 	</div>
 
 	<p><%= Artist %></p>
 	<p><%= Description %></p>
+	
+	<div id="embed-frame"></div>
+	
+	<input type="hidden" id="spotifyUrl" value="<%= SpotifyLink %>">
 
 	<a href="<%- SRC %>"> <img src="../images/arrow.png" alt="" /></a>
 </div>
+
+<script src="/js/spotify.js"></script>

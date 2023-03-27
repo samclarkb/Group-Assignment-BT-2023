@@ -2,6 +2,9 @@
 const frame = document.getElementById("embed-frame");
 const titleSong = document.getElementById("titleSong");
 const titleImg = document.getElementById("titleImg");
+const spotifyUrl = document.getElementById("spotifyUrl").value;
+
+console.log(spotifyUrl);
 
       async function changeSong(url) {
         fetch(`https://open.spotify.com/oembed?url=${url}`)
@@ -17,4 +20,4 @@ const titleImg = document.getElementById("titleImg");
       }
 
 
-changeSong('https://open.spotify.com/playlist/37i9dQZF1DX4sWSpwq3LiO');
+changeSong(spotifyUrl);

@@ -123,6 +123,7 @@ app.post('/results', async (req, res) => {
 				Like: false,
 				Description: req.body.Description,
 				Image: { data: req.file.filename, contentType: 'image/png' },
+				SpotifyLink: req.body.SpotifyLink,
 			},
 		]).then(() => console.log('user saved'))
 

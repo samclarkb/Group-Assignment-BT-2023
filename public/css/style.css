@@ -519,3 +519,15 @@ div > h2 {
 		margin-bottom: 0;
 	}
 }
+
+
+/* Spotify Embed Styling */
+#titleImg {
+	max-height: 300px;
+	object-fit: cover;
+}
+
+iFrame {
+	height: 500px;
+	border-radius: 0;
+}
