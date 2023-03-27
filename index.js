@@ -23,7 +23,7 @@ app.use(session({
 // check if user is authorized (logged in) to visit a page
 const authorizeUser = (req, res, next) => {
 	if (!req.session.user) {
-		res.status(401).render('unauthorized');
+		res.status(401).render('401');
 	} else {
 		next()
 	}

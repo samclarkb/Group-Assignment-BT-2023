@@ -23,6 +23,7 @@ body div,
 	height: 100%;
 	padding: 0;
 	margin: 0;
+	align-items: center;
 }
 
 section h1 {
@@ -252,7 +253,8 @@ legend {
 	width: 75%;
 }
 
-input[type='submit'] {
+input[type='submit'],
+.unauthorized a {
 	border: solid 0.1em rgba(0, 0, 0, 0.1);
 	color: black;
 	box-shadow: 0.15em 0.15em rgba(0, 0, 0, 0.1);
@@ -551,4 +553,8 @@ div>h2 {
 	outline: none;
 	text-align: center;
 	margin: 0;
+}
+
+.unauthorized img {
+	width: 9em;
 }
