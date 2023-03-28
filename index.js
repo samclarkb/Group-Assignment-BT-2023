@@ -83,8 +83,11 @@ app.get('/', (req, res) => {
 	res.render('inloggen')
 })
 	.get('/results', authorizeUser, async (req, res) => {
+		const currentUser = await Users.find({ _id: req.session.user.userID })
+		favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
+
 		const fetchAlbums = await Albums.find({})
-		res.render('results', { data: fetchAlbums })
+		res.render('results', { data: fetchAlbums, user: favoriteAlbumTitles })
 	})
 	.get('/results:id', authorizeUser, async (req, res) => {
 		const fetchOneAlbum = await Albums.find({ _id: req.params.id })
@@ -144,8 +147,11 @@ app.post('/logout', (req, res) => {
 })
 
 app.post('/results', async (req, res) => {
+	const currentUser = await Users.find({ _id: req.session.user.userID })
+	favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
+
 	const fetchAlbums = await Albums.find({ Year: req.body.year, Genre: req.body.genre })
-	res.render('results', { data: fetchAlbums })
+	res.render('results', { data: fetchAlbums, user: favoriteAlbumTitles })
 })
 	.post('/favorites:id', async (req, res) => {
 		const currentUser = await Users.findOne({ _id: req.session.user.userID })
