@@ -410,6 +410,7 @@ i {
 }
 
 .update h3{
+	font-size: 1.5em;
 	margin: 0;
 }
 
@@ -421,12 +422,10 @@ i {
 	margin: 0;
 }
 
-.update input[type='file'] + label{
-	width: 45%;
-    aspect-ratio: 1/1;
-    border-radius: 8em;
+.update fieldset > img{
+	width: 20em;
+    clip-path: circle();
     padding: 0;
-	background-size: cover;
 }
 
 .update input[type='file']{

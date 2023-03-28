@@ -92,8 +92,9 @@ app.get('/', (req, res) => {
 		const fetchAlbums = await Albums.find({}).sort({ _id: -1 })
 		res.render('all', { data: fetchAlbums })
 	})
-	.get('/update', (req, res) => {
-		res.render('update')
+	.get('/update', async (req, res) => {
+		const fetchOneUser = await Users.find({ _id: '641c6d36e398c3ee8d693809' })
+		res.render('update', { data: fetchOneUser })
 		})
 	.get('*', (req, res) => {
 		res.status(404).render('404')
@@ -144,11 +145,8 @@ app.post('/results', async (req, res) => {
 		res.render('all', { data: fetchAlbums })
 	})
 
-	.post('/update', async(req, res) => {
+	.post('/update', upload.single('profilePicture'), async(req, res) => {
 		console.log('request', req.body)
-
-		//change profile picture
-		
 
 		//change username
 		const currentUsername = { Username: req.body.username }
@@ -165,19 +163,17 @@ app.post('/results', async (req, res) => {
 		const newPassword = { $set: { Password: req.body.newPassword } }
 		changePassword = await Users.findOneAndUpdate(currentPassword,newPassword)
 
-		res.send('profile updated')
-	})
-
-	.post('/profilePic', upload.single('profilePicture'), (req, res) => {
+		//profile picture
 		console.log('req', req.file.filename)
 		res.render('update')
+
+		console.log(req)
+
+		
+        // const currentProfilePic = {Profilepic: req.file.filename}
+		const newProfilePic = { $set: { Profilepic: { data: req.file.filename, contentType: 'image/png' }}}
+		changeProfilePic = await Users.findOneAndUpdate({Profilepic: {data: 'PngItem_2741567.png', contentType: 'image/png'}}, newProfilePic)
 	})
-
-		// dit werkt niet
-		// const currentImage = document.querySelector("#currentProfilePicture").style.backgroundImage
-		// const newProfilePicture = { $set: { ProfilePicture: req.file.newProfilePicture } }
-
-		// console.log(currentImage)
 
 
 // Making sure the application is running on the port I defined in the env file
