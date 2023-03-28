@@ -146,33 +146,28 @@ app.post('/results', async (req, res) => {
 	})
 
 	.post('/update', upload.single('profilePicture'), async(req, res) => {
-		console.log('request', req.body)
+
+		const fetchOneUser = await Users.find({ _id: '641c6d36e398c3ee8d693809'})
+		currentUser = {_id:'641c6d36e398c3ee8d693809'}
 
 		//change username
-		const currentUsername = { Username: req.body.username }
 		const newUsername = { $set: { Username: req.body.newUsername } }
-		changeUsername = await Users.findOneAndUpdate(currentUsername,newUsername)
+		changeUsername = await Users.findOneAndUpdate(currentUser, newUsername)
 
 		// change email
-		const currentEmail = { Email: req.body.email }
 		const newEmail = { $set: { Email: req.body.newEmail } }
-		changeEmail = await Users.findOneAndUpdate(currentEmail,newEmail)
+		changeEmail = await Users.findOneAndUpdate(currentUser,newEmail)
 
 		// change password
-		const currentPassword = { Password: req.body.password }
 		const newPassword = { $set: { Password: req.body.newPassword } }
-		changePassword = await Users.findOneAndUpdate(currentPassword,newPassword)
+		changePassword = await Users.findOneAndUpdate(currentUser,newPassword)
 
 		//profile picture
-		console.log('req', req.file.filename)
-		res.render('update')
-
-		console.log(req)
-
-		
-        // const currentProfilePic = {Profilepic: req.file.filename}
 		const newProfilePic = { $set: { Profilepic: { data: req.file.filename, contentType: 'image/png' }}}
-		changeProfilePic = await Users.findOneAndUpdate({Profilepic: {data: 'PngItem_2741567.png', contentType: 'image/png'}}, newProfilePic)
+		changeProfilePic = await Users.findOneAndUpdate(currentUser , newProfilePic)
+
+		res.render('update', { data: fetchOneUser })
+		console.log(req.file.filename, req.body)
 	})
 
 

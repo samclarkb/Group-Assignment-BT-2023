@@ -422,14 +422,21 @@ i {
 	margin: 0;
 }
 
-.update fieldset > img{
-	width: 20em;
-    clip-path: circle();
+.update figure{
+	width: 15em;
+	height: 15em;
+    clip-path: circle(40%);
     padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+	margin-bottom: 1em;
 }
 
-.update input[type='file']{
-	bottom: -3em;
+.update figure img{
+	max-height: 25em;
+    max-width: 25em;
 }
 /* niels end */
 

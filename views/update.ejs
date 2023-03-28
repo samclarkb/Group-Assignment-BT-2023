@@ -5,8 +5,9 @@
 			<!-- change profilePic -->
 			<fieldset>
 				<legend><h3>Change Profile Picture</h3></legend>
-				<img src="/images/<%= data[0].Profilepic.data %>" alt="profilePic" />
-				
+				<figure>
+					<img src="/images/<%= data[0].Profilepic.data %>" alt="profilePic"/>
+				</figure>
 				<div class="formText">
 					<input id="profilePicture" type="File" name="profilePicture"/>
 				</div>
@@ -14,10 +15,6 @@
 			<!-- change username -->
 			<fieldset>
 				<legend><h3>Change Username</h3></legend>
-				<!-- <div class="formText">
-					<label for="username"><h4>Username:</h4></label>
-					<input id="username" type="text" name="username"/>
-				</div> -->
 				<h4> Username: <%= data[0].Username %> </h4>
 				<div class="formText">
 					<label for="newUsername"><h4>New Username:</h4></label>
@@ -28,10 +25,6 @@
 			<fieldset>
 				<legend><h3>Change Email</h3></legend>
 				<h4> Email: <%= data[0].Email %> </h4>
-				<!-- <div class="formText">
-					<label for="email"><h4>Current Email:</h4></label>
-					<input id="email" type="email" name="email"/>
-				</div> -->
 				<div class="formText">
 					<label for="newEmail"><h4>New Email:</h4></label>
 					<input id="newEmail" type="email" name="newEmail"/>
@@ -40,10 +33,6 @@
 			<!-- change password -->
 			<fieldset>
 				<legend><h3>Change Password</h3></legend>
-				<!-- <div class="formText">
-					<label for="password"><h4>Current Password:</h4></label>
-					<input id="password" type="password" name="password"/>
-				</div> -->
 				<h4> Password: <%= data[0].Password %> </h4>
 				<div class="formText">
 					<label for="newPassword"><h4>New Password:</h4></label>
