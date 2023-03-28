@@ -5,10 +5,28 @@ const expressLayouts = require('express-ejs-layouts')
 const dotenv = require('dotenv').config()
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
-const Albums = require('./models/models')
+const session = require('express-session')
+const { Albums, Users } = require('./models/models')
 
 // Defining express as app
 const app = express()
+
+// creating a session
+app.use(session({
+	secret: process.env.SESSION_KEY,
+	resave: true,
+	saveUninitialized: true,
+	cookie: { maxAge: 600000 }
+}));
+
+// check if user is authorized (logged in) to visit a page
+const authorizeUser = (req, res, next) => {
+	if (!req.session.user) {
+		res.status(401).render('401');
+	} else {
+		next()
+	}
+}
 
 // env variables
 const userName = process.env.USERNAME
@@ -58,37 +76,40 @@ app.use(express.static(__dirname + '/public'))
 
 // All Get requests
 app.get('/', (req, res) => {
-	res.render('preference')
+	res.render('inloggen', {
+		errorMessage: '',
+		errorClass: ''
+	})
 })
-	.get('/results', async (req, res) => {
+	.get('/results', authorizeUser, async (req, res) => {
 		const fetchAlbums = await Albums.find({})
 		res.render('results', { data: fetchAlbums })
 	})
-	.get('/results:id', async (req, res) => {
+	.get('/results:id', authorizeUser, async (req, res) => {
 		const fetchOneAlbum = await Albums.find({ _id: req.params.id })
 		res.render('detailPageResults', { data: fetchOneAlbum })
 	})
-	.get('/favorites:id', async (req, res) => {
+	.get('/favorites:id', authorizeUser, async (req, res) => {
 		const fetchOneAlbum = await Albums.find({ _id: req.params.id })
 		res.render('detailPageFavorites', { data: fetchOneAlbum })
 	})
-	.get('/all:id', async (req, res) => {
+	.get('/all:id', authorizeUser, async (req, res) => {
 		const fetchOneAlbum = await Albums.find({ _id: req.params.id })
 		res.render('detailPageAll', { data: fetchOneAlbum })
 	})
-	.get('/favorites', async (req, res) => {
+	.get('/favorites', authorizeUser, async (req, res) => {
 		const fetchFavorite = await Albums.find({ Like: true })
 		res.render('favorites', { data: fetchFavorite })
 	})
-	.get('/deleteModal:id', async (req, res) => {
+	.get('/deleteModal:id', authorizeUser, async (req, res) => {
 		console.log('req', req.params.id)
 		const fetchAlbum = await Albums.find({ _id: req.params.id })
 		res.render('deleteModal', { data: fetchAlbum })
 	})
-	.get('/add', (req, res) => {
+	.get('/add', authorizeUser, (req, res) => {
 		res.render('add')
 	})
-	.get('/all', async (req, res) => {
+	.get('/all', authorizeUser, async (req, res) => {
 		const fetchAlbums = await Albums.find({}).sort({ _id: -1 })
 		res.render('all', { data: fetchAlbums })
 	})
@@ -97,6 +118,26 @@ app.get('/', (req, res) => {
 	})
 
 // All Post requests
+app.post('/home', async (req, res) => {
+	const checkUser = await Users.find({ Email: req.body.email, Password: req.body.password });
+	// if(!req.body.email || !req.body.password) {
+	// }
+	if (checkUser.length !== 0) {
+		req.session.user = { userID: checkUser[0]['_id'] }
+		res.render('preference')
+	} else {
+		res.render('inloggen', {
+			errorMessage: 'Combinatie email en wachtwoord onjuist',
+			errorClass: 'errorLogin'
+		})
+	}
+})
+
+app.post('/logout', (req, res) => {
+	req.session.destroy()
+	res.redirect('/')
+})
+
 app.post('/results', async (req, res) => {
 	const fetchAlbums = await Albums.find({ Year: req.body.year, Genre: req.body.genre })
 	res.render('results', { data: fetchAlbums })
