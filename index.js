@@ -40,6 +40,7 @@ const port = process.env.PORT
 const url = `mongodb+srv://${userName}:${passWord}@Database.ymup0ov.mongodb.net/?retryWrites=true&w=majority`
 
 // Making connection with Mongodb
+mongoose.set('strictQuery', false)
 mongoose
 	.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
 	.then(() => {
@@ -98,6 +99,7 @@ app.get('/', (req, res) => {
 		res.render('detailPageAll', { data: fetchOneAlbum })
 	})
 	.get('/favorites', authorizeUser, async (req, res) => {
+		// const currentUser = await Users.findOne({ _id: req.session.user.userID })
 		const fetchFavorite = await Albums.find({ Like: true })
 		res.render('favorites', { data: fetchFavorite })
 	})
@@ -141,17 +143,13 @@ app.post('/results', async (req, res) => {
 	res.render('results', { data: fetchAlbums })
 })
 	.post('/favorites:id', async (req, res) => {
-		// console.log('albums re', req.session.user.userID)
-
 		const currentUser = await Users.findOne({ _id: req.session.user.userID })
 		const currentAlbum = await Albums.findOne({ _id: req.params.id })
-		console.log('currentUser', currentUser)
-		console.log('album', currentAlbum)
 
-		const updateFavorite = await Albums.findOneAndUpdate({ _id: req.params.id }, [
-			{ $set: { Like: { $eq: [false, '$Like'] } } },
-		])
-		// res.redirect(`/${req.originalUrl}}`, { data: updateFavorite })
+		const updateFavorite = await Users.findOneAndUpdate(
+			{ _id: currentUser.id },
+			{ $push: { Like: currentAlbum._id } }
+		)
 	})
 	.post('/add', upload.single('File'), (req, res) => {
 		console.log('req', req.body)
