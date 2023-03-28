@@ -113,16 +113,17 @@ app.get('/', (req, res) => {
 		const fetchAlbums = await Albums.find({}).sort({ _id: -1 })
 		res.render('all', { data: fetchAlbums })
 	})
-app.get('/register', async (req, res) => {
-	res.render('register')
-})
-app.get('/register-failed', async (req, res) => {
-	res.render('register-failed')
-}).get('/register-succes', async (req, res) => {
-	res.render('register-succes')
-})	.get('*', (req, res) => {
-	res.status(404).render('404')
-})
+	app.get('/register', async (req, res) => {
+		res.render('register')
+	})
+	app.get('/register-failed', async (req, res) => {
+		res.render('register-failed')
+	}).get('/register-succes', async (req, res) => {
+		res.render('register-succes')
+	})
+		.get('*', (req, res) => {
+		res.status(404).render('404')
+	})
 
 // All Post requests
 app.post('/home', async (req, res) => {
