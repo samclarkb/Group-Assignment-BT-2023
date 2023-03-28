@@ -1,4 +1,3 @@
-console.log('test github push')
 // Require external data/functions
 const express = require('express')
 const multer = require('multer')
@@ -17,7 +16,7 @@ app.use(session({
 	secret: process.env.SESSION_KEY,
 	resave: true,
 	saveUninitialized: true,
-	cookie: { maxAge: 60000 }
+	cookie: { maxAge: 600000 }
 }));
 
 // check if user is authorized (logged in) to visit a page
@@ -77,7 +76,10 @@ app.use(express.static(__dirname + '/public'))
 
 // All Get requests
 app.get('/', (req, res) => {
-	res.render('inloggen')
+	res.render('inloggen', {
+		errorMessage: '',
+		errorClass: ''
+	})
 })
 	.get('/results', authorizeUser, async (req, res) => {
 		const fetchAlbums = await Albums.find({})
@@ -118,18 +120,20 @@ app.get('/', (req, res) => {
 // All Post requests
 app.post('/home', async (req, res) => {
 	const checkUser = await Users.find({ Email: req.body.email, Password: req.body.password });
-	console.log(checkUser);
+	// if(!req.body.email || !req.body.password) {
+	// }
 	if (checkUser.length !== 0) {
 		req.session.user = { userID: checkUser[0]['_id'] }
-		console.log(req.session.user);
 		res.render('preference')
 	} else {
-		res.redirect('/');
+		res.render('inloggen', {
+			errorMessage: 'Combinatie email en wachtwoord onjuist',
+			errorClass: 'errorLogin'
+		})
 	}
 })
 
 app.post('/logout', (req, res) => {
-	console.log(req.session.user);
 	req.session.destroy()
 	res.redirect('/')
 })
