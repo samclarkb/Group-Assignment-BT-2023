@@ -13,17 +13,19 @@ const { Albums, Users } = require('./models/models')
 const app = express()
 
 // creating a session
-app.use(session({
-	secret: process.env.SESSION_KEY,
-	resave: true,
-	saveUninitialized: true,
-	cookie: { maxAge: 60000 }
-}));
+app.use(
+	session({
+		secret: process.env.SESSION_KEY,
+		resave: true,
+		saveUninitialized: true,
+		// cookie: { maxAge: 12000 },
+	})
+)
 
 // check if user is authorized (logged in) to visit a page
 const authorizeUser = (req, res, next) => {
 	if (!req.session.user) {
-		res.status(401).render('401');
+		res.status(401).render('401')
 	} else {
 		next()
 	}
@@ -117,19 +119,19 @@ app.get('/', (req, res) => {
 
 // All Post requests
 app.post('/home', async (req, res) => {
-	const checkUser = await Users.find({ Email: req.body.email, Password: req.body.password });
-	console.log(checkUser);
+	const checkUser = await Users.find({ Email: req.body.email, Password: req.body.password })
+	console.log(checkUser)
 	if (checkUser.length !== 0) {
 		req.session.user = { userID: checkUser[0]['_id'] }
-		console.log(req.session.user);
+		console.log(req.session.user)
 		res.render('preference')
 	} else {
-		res.redirect('/');
+		res.redirect('/')
 	}
 })
 
 app.post('/logout', (req, res) => {
-	console.log(req.session.user);
+	console.log(req.session.user)
 	req.session.destroy()
 	res.redirect('/')
 })
@@ -139,6 +141,13 @@ app.post('/results', async (req, res) => {
 	res.render('results', { data: fetchAlbums })
 })
 	.post('/favorites:id', async (req, res) => {
+		// console.log('albums re', req.session.user.userID)
+
+		const currentUser = await Users.findOne({ _id: req.session.user.userID })
+		const currentAlbum = await Albums.findOne({ _id: req.params.id })
+		console.log('currentUser', currentUser)
+		console.log('album', currentAlbum)
+
 		const updateFavorite = await Albums.findOneAndUpdate({ _id: req.params.id }, [
 			{ $set: { Like: { $eq: [false, '$Like'] } } },
 		])
