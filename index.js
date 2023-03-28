@@ -89,6 +89,10 @@ app.get('/', (req, res) => {
 		const fetchAlbums = await Albums.find({})
 		res.render('results', { data: fetchAlbums, user: favoriteAlbumTitles })
 	})
+	.get('/preference', authorizeUser, async (req, res) => {
+		// const fetchOneAlbum = await Albums.find({ _id: req.params.id })
+		res.render('preference')
+	})
 	.get('/results:id', authorizeUser, async (req, res) => {
 		const fetchOneAlbum = await Albums.find({ _id: req.params.id })
 		res.render('detailPageResults', { data: fetchOneAlbum })
@@ -189,9 +193,12 @@ app.post('/results', async (req, res) => {
 		res.render('succesAdd')
 	})
 	.post('/delete:id', async (req, res) => {
+		const currentUser = await Users.find({ _id: req.session.user.userID })
+		favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
+
 		const deleteAlbum = await Albums.find({ _id: req.params.id }).remove()
 		const fetchAlbums = await Albums.find({}).sort({ _id: -1 })
-		res.render('all', { data: fetchAlbums })
+		res.render('all', { data: fetchAlbums, user: favoriteAlbumTitles })
 	})
 	.post('/all', async (req, res) => {
 		const fetchAlbums = await Albums.find({
