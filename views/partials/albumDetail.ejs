@@ -1,0 +1,15 @@
+<div class="detailPage">
+	<% if( typeof imageData != 'undefined' ){ %>
+	<img src="/images/<%= imageData %>" alt="" /> <% } else{ %>
+	<img src="<%= image %>" alt="" />
+	<% } %>
+	<div>
+		<h1><%- Title %></h1>
+		<p><%= Genre %> | <%= Year %></p>
+	</div>
+
+	<p><%= Artist %></p>
+	<p><%= Description %></p>
+
+	<a href="<%- SRC %>"> <img src="../images/arrow.png" alt="" /></a>
+</div>

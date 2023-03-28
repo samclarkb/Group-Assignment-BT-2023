@@ -1,0 +1,64 @@
+<div class="all">
+	<% if(data.length > 0){ %>
+        <%- include('partials/header', {title: 'Latest'}) %>
+	<form action="/all" method="post" class="search">
+		<label for="search"></label>
+		<input type="text" id="search" name="search" placeholder="Search" /><a class="clearSearch" href="/all"><img src="../images/clear.png" alt=""
+            /></a></input>
+		<button type="submit"><img src="../images/search.png" alt="" /></button>
+	</form>
+	
+
+	<% } else{ %> <% } %> <% if(data.length > 0){ %> <% for(let i = 0; i < data.length; i++){ %>
+
+	<a class="albumCard" id="albumcard" href="all<%= data[i]._id %>">
+		<% if( typeof data[i].Image.data != 'undefined' ){ %>
+		<div
+			class="albumImage lazy-background fallback"
+			style="background-image: url('/images/<%= data[i].Image.data %>')"
+		></div>
+
+		<% } else{ %>
+		<div
+			class="albumImage lazy-background fallback"
+			style="background-image: url('<%= data[i].Image %>')"
+		></div>
+		<% } %>
+		<div>
+			<p><%= data[i].Title %></p>
+			<p><%= data[i].Genre %> | <%= data[i].Year %></p>
+		</div>
+
+		<p><%= data[i].Artist %></p>
+
+		<div class="heart">
+			<form action="favorites<%= data[i]._id %>" method="POST">
+				<label for="<%= data[i]._id %>">
+					<% if(data[i].Like === true > 0){ %>
+					<i onclick="toggle(this)" class="fa fa-heart"></i>
+					<% } else{ %>
+					<i onclick="toggle(this)" class="fa fa-heart-o"></i>
+					<% } %>
+				</label>
+				<input
+					id="<%= data[i]._id %>"
+					name="Like"
+					type="submit"
+					value="<%= data[i]._id %>"
+				/>
+			</form>
+		</div>
+		<a href="/deleteModal<%= data[i]._id %>">
+			<img class="delete" src="../images/delete.png" alt=""
+		/></a>
+	</a>
+
+	<% } %> <% } else{ %>
+	<div class="noData">
+		<p>There are no results that matches your search</p>
+		<a href="/all">Go Back</a>
+	</div>
+
+	<% } %> <%- include('partials/navigation') %>
+</div>
+
