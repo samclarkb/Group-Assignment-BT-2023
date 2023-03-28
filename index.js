@@ -101,7 +101,6 @@ app.get('/', (req, res) => {
 	.get('/favorites', authorizeUser, async (req, res) => {
 		const currentUser = await Users.find({ _id: req.session.user.userID })
 		const favoriteAlbums = currentUser[0].Like
-		// const fetchFavorite = await Albums.find({ Like: true })
 		res.render('favorites', { data: favoriteAlbums })
 	})
 	.get('/deleteModal:id', authorizeUser, async (req, res) => {
@@ -147,10 +146,19 @@ app.post('/results', async (req, res) => {
 		const currentUser = await Users.findOne({ _id: req.session.user.userID })
 		const currentAlbum = await Albums.findOne({ _id: req.params.id })
 
-		const updateFavorite = await Users.findOneAndUpdate(
-			{ _id: currentUser.id },
-			{ $push: { Like: currentAlbum } }
-		)
+		const albumTitle = currentUser.Like.map(item => item.Title)
+
+		if (albumTitle.includes(currentAlbum.Title)) {
+			const updateFavorite = await Users.findOneAndUpdate(
+				{ _id: currentUser.id },
+				{ $pull: { Like: currentAlbum } }
+			)
+		} else {
+			const updateFavorite = await Users.findOneAndUpdate(
+				{ _id: currentUser.id },
+				{ $push: { Like: currentAlbum } }
+			)
+		}
 	})
 	.post('/add', upload.single('File'), (req, res) => {
 		console.log('req', req.body)
