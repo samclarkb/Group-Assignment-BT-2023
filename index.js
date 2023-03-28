@@ -5,10 +5,9 @@ const expressLayouts = require('express-ejs-layouts')
 const dotenv = require('dotenv').config()
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
-const {Users, Albums} = require('./models/models')
+const Albums = require('./models/models')
 
-
-// Defining express as appPPP
+// Defining express as app
 const app = express()
 
 // env variables
@@ -93,15 +92,7 @@ app.get('/', (req, res) => {
 		const fetchAlbums = await Albums.find({}).sort({ _id: -1 })
 		res.render('all', { data: fetchAlbums })
 	})
-	//registreren pagina route aangemaakt.
-	app.get('/register', async (req, res) => {
-	res.render('register')
-	})
-	app.get('/register-failed', async (req, res) => {
-	res.render('register-failed')
-	}).get('/register-succes', async (req, res) => {
-	res.render('register-succes')
-})	.get('*', (req, res) => {
+	.get('*', (req, res) => {
 		res.status(404).render('404')
 	})
 
@@ -149,49 +140,6 @@ app.post('/results', async (req, res) => {
 		})
 		res.render('all', { data: fetchAlbums })
 	})
-	.post('/delete:id', async (req, res) => {
-		const deleteAlbum = await Albums.find({ _id: req.params.id }).remove()
-		const fetchAlbums = await Albums.find({}).sort({ _id: -1 })
-		res.render('all', { data: fetchAlbums })
-	})
-	.post('/all', async (req, res) => {
-		const fetchAlbums = await Albums.find({
-			$or: [
-				{ Title: req.body.search },
-				{ Artist: req.body.search },
-				{ Year: req.body.search },
-				{ Genre: req.body.search },
-			],
-		})
-		res.render('all', { data: fetchAlbums })
-	})
-	.post('/register',upload.single('Profilepic'), (req, res) => {
-		Users.findOne({ Email: req.body.email }, function(err, result) {
-			if (err) throw err;
-
-			if (result) {
-				console.log('email komt al voor')
-				res.redirect('register-failed')
-
-				// doe hier iets om te melden dat het e-mailadres al in gebruik is
-			} else {
-				// als de email niet in gebruik is, voor onderstaande commando uit
-				Users.insertMany([
-					{
-						Username: req.body.username,
-						Password: req.body.password,
-						Email: req.body.email,
-						Profilepic: {data: req.file.filename, contentType: 'image/png'}
-					}
-				]).then(() => console.log('user saved'))
-				res.redirect('register-succes')
-
-			}
-		})
-	})
-
-
-
 
 // Making sure the application is running on the port I defined in the env file
 app.listen(port, () => {
