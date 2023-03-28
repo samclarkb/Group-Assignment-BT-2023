@@ -101,7 +101,9 @@ app.get('/', (req, res) => {
 	.get('/favorites', authorizeUser, async (req, res) => {
 		const currentUser = await Users.find({ _id: req.session.user.userID })
 		const favoriteAlbums = currentUser[0].Like
-		res.render('favorites', { data: favoriteAlbums })
+		favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
+
+		res.render('favorites', { data: favoriteAlbums, user: favoriteAlbumTitles })
 	})
 	.get('/deleteModal:id', authorizeUser, async (req, res) => {
 		console.log('req', req.params.id)
@@ -112,8 +114,11 @@ app.get('/', (req, res) => {
 		res.render('add')
 	})
 	.get('/all', authorizeUser, async (req, res) => {
+		const currentUser = await Users.find({ _id: req.session.user.userID })
+		favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
+
 		const fetchAlbums = await Albums.find({}).sort({ _id: -1 })
-		res.render('all', { data: fetchAlbums })
+		res.render('all', { data: fetchAlbums, user: favoriteAlbumTitles })
 	})
 	.get('*', (req, res) => {
 		res.status(404).render('404')
