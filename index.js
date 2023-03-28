@@ -78,7 +78,9 @@ app.use(express.static(__dirname + '/public'))
 app.get('/', (req, res) => {
 	res.render('inloggen', {
 		errorMessage: '',
-		errorClass: ''
+		errorClass: '',
+		emailInput: '',
+		passwordInput: ''
 	})
 })
 	.get('/results', authorizeUser, async (req, res) => {
@@ -120,15 +122,15 @@ app.get('/', (req, res) => {
 // All Post requests
 app.post('/home', async (req, res) => {
 	const checkUser = await Users.find({ Email: req.body.email, Password: req.body.password });
-	// if(!req.body.email || !req.body.password) {
-	// }
 	if (checkUser.length !== 0) {
 		req.session.user = { userID: checkUser[0]['_id'] }
 		res.render('preference')
 	} else {
 		res.render('inloggen', {
 			errorMessage: 'Combinatie email en wachtwoord onjuist',
-			errorClass: 'errorLogin'
+			errorClass: 'errorLogin',
+			emailInput: req.body.email,
+			passwordInput: req.body.password
 		})
 	}
 })
