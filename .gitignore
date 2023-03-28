@@ -1,3 +1,10 @@
 .env
+<<<<<<< HEAD
+/node_modules
+package-lock.json
+.idea
+.DS_Store
+=======
 .DS_Store
 /node_modules
+>>>>>>> Teamassessment/main

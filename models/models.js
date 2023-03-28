@@ -13,19 +13,6 @@ const albumSchema = new mongoose.Schema({
 	Like: Boolean,
 })
 
-const userSchema = new mongoose.Schema({
-	Email: String,
-	Like: Array,
-	Password: String,
-	Profilepic: {
-		data: String,
-		contentType: String,
-	},
-	Username: String,
-})
-
 const Albums = mongoose.model('Albums', albumSchema, 'Albums')
-const Users = mongoose.model('Users', userSchema, 'Users')
 
-module.exports.Users = Users
-module.exports.Albums = Albums
+module.exports = Albums
