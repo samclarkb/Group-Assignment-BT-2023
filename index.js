@@ -84,13 +84,12 @@ app.get('/', (req, res) => {
 })
 	.get('/results', authorizeUser, async (req, res) => {
 		const currentUser = await Users.find({ _id: req.session.user.userID })
-		favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
+		const favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
 
 		const fetchAlbums = await Albums.find({})
 		res.render('results', { data: fetchAlbums, user: favoriteAlbumTitles })
 	})
 	.get('/preference', authorizeUser, async (req, res) => {
-		// const fetchOneAlbum = await Albums.find({ _id: req.params.id })
 		res.render('preference')
 	})
 	.get('/results:id', authorizeUser, async (req, res) => {
@@ -108,7 +107,7 @@ app.get('/', (req, res) => {
 	.get('/favorites', authorizeUser, async (req, res) => {
 		const currentUser = await Users.find({ _id: req.session.user.userID })
 		const favoriteAlbums = currentUser[0].Like
-		favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
+		const favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
 
 		res.render('favorites', { data: favoriteAlbums, user: favoriteAlbumTitles })
 	})
@@ -122,7 +121,7 @@ app.get('/', (req, res) => {
 	})
 	.get('/all', authorizeUser, async (req, res) => {
 		const currentUser = await Users.find({ _id: req.session.user.userID })
-		favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
+		const favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
 
 		const fetchAlbums = await Albums.find({}).sort({ _id: -1 })
 		res.render('all', { data: fetchAlbums, user: favoriteAlbumTitles })
@@ -152,7 +151,7 @@ app.post('/logout', (req, res) => {
 
 app.post('/results', async (req, res) => {
 	const currentUser = await Users.find({ _id: req.session.user.userID })
-	favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
+	const favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
 
 	const fetchAlbums = await Albums.find({ Year: req.body.year, Genre: req.body.genre })
 	res.render('results', { data: fetchAlbums, user: favoriteAlbumTitles })
@@ -194,7 +193,7 @@ app.post('/results', async (req, res) => {
 	})
 	.post('/delete:id', async (req, res) => {
 		const currentUser = await Users.find({ _id: req.session.user.userID })
-		favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
+		const favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
 
 		const deleteAlbum = await Albums.find({ _id: req.params.id }).remove()
 		const fetchAlbums = await Albums.find({}).sort({ _id: -1 })
