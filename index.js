@@ -5,8 +5,13 @@ const expressLayouts = require('express-ejs-layouts')
 const dotenv = require('dotenv').config()
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
+const bcrypt = require("bcrypt");
 const session = require('express-session')
+//Album en user model met hashpassword in db
 const { Albums, Users } = require('./models/models')
+const saltRounds = 10;
+
+
 
 // Defining express as app
 const app = express()
@@ -115,20 +120,38 @@ app.get('/', (req, res) => {
 		const fetchAlbums = await Albums.find({}).sort({ _id: -1 })
 		res.render('all', { data: fetchAlbums })
 	})
+app.get('/register', async (req, res) => {
+	res.render('register', {
+		errorMessage: '',
+		errorClass: ''
+	})
+})
+app.get('/register-failed', async (req, res) => {
+	res.render('register-failed')
+}).get('/register-succes', async (req, res) => {
+	res.render('register-succes')
+})
 	.get('*', (req, res) => {
 		res.status(404).render('404')
 	})
 
 // All Post requests
 app.post('/home', async (req, res) => {
-	const checkUser = await Users.find({ Email: req.body.email, Password: req.body.password });
+	const checkUser = await Users.find({ Email: req.body.email });
+	console.log(checkUser);
 	if (checkUser.length !== 0) {
-		req.session.user = { userID: checkUser[0]['_id'] }
-		// console.log(req.session.user);
-		const bla = await Users.find({ _id: req.session.user.userID })
-		console.log(bla[0].Profilepic);
-		res.render('preference', { user: bla[0].Profilepic.data })
+		const dbpw = checkUser[0]['Password'];
+		const cmp = await bcrypt.compare(req.body.password, dbpw);
+		console.log('Email gevonden');
+		if (cmp) {
+			req.session.user = { userID: checkUser[0]['_id'] }
+			const bla = await Users.find({ _id: req.session.user.userID })
+			console.log(bla[0].Profilepic);
+			res.render('preference', { user: bla[0].Profilepic.data })
+			console.log('Wachtwoord correct');
+		}
 	} else {
+		console.log('niet gelukt');
 		res.render('inloggen', {
 			errorMessage: 'Combinatie email en wachtwoord onjuist',
 			errorClass: 'errorLogin',
@@ -136,6 +159,9 @@ app.post('/home', async (req, res) => {
 			passwordInput: req.body.password
 		})
 	}
+
+
+
 })
 
 app.post('/logout', (req, res) => {
@@ -186,6 +212,36 @@ app.post('/results', async (req, res) => {
 		})
 		res.render('all', { data: fetchAlbums })
 	})
+
+	.post('/register', upload.single('Profilepic'), async (req, res) => {
+		const checkUser = await Users.find({ Email: req.body.email });
+		const uname = checkUser['Username'];
+		Users.findOne({ Email: req.body.email }, async function (err, result) {
+			if (err) throw err;
+			if (result) {
+				// doe hier iets om te melden dat het e-mailadres al in gebruik is
+				console.log('email komt al voor')
+				res.render('register', {
+					errorMessage: 'Email al in gebruik',
+					errorClass: 'errorLogin'
+				})
+			} else {
+				// als de email niet in gebruik is, voor onderstaande commando uit
+				const hashedPwd = await bcrypt.hash(req.body.password, saltRounds);
+				Users.insertMany([
+					{
+						Username: req.body.username,
+						Password: hashedPwd,
+						Email: req.body.email,
+						Profilepic: { data: req.file.filename, contentType: 'image/png' }
+					}
+				]).then(() => console.log('user saved'))
+				res.redirect('register-succes')
+
+			}
+		})
+	})
+
 
 // Making sure the application is running on the port I defined in the env file
 app.listen(port, () => {

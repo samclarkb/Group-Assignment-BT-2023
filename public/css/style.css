@@ -562,6 +562,7 @@ div>h2 {
 	font-weight: bold;
 }
 
+<<<<<<< HEAD
 .header {
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
@@ -588,6 +589,8 @@ div>h2 {
 	color: rgb(139, 0, 0);
 }
 
+=======
+>>>>>>> main
 .unauthorized img {
 	width: 9em;
 }
