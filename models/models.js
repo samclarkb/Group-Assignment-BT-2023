@@ -11,6 +11,7 @@ const albumSchema = new mongoose.Schema({
 	},
 	Description: String,
 	Like: Boolean,
+	SpotifyLink: String,
 })
 
 const userSchema = new mongoose.Schema({

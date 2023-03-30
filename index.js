@@ -212,6 +212,7 @@ app.post('/results', async (req, res) => {
 				Like: false,
 				Description: req.body.Description,
 				Image: { data: req.file.filename, contentType: 'image/png' },
+				SpotifyLink: req.body.SpotifyLink,
 			},
 		]).then(() => console.log('user saved'))
 
@@ -271,3 +272,5 @@ app.post('/results', async (req, res) => {
 app.listen(port, () => {
 	console.log(`server running on ${port}`)
 })
+
+//Spotify API

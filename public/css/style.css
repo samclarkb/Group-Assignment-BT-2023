@@ -288,7 +288,8 @@ input[type='submit'],
 }
 
 .detailPage img {
-	/* object-fit: unset; */
+	max-height: 300px;
+	object-fit: cover;
 	width: 100%;
 }
 
@@ -513,8 +514,8 @@ div>h2 {
 		padding-bottom: 1em;
 	}
 
-	.detailPage>p:last-of-type {
-		padding-bottom: 5em;
+	.detailPage > p:last-of-type {
+		padding-bottom: 2em;
 	}
 
 	input[type='file'] {
@@ -523,6 +524,22 @@ div>h2 {
 	}
 }
 
+
+/* Spotify Embed Styling */
+#titleImg {
+	max-height: 300px;
+	object-fit: cover;
+}
+
+#embed-frame {
+	width: 90%;
+	margin-bottom: 7.5em;
+}
+
+iFrame {
+	height: 500px;
+	border-radius: 0;
+}
 .formLogin {
 	display: flex;
 	margin: 0em 0;
