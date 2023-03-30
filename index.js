@@ -5,8 +5,13 @@ const expressLayouts = require('express-ejs-layouts')
 const dotenv = require('dotenv').config()
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
+const bcrypt = require("bcrypt");
 const session = require('express-session')
+//Album en user model met hashpassword in db
 const { Albums, Users } = require('./models/models')
+const saltRounds = 10;
+
+
 
 // Defining express as app
 const app = express()
@@ -127,18 +132,21 @@ app.get('/', (req, res) => {
 
 // All Post requests
 app.post('/home', async (req, res) => {
-	const checkUser = await Users.find({ Email: req.body.email, Password: req.body.password });
-	// if(!req.body.email || !req.body.password) {
-	// }
-	if (checkUser.length !== 0) {
-		req.session.user = { userID: checkUser[0]['_id'] }
-		res.render('preference')
-	} else {
-		res.render('inloggen', {
-			errorMessage: 'Combinatie email en wachtwoord onjuist',
-			errorClass: 'errorLogin'
-		})
-	}
+	const checkUser = await Users.find({Email: req.body.email});
+	if (checkUser.length !== 0){
+		const cmp = await bcrypt.compare( checkUser.Password, req.body.password);
+		if (cmp) {
+				req.session.user = {userID: checkUser[0]['_id']}
+				res.render('preference')
+			}
+		} else {
+			res.render('inloggen', {
+				errorMessage: 'Combinatie email en wachtwoord onjuist',
+				errorClass: 'errorLogin'
+			})
+		}
+
+
 })
 
 app.post('/logout', (req, res) => {
@@ -191,7 +199,8 @@ app.post('/results', async (req, res) => {
 	})
 
 	.post('/register',upload.single('Profilepic'), (req, res) => {
-		Users.findOne({ Email: req.body.email }, function(err, result) {
+		Users.findOne({ Email: req.body.email }, async function (err, result) {
+
 			if (err) throw err;
 
 			if (result) {
@@ -201,10 +210,11 @@ app.post('/results', async (req, res) => {
 				// doe hier iets om te melden dat het e-mailadres al in gebruik is
 			} else {
 				// als de email niet in gebruik is, voor onderstaande commando uit
+				const hashedPwd = await bcrypt.hash(req.body.password, saltRounds);
 				Users.insertMany([
 					{
 						Username: req.body.username,
-						Password: req.body.password,
+						Password: hashedPwd,
 						Email: req.body.email,
 						Profilepic: {data: req.file.filename, contentType: 'image/png'}
 					}
