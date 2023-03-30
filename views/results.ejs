@@ -1,6 +1,6 @@
 <div>
 	<% if(data.length > 0){ %>
-	<%- include('partials/header', {title: 'Results', image: user[0].Profilepic.data, username: user[0].Username }) %>
+	<%- include('partials/header', {title: 'Results', image: userinfo[0].Profilepic.data, username: userinfo[0].Username }) %>
 	<% } else{ %> <% } %> <% if(data.length > 0){ %> <% for(let i = 0; i < data.length; i++){ %>
 
 	<a class="albumCard" id="albumcard" href="results<%= data[i]._id %>">
@@ -24,7 +24,7 @@
 		<div class="heart">
 			<form action="favorites<%= data[i]._id %>" method="POST">
 				<label for="<%= data[i]._id %>">
-					<% if(data[i].Like === true > 0){ %>
+					<% if(user.includes(data[i].Title)){ %>
 					<i onclick="toggle(this)" class="fa fa-heart"></i>
 					<% } else{ %>
 					<i onclick="toggle(this)" class="fa fa-heart-o"></i>

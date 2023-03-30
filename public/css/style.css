@@ -288,7 +288,8 @@ input[type='submit'],
 }
 
 .detailPage img {
-	/* object-fit: unset; */
+	max-height: 300px;
+	object-fit: cover;
 	width: 100%;
 }
 
@@ -372,8 +373,9 @@ i {
 	position: relative;
 }
 
-.formText>input[type='text'],
-.formText>textarea {
+/* niels add: input type email and password */
+.formText > input[type='text'], .formText > input[type='email'], .formText > input[type='password'],
+.formText > textarea {
 	border: none;
 	font-size: 1.5em;
 	width: 75%;
@@ -399,6 +401,59 @@ i {
 .addForm {
 	padding-bottom: 5em;
 }
+
+
+/* Niels */
+.update{
+	margin-bottom: 2em;
+}
+
+.update fieldset{
+	margin: 1em;
+	margin-bottom: 3em;
+}
+
+.update h3{
+	font-size: 1.5em;
+	margin: 0;
+}
+
+.update h4{
+	margin: 0;
+}
+
+.update input[type=password]{
+	margin-bottom: 1em;
+}
+
+.update input[type=submit]{
+	margin: 0;
+}
+
+.update figure{
+	width: 15em;
+	height: 15em;
+    clip-path: circle(40%);
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+	margin-bottom: 1em;
+}
+
+.update figure img{
+	max-height: 25em;
+    max-width: 25em;
+}
+
+.update .passError{
+	color: red;
+	font-weight: 700;
+	margin: 0;
+}
+
+/* niels end */
 
 .search {
 	display: flex;
@@ -509,8 +564,8 @@ div>h2 {
 		padding-bottom: 1em;
 	}
 
-	.detailPage>p:last-of-type {
-		padding-bottom: 5em;
+	.detailPage > p:last-of-type {
+		padding-bottom: 2em;
 	}
 
 	input[type='file'] {
@@ -519,6 +574,22 @@ div>h2 {
 	}
 }
 
+
+/* Spotify Embed Styling */
+#titleImg {
+	max-height: 300px;
+	object-fit: cover;
+}
+
+#embed-frame {
+	width: 90%;
+	margin-bottom: 7.5em;
+}
+
+iFrame {
+	height: 500px;
+	border-radius: 0;
+}
 .formLogin {
 	display: flex;
 	margin: 0em 0;

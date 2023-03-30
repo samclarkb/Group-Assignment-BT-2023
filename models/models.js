@@ -11,6 +11,7 @@ const albumSchema = new mongoose.Schema({
 	},
 	Description: String,
 	Like: Boolean,
+	SpotifyLink: String,
 })
 
 const userSchema = new mongoose.Schema({
@@ -26,6 +27,4 @@ const userSchema = new mongoose.Schema({
 
 const Albums = mongoose.model('Albums', albumSchema, 'Albums')
 const Users = mongoose.model('Users', userSchema, 'Users')
-
-module.exports.Users = Users
-module.exports.Albums = Albums
+module.exports = { Users, Albums }
