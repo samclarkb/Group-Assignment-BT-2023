@@ -285,7 +285,8 @@ input[type='submit'] {
 }
 
 .detailPage img {
-	/* object-fit: unset; */
+	max-height: 300px;
+	object-fit: cover;
 	width: 100%;
 }
 
@@ -511,7 +512,7 @@ div > h2 {
 	}
 
 	.detailPage > p:last-of-type {
-		padding-bottom: 5em;
+		padding-bottom: 2em;
 	}
 
 	input[type='file'] {
@@ -525,6 +526,11 @@ div > h2 {
 #titleImg {
 	max-height: 300px;
 	object-fit: cover;
+}
+
+#embed-frame {
+	width: 90%;
+	margin-bottom: 7.5em;
 }
 
 iFrame {

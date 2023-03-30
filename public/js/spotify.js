@@ -1,7 +1,5 @@
 // Spotify Embed test
 const frame = document.getElementById("embed-frame");
-const titleSong = document.getElementById("titleSong");
-const titleImg = document.getElementById("titleImg");
 const spotifyUrl = document.getElementById("spotifyUrl").value;
 
 console.log(spotifyUrl);
@@ -12,9 +10,6 @@ console.log(spotifyUrl);
           .then((data) => {
             console.log(data);
             frame.innerHTML = data.html;
-            titleSong.innerHTML = data.title;
-            titleImg.src = data.thumbnail_url
-
           });
 
       }
