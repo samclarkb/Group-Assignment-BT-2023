@@ -24,7 +24,7 @@
 			<div class="heart">
 				<form class="likeForm" action="favorites<%= data[i]._id %>" method="POST">
 					<label for="<%= data[i]._id %>">
-						<% if(data[i].Like === true > 0){ %>
+						<% if(user.includes(data[i].Title)){ %>
 						<i onclick="toggle(this)" class="fa fa-heart"></i>
 						<% } else{ %>
 						<i onclick="toggle(this)" class="fa fa-heart-o"></i>
@@ -45,7 +45,7 @@
 	<% } else{ %>
 	<div class="noData">
 		<p>You didn't have add an album to your favorites list yet</p>
-		<a href="/">Search</a>
+		<a href="/preference">Search</a>
 	</div>
 
 	<% } %> <%- include('partials/navigation') %>

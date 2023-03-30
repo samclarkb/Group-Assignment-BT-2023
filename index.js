@@ -27,7 +27,7 @@ app.use(session({
 // check if user is authorized (logged in) to visit a page
 const authorizeUser = (req, res, next) => {
 	if (!req.session.user) {
-		res.status(401).render('401');
+		res.status(401).render('401')
 	} else {
 		next()
 	}
@@ -42,6 +42,7 @@ const port = process.env.PORT
 const url = `mongodb+srv://${userName}:${passWord}@Database.ymup0ov.mongodb.net/?retryWrites=true&w=majority`
 
 // Making connection with Mongodb
+mongoose.set('strictQuery', false)
 mongoose
 	.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
 	.then(() => {
@@ -87,8 +88,14 @@ app.get('/', (req, res) => {
 	})
 })
 	.get('/results', authorizeUser, async (req, res) => {
+		const currentUser = await Users.find({ _id: req.session.user.userID })
+		const favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
+
 		const fetchAlbums = await Albums.find({})
-		res.render('results', { data: fetchAlbums })
+		res.render('results', { data: fetchAlbums, user: favoriteAlbumTitles })
+	})
+	.get('/preference', authorizeUser, async (req, res) => {
+		res.render('preference')
 	})
 	.get('/results:id', authorizeUser, async (req, res) => {
 		const fetchOneAlbum = await Albums.find({ _id: req.params.id })
@@ -103,8 +110,11 @@ app.get('/', (req, res) => {
 		res.render('detailPageAll', { data: fetchOneAlbum })
 	})
 	.get('/favorites', authorizeUser, async (req, res) => {
-		const fetchFavorite = await Albums.find({ Like: true })
-		res.render('favorites', { data: fetchFavorite })
+		const currentUser = await Users.find({ _id: req.session.user.userID })
+		const favoriteAlbums = currentUser[0].Like
+		const favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
+
+		res.render('favorites', { data: favoriteAlbums, user: favoriteAlbumTitles })
 	})
 	.get('/deleteModal:id', authorizeUser, async (req, res) => {
 		console.log('req', req.params.id)
@@ -115,8 +125,11 @@ app.get('/', (req, res) => {
 		res.render('add')
 	})
 	.get('/all', authorizeUser, async (req, res) => {
+		const currentUser = await Users.find({ _id: req.session.user.userID })
+		const favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
+
 		const fetchAlbums = await Albums.find({}).sort({ _id: -1 })
-		res.render('all', { data: fetchAlbums })
+		res.render('all', { data: fetchAlbums, user: favoriteAlbumTitles })
 	})
 	app.get('/register', async (req, res) => {
 		res.render('register', {
@@ -163,14 +176,29 @@ app.post('/logout', (req, res) => {
 })
 
 app.post('/results', async (req, res) => {
+	const currentUser = await Users.find({ _id: req.session.user.userID })
+	const favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
+
 	const fetchAlbums = await Albums.find({ Year: req.body.year, Genre: req.body.genre })
-	res.render('results', { data: fetchAlbums })
+	res.render('results', { data: fetchAlbums, user: favoriteAlbumTitles })
 })
 	.post('/favorites:id', async (req, res) => {
-		const updateFavorite = await Albums.findOneAndUpdate({ _id: req.params.id }, [
-			{ $set: { Like: { $eq: [false, '$Like'] } } },
-		])
-		// res.redirect(`/${req.originalUrl}}`, { data: updateFavorite })
+		const currentUser = await Users.findOne({ _id: req.session.user.userID })
+		const currentAlbum = await Albums.findOne({ _id: req.params.id })
+
+		const albumTitle = currentUser.Like.map(item => item.Title)
+
+		if (albumTitle.includes(currentAlbum.Title)) {
+			const updateFavorite = await Users.findOneAndUpdate(
+				{ _id: currentUser.id },
+				{ $pull: { Like: currentAlbum } }
+			)
+		} else {
+			const updateFavorite = await Users.findOneAndUpdate(
+				{ _id: currentUser.id },
+				{ $push: { Like: currentAlbum } }
+			)
+		}
 	})
 	.post('/add', upload.single('File'), (req, res) => {
 		console.log('req', req.body)
@@ -190,9 +218,12 @@ app.post('/results', async (req, res) => {
 		res.render('succesAdd')
 	})
 	.post('/delete:id', async (req, res) => {
+		const currentUser = await Users.find({ _id: req.session.user.userID })
+		const favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
+
 		const deleteAlbum = await Albums.find({ _id: req.params.id }).remove()
 		const fetchAlbums = await Albums.find({}).sort({ _id: -1 })
-		res.render('all', { data: fetchAlbums })
+		res.render('all', { data: fetchAlbums, user: favoriteAlbumTitles })
 	})
 	.post('/all', async (req, res) => {
 		const fetchAlbums = await Albums.find({
