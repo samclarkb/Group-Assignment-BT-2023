@@ -9,8 +9,8 @@ const bcrypt = require('bcrypt')
 const session = require('express-session')
 //Album en user model met hashpassword in db
 const { Albums, Users } = require('./models/models')
-const saltRounds = 10;
-let userInfo;
+const saltRounds = 10
+let userInfo
 
 // Defining express as app
 const app = express()
@@ -87,9 +87,9 @@ app.get('/', (req, res) => {
 		errorMessage: '',
 		errorClass: '',
 		emailInput: '',
-		passwordInput: ''
+		passwordInput: '',
 	})
-	})
+})
 	.get('/results', authorizeUser, async (req, res) => {
 		const currentUser = await Users.find({ _id: req.session.user.userID })
 		const favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
@@ -97,7 +97,7 @@ app.get('/', (req, res) => {
 		res.render('results', { data: fetchAlbums, user: favoriteAlbumTitles, userinfo: userInfo })
 	})
 	.get('/preference', authorizeUser, async (req, res) => {
-		res.render('preference', {userinfo: userInfo})
+		res.render('preference', { userinfo: userInfo })
 	})
 	.get('/results:id', authorizeUser, async (req, res) => {
 		const fetchOneAlbum = await Albums.find({ _id: req.params.id })
@@ -115,8 +115,11 @@ app.get('/', (req, res) => {
 		const currentUser = await Users.find({ _id: req.session.user.userID })
 		const favoriteAlbums = currentUser[0].Like
 		const favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
-		res.render('favorites', { data: favoriteAlbums, user: favoriteAlbumTitles, userinfo: userInfo })
-
+		res.render('favorites', {
+			data: favoriteAlbums,
+			user: favoriteAlbumTitles,
+			userinfo: userInfo,
+		})
 	})
 	.get('/deleteModal:id', authorizeUser, async (req, res) => {
 		console.log('req', req.params.id)
@@ -163,7 +166,7 @@ app.post('/home', async (req, res) => {
 		if (cmp) {
 			req.session.user = { userID: checkUser[0]['_id'] }
 			userInfo = await Users.find({ _id: req.session.user.userID })
-			res.render('preference', {userinfo: userInfo})
+			res.render('preference', { userinfo: userInfo })
 		}
 	} else {
 		res.render('inloggen', {
@@ -179,7 +182,7 @@ app.post('/logout', (req, res) => {
 		errorMessage: 'u bent succesvol uitgelogd!',
 		errorClass: 'successLogout',
 		emailInput: '',
-		passwordInput: ''
+		passwordInput: '',
 	})
 })
 
