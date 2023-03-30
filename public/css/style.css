@@ -115,7 +115,7 @@ section a,
 	text-align: left;
 }
 
-.albumCard>div p:first-of-type {
+.albumCard > div p:first-of-type {
 	margin-top: 0.5em;
 	margin-bottom: 0.5em;
 	font-weight: 700;
@@ -124,7 +124,7 @@ section a,
 	margin-left: 1.5em;
 }
 
-.albumCard>p {
+.albumCard > p {
 	font-weight: thin;
 	opacity: 50%;
 	margin: 0 0 0 1.5em;
@@ -140,7 +140,7 @@ section a,
 }
 
 .albumCard div:nth-of-type(2),
-.detailPage>div {
+.detailPage > div {
 	display: flex;
 	height: auto;
 	margin-top: 0.25em;
@@ -148,11 +148,11 @@ section a,
 	flex-direction: row;
 }
 
-.detailPage>div {
+.detailPage > div {
 	margin-top: 0.5em;
 }
 
-.detailPage>div h1 {
+.detailPage > div h1 {
 	max-width: 70%;
 	text-align: left;
 	margin: 0;
@@ -160,8 +160,8 @@ section a,
 	font-size: 1.5em;
 }
 
-.albumCard>div:nth-of-type(2) p:nth-of-type(2),
-.detailPage>div>p:last-of-type {
+.albumCard > div:nth-of-type(2) p:nth-of-type(2),
+.detailPage > div > p:last-of-type {
 	opacity: 50%;
 	text-align: right;
 	margin: 0;
@@ -169,7 +169,7 @@ section a,
 	margin-right: 1em;
 }
 
-.detailPage>div>p:last-of-type {
+.detailPage > div > p:last-of-type {
 	font-size: 1em;
 }
 
@@ -184,7 +184,7 @@ input[type='file'] {
 	bottom: 10%;
 }
 
-input[type='file']+label {
+input[type='file'] + label {
 	border: 0.15em solid black;
 	padding: 4em 0;
 	display: flex;
@@ -196,7 +196,7 @@ input[type='file']+label {
 	background-color: white;
 }
 
-input[type='file']+label img {
+input[type='file'] + label img {
 	width: 2em;
 }
 
@@ -226,7 +226,7 @@ form {
 	height: 100%;
 }
 
-input[type='radio']+label {
+input[type='radio'] + label {
 	border: 0.15em solid black;
 	margin: 0.5em 0.75em;
 	width: 75%;
@@ -236,12 +236,12 @@ input[type='radio']+label {
 	border-radius: 5em;
 }
 
-fieldset:first-of-type input[type='radio']+label {
+fieldset:first-of-type input[type='radio'] + label {
 	margin: 0.5em 0.75em;
 	width: 27.5%;
 }
 
-input[type='radio']:checked+label {
+input[type='radio']:checked + label {
 	border: 0.15em solid black;
 	background-color: rgba(0, 0, 0, 0.05);
 	color: black;
@@ -293,7 +293,7 @@ input[type='submit'],
 	width: 100%;
 }
 
-.detailPage>p:first-of-type {
+.detailPage > p:first-of-type {
 	display: block;
 	text-align: left;
 	width: 90%;
@@ -301,14 +301,14 @@ input[type='submit'],
 	margin-top: 0.5em;
 }
 
-.detailPage>p:last-of-type {
+.detailPage > p:last-of-type {
 	padding-bottom: 1em;
 	width: 90%;
 	font-size: 0.9em;
 	opacity: 50%;
 }
 
-.detailPage>a {
+.detailPage > a {
 	border: none;
 	background-color: rgba(250, 250, 250, 1);
 	color: white;
@@ -319,7 +319,7 @@ input[type='submit'],
 	padding-bottom: 5em;
 }
 
-.detailPage>a img {
+.detailPage > a img {
 	width: 1.25em;
 	transform: translate(-0.25em, -0.25em);
 }
@@ -341,11 +341,11 @@ legend h2 {
 	display: none;
 }
 
-.heart>form>input {
+.heart > form > input {
 	display: none;
 }
 
-.heart>form {
+.heart > form {
 	display: flex;
 	align-items: flex-end;
 	margin-right: 2.1em;
@@ -374,7 +374,9 @@ i {
 }
 
 /* niels add: input type email and password */
-.formText > input[type='text'], .formText > input[type='email'], .formText > input[type='password'],
+.formText > input[type='text'],
+.formText > input[type='email'],
+.formText > input[type='password'],
 .formText > textarea {
 	border: none;
 	font-size: 1.5em;
@@ -386,7 +388,7 @@ i {
 	margin: 0;
 }
 
-.formText>textarea {
+.formText > textarea {
 	border: 0.1em solid black;
 	border-radius: 0.5em;
 	height: 7.5em;
@@ -394,7 +396,7 @@ i {
 	text-align: left;
 }
 
-.formText>Label>h2 {
+.formText > Label > h2 {
 	margin: 0.5em 0;
 }
 
@@ -402,52 +404,51 @@ i {
 	padding-bottom: 5em;
 }
 
-
 /* Niels */
-.update{
+.update {
 	margin-bottom: 2em;
 }
 
-.update fieldset{
+.update fieldset {
 	margin: 1em;
 	margin-bottom: 3em;
 }
 
-.update h3{
+.update h3 {
 	font-size: 1.5em;
 	margin: 0;
 }
 
-.update h4{
+.update h4 {
 	margin: 0;
 }
 
-.update input[type=password]{
+.update input[type='password'] {
 	margin-bottom: 1em;
 }
 
-.update input[type=submit]{
+.update input[type='submit'] {
 	margin: 0;
 }
 
-.update figure{
+.update figure {
 	width: 15em;
 	height: 15em;
-    clip-path: circle(40%);
-    padding: 0;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+	clip-path: circle(40%);
+	padding: 0;
+	margin: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	margin-bottom: 1em;
 }
 
-.update figure img{
+.update figure img {
 	max-height: 25em;
-    max-width: 25em;
+	max-width: 25em;
 }
 
-.update .passError{
+.update .passError {
 	color: red;
 	font-weight: 700;
 	margin: 0;
@@ -504,7 +505,7 @@ i {
 	height: 65%;
 }
 
-.deleteModal form>div {
+.deleteModal form > div {
 	width: 80%;
 	display: flex;
 	align-items: center;
@@ -524,7 +525,7 @@ i {
 	margin: 1em 0;
 }
 
-.deleteModal .albumCard>p {
+.deleteModal .albumCard > p {
 	margin: 0 0 1em 1.5em;
 }
 
@@ -537,7 +538,7 @@ i {
 	transform: translate(250%, -55%);
 }
 
-div>h2 {
+div > h2 {
 	width: 100%;
 	text-align: center;
 	padding: 1em 0 0 0;
@@ -557,7 +558,7 @@ div>h2 {
 }
 
 @supports (position: absolute) {
-	.detailPage>a {
+	.detailPage > a {
 		position: absolute;
 		left: 0;
 		top: 0;
@@ -573,7 +574,6 @@ div>h2 {
 		margin-bottom: 0;
 	}
 }
-
 
 /* Spotify Embed Styling */
 #titleImg {
@@ -599,7 +599,7 @@ iFrame {
 	position: relative;
 }
 
-.formLogin>label {
+.formLogin > label {
 	display: block;
 	font-size: 1.2em;
 	margin-block-start: 0.83em;
@@ -609,9 +609,9 @@ iFrame {
 	font-weight: bold;
 }
 
-.formLogin>input[type='password'],
-.formLogin>input[type='email'],
-.formLogin>input[type='text'] {
+.formLogin > input[type='password'],
+.formLogin > input[type='email'],
+.formLogin > input[type='text'] {
 	border: none;
 	font-size: 1em;
 	width: 75%;
@@ -638,9 +638,16 @@ iFrame {
 
 .header {
 	display: grid;
+	background-color: white;
 	grid-template-columns: 1fr 2fr 1fr;
 	grid-template-rows: 1fr;
-	margin: 0.8em 0;
+	margin: 0 0 0.8em 0;
+	padding: 0.5em 0;
+	position: sticky;
+	height: auto;
+	top: 0;
+	left: 0;
+	z-index: 99;
 }
 
 .header div:first-child {
@@ -649,12 +656,12 @@ iFrame {
 
 .header img {
 	border-radius: 50%;
-	width: 4em;
+	width: 3em;
 	margin-left: 0.9em;
 }
 
 .header p {
-	font-weight: bold;
+	/* font-weight: bold; */
 	margin-left: 0.6em;
 }
 
@@ -664,10 +671,9 @@ iFrame {
 
 .header form {
 	grid-column: 3;
-
 }
 
-.header form input[value="logout"] {
+.header form input[value='logout'] {
 	background-color: transparent;
 	box-shadow: none;
 	border: none;

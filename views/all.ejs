@@ -1,6 +1,7 @@
 <div class="all">
 	<% if(data.length > 0){ %>
         <%- include('partials/header', {title: 'Latest', image: userinfo[0].Profilepic.data, username: userinfo[0].Username}) %>
+        <h3>Latest</h3>
 	<form action="/all" method="post" class="search">
 		<label for="search"></label>
 		<input type="text" id="search" name="search" placeholder="Search" /><a class="clearSearch" href="/all"><img src="../images/clear.png" alt=""

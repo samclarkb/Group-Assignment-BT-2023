@@ -175,24 +175,22 @@ app.post('/home', async (req, res) => {
 		})
 	}
 })
-
-app.post('/logout', (req, res) => {
-	req.session.destroy()
-	res.render('inloggen', {
-		errorMessage: 'u bent succesvol uitgelogd!',
-		errorClass: 'successLogout',
-		emailInput: '',
-		passwordInput: '',
+	.post('/logout', (req, res) => {
+		req.session.destroy()
+		res.render('inloggen', {
+			errorMessage: 'u bent succesvol uitgelogd!',
+			errorClass: 'successLogout',
+			emailInput: '',
+			passwordInput: '',
+		})
 	})
-})
+	.post('/results', async (req, res) => {
+		const currentUser = await Users.find({ _id: req.session.user.userID })
+		const favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
 
-app.post('/results', async (req, res) => {
-	const currentUser = await Users.find({ _id: req.session.user.userID })
-	const favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
-
-	const fetchAlbums = await Albums.find({ Year: req.body.year, Genre: req.body.genre })
-	res.render('results', { data: fetchAlbums, user: favoriteAlbumTitles, userinfo: userInfo })
-})
+		const fetchAlbums = await Albums.find({ Year: req.body.year, Genre: req.body.genre })
+		res.render('results', { data: fetchAlbums, user: favoriteAlbumTitles, userinfo: userInfo })
+	})
 	.post('/favorites:id', async (req, res) => {
 		const currentUser = await Users.findOne({ _id: req.session.user.userID })
 		const currentAlbum = await Albums.findOne({ _id: req.params.id })
@@ -238,6 +236,9 @@ app.post('/results', async (req, res) => {
 		res.render('all', { data: fetchAlbums, user: favoriteAlbumTitles })
 	})
 	.post('/all', async (req, res) => {
+		const currentUser = await Users.find({ _id: req.session.user.userID })
+		const favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
+
 		const fetchAlbums = await Albums.find({
 			$or: [
 				{ Title: req.body.search },
@@ -246,7 +247,7 @@ app.post('/results', async (req, res) => {
 				{ Genre: req.body.search },
 			],
 		})
-		res.render('all', { data: fetchAlbums })
+		res.render('all', { data: fetchAlbums, user: favoriteAlbumTitles, userinfo: userInfo })
 	})
 	.post('/update', upload.single('profilePicture'), async (req, res) => {
 		let currentUser = await Users.find({ _id: req.session.user.userID })

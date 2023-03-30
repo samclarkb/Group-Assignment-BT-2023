@@ -1,7 +1,9 @@
 <div class="preference">
 	<div>
-		<% if(data.length > 0){ %> <%- include('partials/header', {title: 'Favorites', image: userinfo[0].Profilepic.data, username: userinfo[0].Username}) %> <% }
-		else{ %> <% } %> <% if(data.length > 0){ %> <% for(let i = 0; i < data.length; i++){ %>
+		<% if(data.length > 0){ %> <%- include('partials/header', {title: 'Favorites', image:
+		userinfo[0].Profilepic.data, username: userinfo[0].Username}) %>
+		<h3>Favorites</h3>
+		<% } else{ %> <% } %> <% if(data.length > 0){ %> <% for(let i = 0; i < data.length; i++){ %>
 
 		<a class="albumCard" href="favorites<%= data[i]._id %>">
 			<% if( typeof data[i].Image.data != 'undefined' ){ %>
