@@ -146,75 +146,58 @@ app.post('/results', async (req, res) => {
 	})
 
 	.post('/update', upload.single('profilePicture'), async(req, res) => {
-		//fetch user
-		const fetchOneUser = await Users.find({ _id: '641c6d36e398c3ee8d693809'})
-		currentUser = {_id:'641c6d36e398c3ee8d693809'}
 
-		//if profile picture is empty change to current profile picture
-		if (req.file == undefined) {
-			req.file = { filename: fetchOneUser[0].Profilepic.data }
-		} else{
-		//profile picture
-		const newProfilePic = { $set: { Profilepic: { data: req.file.filename, contentType: 'image/png' }}}
-		changeProfilePic = await Users.findOneAndUpdate(currentUser , newProfilePic)
-		}
+		try{
+			//fetch user
+			const fetchOneUser = await Users.find({ _id: '641c6d36e398c3ee8d693809'})
+			currentUser = {_id:'641c6d36e398c3ee8d693809'}
 
-		//if username is empty change to current username
-		if (req.body.newUsername == '') {
-			req.body.newUsername = fetchOneUser[0].Username
-		} else{
+			//if profile picture is empty keep current profile picture
+			if (req.file == undefined) {
+				req.file = { filename: fetchOneUser[0].Profilepic.data }
+			} else {
+			//profile picture
+			const newProfilePic = { $set: { Profilepic: { data: req.file.filename, contentType: 'image/png' }}}
+			changeProfilePic = await Users.findOneAndUpdate(currentUser , newProfilePic)
+			}
+
+			//if username is empty keep current username
+			if (req.body.newUsername == '') {
+				req.body.newUsername = fetchOneUser[0].Username
+			} else{
 			//change username
 			const newUsername = { $set: { Username: req.body.newUsername } }
 			changeUsername = await Users.findOneAndUpdate(currentUser, newUsername)
-		}
+			}
 
-		//if email is empty change to current email
-		if (req.body.newEmail == '') {
-			req.body.newEmail = fetchOneUser[0].Email
-		} else{
-		// change email
-		const newEmail = { $set: { Email: req.body.newEmail } }
-		changeEmail = await Users.findOneAndUpdate(currentUser,newEmail)
-		}
+			//if email is empty keep current email
+			if (req.body.newEmail == '') {
+				req.body.newEmail = fetchOneUser[0].Email
+			} else{
+			// change email
+			const newEmail = { $set: { Email: req.body.newEmail } }
+			changeEmail = await Users.findOneAndUpdate(currentUser,newEmail)
+			}
 
-		//if password is empty change to current password
-		if (req.body.newPassword == '') {
-			req.body.newPassword = fetchOneUser[0].Password
-		} else {
-		// change password
-		const newPassword = { $set: { Password: req.body.newPassword } }
-		changePassword = await Users.findOneAndUpdate(currentUser,newPassword)
-		}
+			//if password is empty keep current password
+			if (req.body.newPassword == '') {
+				req.body.newPassword = fetchOneUser[0].Password
+			} 
+			if (req.body.currentPassword != fetchOneUser[0].Password) {
+				//if current password is not the same as the password of user give error
+				console.log('error')
+			} else {
+			// change password
+			const newPassword = { $set: { Password: req.body.newPassword } }
+			changePassword = await Users.findOneAndUpdate(currentUser,newPassword)
+			}
 
-		res.render('update', { data: fetchOneUser })
-		console.log(req.file.filename, req.body)
+			console.log(req.file.filename, req.body)
+		}
+		catch(err){
+			console.log(err)
+		}
 	})
-
-	// .post('/update', upload.single('profilePicture'), async(req, res) => {
-
-	// 	const fetchOneUser = await Users.find({ _id: '641c6d36e398c3ee8d693809'})
-	// 	currentUser = {_id:'641c6d36e398c3ee8d693809'}
-
-	// 	//change username
-	// 	const newUsername = { $set: { Username: req.body.newUsername } }
-	// 	changeUsername = await Users.findOneAndUpdate(currentUser, newUsername)
-
-	// 	// change email
-	// 	const newEmail = { $set: { Email: req.body.newEmail } }
-	// 	changeEmail = await Users.findOneAndUpdate(currentUser,newEmail)
-
-	// 	// change password
-	// 	const newPassword = { $set: { Password: req.body.newPassword } }
-	// 	changePassword = await Users.findOneAndUpdate(currentUser,newPassword)
-
-	// 	//profile picture
-	// 	const newProfilePic = { $set: { Profilepic: { data: req.file.filename, contentType: 'image/png' }}}
-	// 	changeProfilePic = await Users.findOneAndUpdate(currentUser , newProfilePic)
-
-	// 	res.render('update', { data: fetchOneUser })
-	// 	console.log(req.file.filename, req.body)
-	// })
-
 
 // Making sure the application is running on the port I defined in the env file
 app.listen(port, () => {

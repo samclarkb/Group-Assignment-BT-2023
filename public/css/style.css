@@ -418,6 +418,10 @@ i {
 	margin: 0;
 }
 
+.update input[type=password]{
+	margin-bottom: 1em;
+}
+
 .update input[type=submit]{
 	margin: 0;
 }

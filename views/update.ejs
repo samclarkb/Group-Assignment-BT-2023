@@ -33,8 +33,10 @@
 			<!-- change password -->
 			<fieldset>
 				<legend><h3>Change Password</h3></legend>
-				<h4> Password: <%= data[0].Password %> </h4>
+				<!-- <h4> Password: <%= data[0].Password %> </h4> -->
 				<div class="formText">
+					<label for="currentPassword"><h4>Current Password:</h4></label>
+					<input id="currentPassword" type="password" name="currentPassword"/>
 					<label for="newPassword"><h4>New Password:</h4></label>
 					<input id="newPassword" type="password" name="newPassword"/>
 				</div>
