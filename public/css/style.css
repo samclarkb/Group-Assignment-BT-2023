@@ -442,6 +442,13 @@ i {
 	max-height: 25em;
     max-width: 25em;
 }
+
+.update .passError{
+	color: red;
+	font-weight: 700;
+	margin: 0;
+}
+
 /* niels end */
 
 .search {

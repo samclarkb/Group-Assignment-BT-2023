@@ -94,7 +94,7 @@ app.get('/', (req, res) => {
 	})
 	.get('/update', async (req, res) => {
 		const fetchOneUser = await Users.find({ _id: '641c6d36e398c3ee8d693809' })
-		res.render('update', { data: fetchOneUser })
+		res.render('update', { data: fetchOneUser, passError: "false" })
 		})
 	.get('*', (req, res) => {
 		res.status(404).render('404')
@@ -186,11 +186,16 @@ app.post('/results', async (req, res) => {
 			if (req.body.currentPassword != fetchOneUser[0].Password) {
 				//if current password is not the same as the password of user give error
 				console.log('error')
+				res.render('update', { data: fetchOneUser, passError: "true" } )
+
 			} else {
 			// change password
 			const newPassword = { $set: { Password: req.body.newPassword } }
 			changePassword = await Users.findOneAndUpdate(currentUser,newPassword)
 			}
+
+			res.render('succesUpdate', { data: fetchOneUser, passError: "false" })
+
 
 			console.log(req.file.filename, req.body)
 		}

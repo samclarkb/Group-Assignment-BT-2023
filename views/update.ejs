@@ -39,6 +39,11 @@
 					<input id="currentPassword" type="password" name="currentPassword"/>
 					<label for="newPassword"><h4>New Password:</h4></label>
 					<input id="newPassword" type="password" name="newPassword"/>
+					
+					<% if (passError == "true") { %>
+						<p class="passError" >Incorrect Password</p>
+					<% } %> 
+				
 				</div>
 
 			</fieldset>
