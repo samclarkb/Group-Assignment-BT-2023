@@ -242,10 +242,11 @@ app.post('/results', async (req, res) => {
 		res.render('all', { data: fetchAlbums })
 	})
 	.post('/update', upload.single('profilePicture'), async (req, res) => {
+		let currentUser = await Users.find({ _id: req.session.user.userID })
 		try {
 			//fetch user
-			const fetchOneUser = await Users.find({ _id: '641c6d36e398c3ee8d693809' })
-			currentUser = { _id: '641c6d36e398c3ee8d693809' }
+			const fetchOneUser = await Users.find({ _id: currentUser._id })
+			currentUser = { _id: currentUser._id }
 
 			//if profile picture is empty keep current profile picture
 			if (req.file == undefined) {
