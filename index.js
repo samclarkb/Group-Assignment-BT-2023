@@ -124,7 +124,10 @@ app.post('/home', async (req, res) => {
 	const checkUser = await Users.find({ Email: req.body.email, Password: req.body.password });
 	if (checkUser.length !== 0) {
 		req.session.user = { userID: checkUser[0]['_id'] }
-		res.render('preference')
+		// console.log(req.session.user);
+		const bla = await Users.find({ _id: req.session.user.userID })
+		console.log(bla[0].Profilepic);
+		res.render('preference', { user: bla[0].Profilepic.data })
 	} else {
 		res.render('inloggen', {
 			errorMessage: 'Combinatie email en wachtwoord onjuist',
