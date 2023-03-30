@@ -169,7 +169,12 @@ app.post('/home', async (req, res) => {
 
 app.post('/logout', (req, res) => {
 	req.session.destroy()
-	res.redirect('/')
+	res.render('inloggen', {
+		errorMessage: 'u bent succesvol uitgelogd!',
+		errorClass: 'successLogout',
+		emailInput: '',
+		passwordInput: ''
+	})
 })
 
 app.post('/results', async (req, res) => {

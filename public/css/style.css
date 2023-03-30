@@ -562,6 +562,13 @@ div>h2 {
 	font-weight: bold;
 }
 
+.successLogout {
+	color: #008722;
+	background-color: #00872229;
+	padding: 1em;
+	font-weight: bold;
+}
+
 .header {
 	display: grid;
 	grid-template-columns: 1fr 2fr 1fr;
