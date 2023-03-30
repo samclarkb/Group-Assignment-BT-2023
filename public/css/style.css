@@ -555,6 +555,13 @@ div>h2 {
 	margin: 0;
 }
 
+.errorLogin {
+	color: red;
+	background-color: rgba(255, 0, 0, 0.108);
+	padding: 1em;
+	font-weight: bold;
+}
+
 .unauthorized img {
 	width: 9em;
 }
