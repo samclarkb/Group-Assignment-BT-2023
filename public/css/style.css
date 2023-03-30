@@ -26,6 +26,11 @@ body div,
 	align-items: center;
 }
 
+.unauthorized {
+	height: 100vh !important;
+	justify-content: center;
+}
+
 section h1 {
 	color: white;
 }
