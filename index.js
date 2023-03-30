@@ -133,13 +133,19 @@ app.get('/', (req, res) => {
 // All Post requests
 app.post('/home', async (req, res) => {
 	const checkUser = await Users.find({Email: req.body.email});
+	console.log(checkUser);
 	if (checkUser.length !== 0){
-		const cmp = await bcrypt.compare( checkUser.Password, req.body.password);
+		const dbpw = checkUser[0]['Password'];
+		const cmp = await bcrypt.compare(req.body.password, dbpw );
+		console.log('Email gevonden');
 		if (cmp) {
 				req.session.user = {userID: checkUser[0]['_id']}
 				res.render('preference')
-			}
+			console.log('Wachtwoord correct');
+
+		}
 		} else {
+		console.log('niet gelukt');
 			res.render('inloggen', {
 				errorMessage: 'Combinatie email en wachtwoord onjuist',
 				errorClass: 'errorLogin'
