@@ -143,8 +143,10 @@ app.post('/home', async (req, res) => {
 		console.log('Email gevonden');
 		if (cmp) {
 				req.session.user = {userID: checkUser[0]['_id']}
-				res.render('preference')
-				console.log('Wachtwoord correct');
+				res.render('preference', {
+					errorMessage: 'Wachtwoord onjuist',
+					errorClass: 'errorLogin'
+				})
 		}
 		} else {
 			console.log('niet gelukt');
