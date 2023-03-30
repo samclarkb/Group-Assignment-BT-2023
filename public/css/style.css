@@ -562,6 +562,34 @@ div>h2 {
 	font-weight: bold;
 }
 
+.header {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-rows: 1fr;
+	/* flex-direction: row; */
+}
+
+.header h2 {
+	grid-column: 2;
+}
+
+.header form {
+	grid-column: 3;
+
+}
+
+.header form input[value="logout"] {
+	background-color: transparent;
+	box-shadow: none;
+	border: none;
+	border-radius: 0;
+	padding: 0;
+	margin-top: 0;
+	color: rgb(139, 0, 0);
+}
+
 .unauthorized img {
 	width: 9em;
 }
+
+/* image user -----------logout */
