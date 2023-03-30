@@ -10,8 +10,7 @@ const session = require('express-session')
 //Album en user model met hashpassword in db
 const { Albums, Users } = require('./models/models')
 const saltRounds = 10;
-
-
+let userInfo;
 
 // Defining express as app
 const app = express()
@@ -87,10 +86,12 @@ app.get('/', (req, res) => {
 		emailInput: '',
 		passwordInput: ''
 	})
-})
+	})
+	.get('/home', authorizeUser, (req, res) => {
+		res.render('preference', { user: userInfo })
+	})
 	.get('/results', authorizeUser, async (req, res) => {
 		const fetchAlbums = await Albums.find({})
-		console.log(userInfo)
 		res.render('results', { data: fetchAlbums, user: userInfo })
 	})
 	.get('/results:id', authorizeUser, async (req, res) => {
@@ -121,7 +122,7 @@ app.get('/', (req, res) => {
 		const fetchAlbums = await Albums.find({}).sort({ _id: -1 })
 		res.render('all', { data: fetchAlbums, user: userInfo })
 	})
-app.get('/register', async (req, res) => {
+	.get('/register', async (req, res) => {
 	res.render('register', {
 		errorMessage: '',
 		errorClass: ''
@@ -136,25 +137,18 @@ app.get('/register-failed', async (req, res) => {
 		res.status(404).render('404')
 	})
 
-let userInfo;
-
 // All Post requests
 app.post('/home', async (req, res) => {
-	const checkUser = await Users.find({ Email: req.body.email });
-	console.log(checkUser);
+	const checkUser = await Users.find({ Email: req.body.email })
 	if (checkUser.length !== 0) {
-		const dbpw = checkUser[0]['Password'];
-		const cmp = await bcrypt.compare(req.body.password, dbpw);
-		console.log('Email gevonden');
+		const dbpw = checkUser[0]['Password']
+		const cmp = await bcrypt.compare(req.body.password, dbpw)
 		if (cmp) {
 			req.session.user = { userID: checkUser[0]['_id'] }
 			userInfo = await Users.find({ _id: req.session.user.userID })
-			console.log(userInfo);
 			res.render('preference', { user: userInfo })
-			console.log('Wachtwoord correct');
 		}
 	} else {
-		console.log('niet gelukt');
 		res.render('inloggen', {
 			errorMessage: 'Combinatie email en wachtwoord onjuist',
 			errorClass: 'errorLogin',
@@ -162,9 +156,6 @@ app.post('/home', async (req, res) => {
 			passwordInput: req.body.password
 		})
 	}
-
-
-
 })
 
 app.post('/logout', (req, res) => {
@@ -179,7 +170,6 @@ app.post('/logout', (req, res) => {
 
 app.post('/results', async (req, res) => {
 	const fetchAlbums = await Albums.find({ Year: req.body.year, Genre: req.body.genre })
-	console.log(userInfo)
 	res.render('results', { data: fetchAlbums, user: userInfo })
 })
 	.post('/favorites:id', async (req, res) => {

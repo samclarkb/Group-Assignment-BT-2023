@@ -1,6 +1,5 @@
 <div>
 	<% if(data.length > 0){ %>
-	<!-- <h2>Results</h2> -->
 	<%- include('partials/header', {title: 'Results', image: user[0].Profilepic.data, username: user[0].Username }) %>
 	<% } else{ %> <% } %> <% if(data.length > 0){ %> <% for(let i = 0; i < data.length; i++){ %>
 

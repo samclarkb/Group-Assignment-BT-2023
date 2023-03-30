@@ -435,10 +435,6 @@ i {
 	width: 1.15em;
 }
 
-.all input[type='submit'] {
-	/* display: none; */
-}
-
 .deleteModal {
 	text-align: center;
 	height: 100vh;
@@ -574,7 +570,6 @@ div>h2 {
 	grid-template-columns: 1fr 2fr 1fr;
 	grid-template-rows: 1fr;
 	margin: 0.8em 0;
-	/* flex-direction: row; */
 }
 
 .header div:first-child {
@@ -614,5 +609,3 @@ div>h2 {
 .unauthorized img {
 	width: 9em;
 }
-
-/* image user -----------logout */
