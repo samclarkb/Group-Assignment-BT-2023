@@ -41,24 +41,25 @@ const toggle = heart => {
 }
 
 // Highlights the icon of the page of where the user is located
-if (window.location.href === 'http://localhost:3333/favorites') {
+if (window.location.href === 'http://localhost:4444/favorites') {
 	buttonTwo.classList.add('inActive')
 	buttonOne.classList.add('inActive')
 	buttonThree.classList.add('inActive')
 	buttonFour.classList.add('active')
-} else if (window.location.href === 'http://localhost:3333/all') {
+} else if (window.location.href === 'http://localhost:4444/all') {
 	buttonTwo.classList.add('inActive')
 	buttonThree.classList.add('active')
 	buttonOne.classList.add('inActive')
 	buttonFour.classList.add('inActive')
-} else if (window.location.href === 'http://localhost:3333/add') {
+} else if (window.location.href === 'http://localhost:4444/add') {
 	buttonTwo.classList.add('active')
 	buttonOne.classList.add('inActive')
 	buttonThree.classList.add('inActive')
 	buttonFour.classList.add('inActive')
 } else if (
-	window.location.href === 'http://localhost:3333/' ||
-	window.location.href === 'http://localhost:3333/results'
+	window.location.href === 'http://localhost:4444/preference' ||
+	window.location.href === 'http://localhost:4444/results' ||
+	window.location.href === 'http://localhost:4444/home'
 ) {
 	buttonTwo.classList.add('inActive')
 	buttonThree.classList.add('inActive')

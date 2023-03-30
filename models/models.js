@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 const albumSchema = new mongoose.Schema({
 	Title: String,
@@ -11,11 +11,10 @@ const albumSchema = new mongoose.Schema({
 	},
 	Description: String,
 	Like: Boolean,
+	SpotifyLink: String,
 })
 
-
-
-const userSchema = new mongoose.Schema( {
+const userSchema = new mongoose.Schema({
 	Email: String,
 	Like: Array,
 	Password: String,
@@ -25,6 +24,7 @@ const userSchema = new mongoose.Schema( {
 	},
 	Username: String,
 })
+
 const Albums = mongoose.model('Albums', albumSchema, 'Albums')
 const Users = mongoose.model('Users', userSchema, 'Users')
-module.exports = {Users, Albums}
+module.exports = { Users, Albums }
