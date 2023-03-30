@@ -90,7 +90,8 @@ app.get('/', (req, res) => {
 })
 	.get('/results', authorizeUser, async (req, res) => {
 		const fetchAlbums = await Albums.find({})
-		res.render('results', { data: fetchAlbums })
+		console.log(userInfo)
+		res.render('results', { data: fetchAlbums, user: userInfo })
 	})
 	.get('/results:id', authorizeUser, async (req, res) => {
 		const fetchOneAlbum = await Albums.find({ _id: req.params.id })
@@ -106,7 +107,7 @@ app.get('/', (req, res) => {
 	})
 	.get('/favorites', authorizeUser, async (req, res) => {
 		const fetchFavorite = await Albums.find({ Like: true })
-		res.render('favorites', { data: fetchFavorite })
+		res.render('favorites', { data: fetchFavorite, user: userInfo })
 	})
 	.get('/deleteModal:id', authorizeUser, async (req, res) => {
 		console.log('req', req.params.id)
@@ -114,11 +115,11 @@ app.get('/', (req, res) => {
 		res.render('deleteModal', { data: fetchAlbum })
 	})
 	.get('/add', authorizeUser, (req, res) => {
-		res.render('add')
+		res.render('add', { user: userInfo })
 	})
 	.get('/all', authorizeUser, async (req, res) => {
 		const fetchAlbums = await Albums.find({}).sort({ _id: -1 })
-		res.render('all', { data: fetchAlbums })
+		res.render('all', { data: fetchAlbums, user: userInfo })
 	})
 app.get('/register', async (req, res) => {
 	res.render('register', {
@@ -135,6 +136,8 @@ app.get('/register-failed', async (req, res) => {
 		res.status(404).render('404')
 	})
 
+let userInfo;
+
 // All Post requests
 app.post('/home', async (req, res) => {
 	const checkUser = await Users.find({ Email: req.body.email });
@@ -145,9 +148,9 @@ app.post('/home', async (req, res) => {
 		console.log('Email gevonden');
 		if (cmp) {
 			req.session.user = { userID: checkUser[0]['_id'] }
-			const bla = await Users.find({ _id: req.session.user.userID })
-			console.log(bla[0].Profilepic);
-			res.render('preference', { user: bla[0].Profilepic.data })
+			userInfo = await Users.find({ _id: req.session.user.userID })
+			console.log(userInfo);
+			res.render('preference', { user: userInfo })
 			console.log('Wachtwoord correct');
 		}
 	} else {
@@ -171,7 +174,8 @@ app.post('/logout', (req, res) => {
 
 app.post('/results', async (req, res) => {
 	const fetchAlbums = await Albums.find({ Year: req.body.year, Genre: req.body.genre })
-	res.render('results', { data: fetchAlbums })
+	console.log(userInfo)
+	res.render('results', { data: fetchAlbums, user: userInfo })
 })
 	.post('/favorites:id', async (req, res) => {
 		const updateFavorite = await Albums.findOneAndUpdate({ _id: req.params.id }, [

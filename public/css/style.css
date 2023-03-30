@@ -436,7 +436,7 @@ i {
 }
 
 .all input[type='submit'] {
-	display: none;
+	/* display: none; */
 }
 
 .deleteModal {
@@ -562,12 +562,27 @@ div>h2 {
 	font-weight: bold;
 }
 
-<<<<<<< HEAD
 .header {
 	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-columns: 1fr 2fr 1fr;
 	grid-template-rows: 1fr;
+	margin: 0.8em 0;
 	/* flex-direction: row; */
+}
+
+.header div:first-child {
+	flex-direction: row;
+}
+
+.header img {
+	border-radius: 50%;
+	width: 4em;
+	margin-left: 0.9em;
+}
+
+.header p {
+	font-weight: bold;
+	margin-left: 0.6em;
 }
 
 .header h2 {
@@ -589,8 +604,6 @@ div>h2 {
 	color: rgb(139, 0, 0);
 }
 
-=======
->>>>>>> main
 .unauthorized img {
 	width: 9em;
 }

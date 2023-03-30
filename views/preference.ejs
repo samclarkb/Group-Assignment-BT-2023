@@ -1,6 +1,7 @@
 <div>
-	<%- include('partials/header', {title: 'Home' , image: user }) %><%- include('partials/form') %> <%-
-				include('partials/navigation') %>
+	<%- include('partials/header', {title: 'Home' , image: user[0].Profilepic.data, username: user[0].Username }) %><%-
+			include('partials/form') %>
+			<%- include('partials/navigation') %>
 </div>
 
 <!-- img: 'img path', user: 'naam van user',  -->
