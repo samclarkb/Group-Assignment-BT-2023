@@ -119,7 +119,10 @@ app.get('/', (req, res) => {
 		res.render('all', { data: fetchAlbums })
 	})
 	app.get('/register', async (req, res) => {
-		res.render('register')
+		res.render('register', {
+			errorMessage: '',
+			errorClass: ''
+		})
 	})
 	app.get('/register-failed', async (req, res) => {
 		res.render('register-failed')
@@ -141,11 +144,10 @@ app.post('/home', async (req, res) => {
 		if (cmp) {
 				req.session.user = {userID: checkUser[0]['_id']}
 				res.render('preference')
-			console.log('Wachtwoord correct');
-
+				console.log('Wachtwoord correct');
 		}
 		} else {
-		console.log('niet gelukt');
+			console.log('niet gelukt');
 			res.render('inloggen', {
 				errorMessage: 'Combinatie email en wachtwoord onjuist',
 				errorClass: 'errorLogin'
@@ -204,16 +206,18 @@ app.post('/results', async (req, res) => {
 		res.render('all', { data: fetchAlbums })
 	})
 
-	.post('/register',upload.single('Profilepic'), (req, res) => {
-		Users.findOne({ Email: req.body.email }, async function (err, result) {
-
+	.post('/register',upload.single('Profilepic'), async (req, res) => {
+		const checkUser = await Users.find({Email: req.body.email});
+		const uname = checkUser['Username'];
+		Users.findOne({Email: req.body.email}, async function (err, result) {
 			if (err) throw err;
-
 			if (result) {
-				console.log('email komt al voor')
-				res.redirect('register-failed')
-
 				// doe hier iets om te melden dat het e-mailadres al in gebruik is
+				console.log('email komt al voor')
+				res.render('register', {
+					errorMessage: 'Email al in gebruik',
+					errorClass: 'errorLogin'
+				})
 			} else {
 				// als de email niet in gebruik is, voor onderstaande commando uit
 				const hashedPwd = await bcrypt.hash(req.body.password, saltRounds);
