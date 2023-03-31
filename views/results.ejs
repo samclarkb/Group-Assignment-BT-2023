@@ -1,6 +1,6 @@
 <div>
 	<% if(data.length > 0){ %>
-	<h2>Results</h2>
+	<%- include('partials/header', {title: 'Results', image: userinfo[0].Profilepic.data, username: userinfo[0].Username }) %>
 	<% } else{ %> <% } %> <% if(data.length > 0){ %> <% for(let i = 0; i < data.length; i++){ %>
 
 	<a class="albumCard" id="albumcard" href="results<%= data[i]._id %>">

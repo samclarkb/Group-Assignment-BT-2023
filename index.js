@@ -10,6 +10,7 @@ const session = require('express-session')
 //Album en user model met hashpassword in db
 const { Albums, Users } = require('./models/models')
 const saltRounds = 10
+let userInfo
 
 // Defining express as app
 const app = express()
@@ -85,17 +86,18 @@ app.get('/', (req, res) => {
 	res.render('inloggen', {
 		errorMessage: '',
 		errorClass: '',
+		emailInput: '',
+		passwordInput: '',
 	})
 })
 	.get('/results', authorizeUser, async (req, res) => {
 		const currentUser = await Users.find({ _id: req.session.user.userID })
 		const favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
-
 		const fetchAlbums = await Albums.find({})
-		res.render('results', { data: fetchAlbums, user: favoriteAlbumTitles })
+		res.render('results', { data: fetchAlbums, user: favoriteAlbumTitles, userinfo: userInfo })
 	})
 	.get('/preference', authorizeUser, async (req, res) => {
-		res.render('preference')
+		res.render('preference', { userinfo: userInfo })
 	})
 	.get('/results:id', authorizeUser, async (req, res) => {
 		const fetchOneAlbum = await Albums.find({ _id: req.params.id })
@@ -113,8 +115,11 @@ app.get('/', (req, res) => {
 		const currentUser = await Users.find({ _id: req.session.user.userID })
 		const favoriteAlbums = currentUser[0].Like
 		const favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
-
-		res.render('favorites', { data: favoriteAlbums, user: favoriteAlbumTitles })
+		res.render('favorites', {
+			data: favoriteAlbums,
+			user: favoriteAlbumTitles,
+			userinfo: userInfo,
+		})
 	})
 	.get('/deleteModal:id', authorizeUser, async (req, res) => {
 		console.log('req', req.params.id)
@@ -122,14 +127,14 @@ app.get('/', (req, res) => {
 		res.render('deleteModal', { data: fetchAlbum })
 	})
 	.get('/add', authorizeUser, (req, res) => {
-		res.render('add')
+		res.render('add', { userinfo: userInfo })
 	})
 	.get('/all', authorizeUser, async (req, res) => {
 		const currentUser = await Users.find({ _id: req.session.user.userID })
 		const favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
 
 		const fetchAlbums = await Albums.find({}).sort({ _id: -1 })
-		res.render('all', { data: fetchAlbums, user: favoriteAlbumTitles })
+		res.render('all', { data: fetchAlbums, user: favoriteAlbumTitles, userinfo: userInfo })
 	})
 	.get('/update', async (req, res) => {
 		const currentUser = await Users.find({ _id: req.session.user.userID })
@@ -155,37 +160,37 @@ app.get('/', (req, res) => {
 // All Post requests
 app.post('/home', async (req, res) => {
 	const checkUser = await Users.find({ Email: req.body.email })
-	console.log(checkUser)
 	if (checkUser.length !== 0) {
 		const dbpw = checkUser[0]['Password']
 		const cmp = await bcrypt.compare(req.body.password, dbpw)
-		console.log('Email gevonden')
 		if (cmp) {
 			req.session.user = { userID: checkUser[0]['_id'] }
-			res.render('preference')
-			console.log('Wachtwoord correct')
+			userInfo = await Users.find({ _id: req.session.user.userID })
+			res.render('preference', { userinfo: userInfo })
 		}
 	} else {
-		console.log('niet gelukt')
 		res.render('inloggen', {
 			errorMessage: 'Combinatie email en wachtwoord onjuist',
 			errorClass: 'errorLogin',
 		})
 	}
 })
+	.post('/logout', (req, res) => {
+		req.session.destroy()
+		res.render('inloggen', {
+			errorMessage: 'u bent succesvol uitgelogd!',
+			errorClass: 'successLogout',
+			emailInput: '',
+			passwordInput: '',
+		})
+	})
+	.post('/results', async (req, res) => {
+		const currentUser = await Users.find({ _id: req.session.user.userID })
+		const favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
 
-app.post('/logout', (req, res) => {
-	req.session.destroy()
-	res.redirect('/')
-})
-
-app.post('/results', async (req, res) => {
-	const currentUser = await Users.find({ _id: req.session.user.userID })
-	const favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
-
-	const fetchAlbums = await Albums.find({ Year: req.body.year, Genre: req.body.genre })
-	res.render('results', { data: fetchAlbums, user: favoriteAlbumTitles })
-})
+		const fetchAlbums = await Albums.find({ Year: req.body.year, Genre: req.body.genre })
+		res.render('results', { data: fetchAlbums, user: favoriteAlbumTitles, userinfo: userInfo })
+	})
 	.post('/favorites:id', async (req, res) => {
 		const currentUser = await Users.findOne({ _id: req.session.user.userID })
 		const currentAlbum = await Albums.findOne({ _id: req.params.id })
@@ -231,6 +236,9 @@ app.post('/results', async (req, res) => {
 		res.render('all', { data: fetchAlbums, user: favoriteAlbumTitles })
 	})
 	.post('/all', async (req, res) => {
+		const currentUser = await Users.find({ _id: req.session.user.userID })
+		const favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
+
 		const fetchAlbums = await Albums.find({
 			$or: [
 				{ Title: req.body.search },
@@ -239,7 +247,7 @@ app.post('/results', async (req, res) => {
 				{ Genre: req.body.search },
 			],
 		})
-		res.render('all', { data: fetchAlbums })
+		res.render('all', { data: fetchAlbums, user: favoriteAlbumTitles, userinfo: userInfo })
 	})
 	.post('/update', upload.single('profilePicture'), async (req, res) => {
 		let currentUser = await Users.find({ _id: req.session.user.userID })

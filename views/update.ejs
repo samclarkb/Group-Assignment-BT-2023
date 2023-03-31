@@ -1,33 +1,38 @@
 <div>
-	<%- include('partials/header', {title: 'Edit Profile'}) %>
 	<div class="addForm">
-		<form action="/update" key="profilePicture" method="POST" class="update" enctype="multipart/form-data">
+		<form
+			action="/update"
+			key="profilePicture"
+			method="POST"
+			class="update"
+			enctype="multipart/form-data"
+		>
 			<!-- change profilePic -->
 			<fieldset>
 				<legend><h3>Change Profile Picture</h3></legend>
 				<figure>
-					<img src="/images/<%= data[0].Profilepic.data %>" alt="profilePic"/>
+					<img src="/images/<%= data[0].Profilepic.data %>" alt="profilePic" />
 				</figure>
 				<div class="formText">
-					<input id="profilePicture" type="File" name="profilePicture"/>
+					<input id="profilePicture" type="File" name="profilePicture" />
 				</div>
 			</fieldset>
 			<!-- change username -->
 			<fieldset>
 				<legend><h3>Change Username</h3></legend>
-				<h4> Username: <%= data[0].Username %> </h4>
+				<h4> <%= data[0].Username %></h4>
 				<div class="formText">
 					<label for="newUsername"><h4>New Username:</h4></label>
-					<input id="newUsername" type="text" name="newUsername"/>
+					<input id="newUsername" type="text" name="newUsername" />
 				</div>
 			</fieldset>
 			<!-- change email -->
 			<fieldset>
 				<legend><h3>Change Email</h3></legend>
-				<h4> Email: <%= data[0].Email %> </h4>
+				<h4> <%= data[0].Email %></h4>
 				<div class="formText">
 					<label for="newEmail"><h4>New Email:</h4></label>
-					<input id="newEmail" type="email" name="newEmail"/>
+					<input id="newEmail" type="email" name="newEmail" />
 				</div>
 			</fieldset>
 			<!-- change password -->
@@ -36,19 +41,17 @@
 				<!-- <h4> Password: <%= data[0].Password %> </h4> -->
 				<div class="formText">
 					<label for="currentPassword"><h4>Current Password:</h4></label>
-					<input id="currentPassword" type="password" name="currentPassword"/>
+					<input id="currentPassword" type="password" name="currentPassword" />
 					<label for="newPassword"><h4>New Password:</h4></label>
-					<input id="newPassword" type="password" name="newPassword"/>
-					
-					<% if (passError == "true") { %>
-						<p class="passError" >Incorrect Password</p>
-					<% } %> 
-				
-				</div>
+					<input id="newPassword" type="password" name="newPassword" />
 
+					<% if (passError == "true") { %>
+					<p class="passError">Incorrect Password</p>
+					<% } %>
+				</div>
 			</fieldset>
-            <input type="submit" value="Save Changes" /> 
-        </form>
+			<input type="submit" value="Save Changes" />
+		</form>
 	</div>
 	<%- include('partials/navigation') %>
 </div>
