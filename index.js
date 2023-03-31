@@ -172,6 +172,8 @@ app.post('/home', async (req, res) => {
 		res.render('inloggen', {
 			errorMessage: 'Combinatie email en wachtwoord onjuist',
 			errorClass: 'errorLogin',
+			emailInput: req.body.email,
+			passwordInput: req.body.password
 		})
 	}
 })
