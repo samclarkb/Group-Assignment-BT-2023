@@ -22,7 +22,7 @@
 
 			<p><%= data[i].Artist %></p>
 			<div class="heart">
-				<form class="likeForm" action="favorites<%= data[i]._id %>" method="POST">
+				<form class="likeForm" action="favorites<%= data[i]._id %>">
 					<label for="<%= data[i]._id %>">
 						<% if(data[i].Like === true > 0){ %>
 						<i onclick="toggle(this)" class="fa fa-heart"></i>
