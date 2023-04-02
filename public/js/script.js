@@ -7,7 +7,7 @@ const buttonFour = document.querySelector('#linkFour')
 const lazyBackgrounds = [].slice.call(document.querySelectorAll('.lazy-background'))
 
 // Favorite form/button
-const form = document.querySelectorAll('.likeForm')
+const form = document.querySelectorAll('.likeButton')
 
 // Using the intersection observer to implement lazy loading
 // Resource: https://web.dev/lazy-loading-images/
@@ -86,7 +86,6 @@ const likeHandler = async (event) => { // stop refresh
 		return response
 	}
 console.log(form);
-
 
 form.forEach(button => button.addEventListener('click', likeHandler))
 
