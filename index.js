@@ -137,9 +137,9 @@ app.get('/', (req, res) => {
 		res.render('all', { data: fetchAlbums, user: favoriteAlbumTitles, userinfo: userInfo })
 	})
 	.get('/update', async (req, res) => {
-		const currentUser = await Users.find({ _id: req.session.user.userID })
-		const fetchOneUser = await Users.find({ _id: currentUser[0]._id })
-		res.render('update', { data: fetchOneUser, passError: 'false' })
+		const fetchOneUser = await Users.find({ _id: req.session.user.userID })
+		const currentUser = await Users.find({ _id: fetchOneUser[0]._id })
+		res.render('update', { data: currentUser, passError: 'false' })
 	})
 	.get('/register', async (req, res) => {
 		res.render('register', {
@@ -249,61 +249,75 @@ app.post('/home', async (req, res) => {
 		})
 		res.render('all', { data: fetchAlbums, user: favoriteAlbumTitles, userinfo: userInfo })
 	})
+
 	.post('/update', upload.single('profilePicture'), async (req, res) => {
-		let currentUser = await Users.find({ _id: req.session.user.userID })
-		try {
+		try{
 			//fetch user
-			const fetchOneUser = await Users.find({ _id: currentUser._id })
-			currentUser = { _id: currentUser._id }
+			const fetchOneUser = await Users.find({ _id: req.session.user.userID })
+			const currentUser = await Users.find({ _id: fetchOneUser[0]._id })
+
+			var newUsername = { $set: { Username: req.body.newUsername }}
+			var newEmail = { $set: { Email: req.body.newEmail }}
+
+			//current password equals current password in database in hash
+			const currentPassword = await bcrypt.compare(req.body.currentPassword, currentUser[0].Password)
+			//hash new password
+			const hashedPwd = await bcrypt.hash(req.body.newPassword, saltRounds)
+			var newPassword = { $set: { Password: hashedPwd} }
 
 			//if profile picture is empty keep current profile picture
 			if (req.file == undefined) {
-				req.file = { filename: fetchOneUser[0].Profilepic.data }
-			} else {
-				//profile picture
-				const newProfilePic = {
-					$set: { Profilepic: { data: req.file.filename, contentType: 'image/png' } },
-				}
-				changeProfilePic = await Users.findOneAndUpdate(currentUser, newProfilePic)
+				var newProfilePic = { $set: { Profilepic: { data: currentUser[0].Profilepic.data, contentType: 'image/png' }}}
+				console.log('there is no file uploaded')
+			}
+
+			if (req.file != undefined) {
+				newProfilePic = { $set: { Profilepic: { data: req.file.filename, contentType: 'image/png' }}}
+				console.log('there is a file uploaded')
 			}
 
 			//if username is empty keep current username
 			if (req.body.newUsername == '') {
-				req.body.newUsername = fetchOneUser[0].Username
-			} else {
-				//change username
-				const newUsername = { $set: { Username: req.body.newUsername } }
-				changeUsername = await Users.findOneAndUpdate(currentUser, newUsername)
+				newUsername = currentUser[0].Username
+				console.log('there is no new username')
 			}
 
 			//if email is empty keep current email
 			if (req.body.newEmail == '') {
-				req.body.newEmail = fetchOneUser[0].Email
-			} else {
-				// change email
-				const newEmail = { $set: { Email: req.body.newEmail } }
-				changeEmail = await Users.findOneAndUpdate(currentUser, newEmail)
+				newEmail = currentUser[0].Email
+				console.log('there is no new email')
 			}
 
-			//if password is empty keep current password
-			if (req.body.newPassword == '') {
-				req.body.newPassword = fetchOneUser[0].Password
-			}
-			if (req.body.currentPassword != fetchOneUser[0].Password) {
-				//if current password is not the same as the password of user give error
-				console.log('error')
-				res.render('update', { data: fetchOneUser, passError: 'true' })
-			} else {
-				// change password
-				const newPassword = { $set: { Password: req.body.newPassword } }
-				changePassword = await Users.findOneAndUpdate(currentUser, newPassword)
+			// if password is nog the same as current password give error
+			if (currentPassword === false) {
+				console.log('password is not the same as current password')
+
+				//if password is empty keep current password
+				if (req.body.newPassword == '') {
+					newPassword = currentUser[0].Password
+					console.log('there is no new password')
+					res.render('update', { data: currentUser, passError: false })
+				} else {
+					res.render('update', { data: currentUser, passError: true })
+					console.log('current password is incorrect')
+					newPassword = currentUser[0].Password
+				}
 			}
 
-			res.render('succesUpdate', { data: fetchOneUser, passError: 'false' })
+			//update user
+			changeProfilePic = await Users.findOneAndUpdate( { _id: currentUser[0]._id }, newProfilePic )
+			changeUsername = await Users.findOneAndUpdate( { _id: currentUser[0]._id }, newUsername )
+			changeEmail = await Users.findOneAndUpdate( { _id: currentUser[0]._id }, newEmail )
+			changePassword = await Users.findOneAndUpdate( { _id: currentUser[0]._id }, newPassword )
+	
+			res.render('update', { data: currentUser, passError: false})
+			console.log(req.file)
 
-			console.log(req.file.filename, req.body)
-		} catch (err) {
-			console.log(err)
+
+
+
+		} catch (error) {
+			console.log(error)
 		}
 	})
 
