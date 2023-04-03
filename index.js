@@ -170,9 +170,17 @@ app.post('/home', async (req, res) => {
 			req.session.user = { userID: checkUser[0]['_id'] }
 			userInfo = await Users.find({ _id: req.session.user.userID })
 			res.render('preference', { userinfo: userInfo })
+		} else {
+			// show error message when password is wrong
+			res.render('inloggen', {
+				errorMessage: 'Combinatie email en wachtwoord onjuist',
+				errorClass: 'errorLogin',
+				emailInput: req.body.email,
+				passwordInput: req.body.password
+			})
 		}
 	} else {
-		// show error message when password and email are wrong
+		// show error message when email is wrong
 		res.render('inloggen', {
 			errorMessage: 'Combinatie email en wachtwoord onjuist',
 			errorClass: 'errorLogin',
