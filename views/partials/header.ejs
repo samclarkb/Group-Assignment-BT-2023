@@ -1,4 +1,11 @@
-<h2><%- title %></h2>
-    <form action="/logout" method="post">
-    <input type="submit" value="logout">
-</form>
+<div class="header">
+	<a href="/update">
+		<div>
+			<img src="images/<%- image %>" alt="" />
+			<p><%= username %></p>
+		</div>
+	</a>
+	<form action="/logout" method="post">
+		<input type="submit" value="logout" />
+	</form>
+</div>

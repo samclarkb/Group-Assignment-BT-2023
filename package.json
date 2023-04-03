@@ -23,6 +23,16 @@
     "nodemon": "^2.0.20",
     "vercel": "^28.16.15"
   },
-  "devDependencies": {},
-  "keywords": []
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/samclarkb/Group-Assignment-BT-2023.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/samclarkb/Group-Assignment-BT-2023/issues"
+  },
+  "homepage": "https://github.com/samclarkb/Group-Assignment-BT-2023#readme",
+  "devDependencies": {
+    "eslint": "^8.37.0"
+  }
 }
