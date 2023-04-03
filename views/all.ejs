@@ -49,6 +49,7 @@
 		/></a>
 	</a>
 	<% } %> <% } else{ %>
+        <%- include('partials/header', {title: 'Latest', image: userinfo[0].Profilepic.data, username: userinfo[0].Username}) %>
 	<div class="noData">
 		<p>There are no results that matches your search</p>
 		<a href="/all">Go Back</a>

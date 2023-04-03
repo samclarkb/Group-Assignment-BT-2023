@@ -44,7 +44,8 @@
 
 		<% } %>
 	</div>
-	<% } else{ %>
+	<% } else{ %> <%- include('partials/header', {title: 'Favorites', image:
+	userinfo[0].Profilepic.data, username: userinfo[0].Username}) %>
 	<div class="noData">
 		<p>You didn't have add an album to your favorites list yet</p>
 		<a href="/preference">Search</a>

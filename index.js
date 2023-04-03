@@ -10,7 +10,6 @@ const session = require('express-session')
 //Album en user model met hashpassword in db
 const { Albums, Users } = require('./models/models')
 const saltRounds = 10
-let userInfo
 
 // Defining express as app
 const app = express()
@@ -94,10 +93,15 @@ app.get('/', (req, res) => {
 		const currentUser = await Users.find({ _id: req.session.user.userID })
 		const favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
 		const fetchAlbums = await Albums.find({})
-		res.render('results', { data: fetchAlbums, user: favoriteAlbumTitles, userinfo: userInfo })
+		res.render('results', {
+			data: fetchAlbums,
+			user: favoriteAlbumTitles,
+			userinfo: currentUser,
+		})
 	})
 	.get('/preference', authorizeUser, async (req, res) => {
-		res.render('preference', { userinfo: userInfo })
+		const currentUser = await Users.find({ _id: req.session.user.userID })
+		res.render('preference', { userinfo: currentUser })
 	})
 	.get('/results:id', authorizeUser, async (req, res) => {
 		const fetchOneAlbum = await Albums.find({ _id: req.params.id })
@@ -118,23 +122,24 @@ app.get('/', (req, res) => {
 		res.render('favorites', {
 			data: favoriteAlbums,
 			user: favoriteAlbumTitles,
-			userinfo: userInfo,
+			userinfo: currentUser,
 		})
 	})
 	.get('/deleteModal:id', authorizeUser, async (req, res) => {
-		console.log('req', req.params.id)
+		const currentUser = await Users.find({ _id: req.session.user.userID })
 		const fetchAlbum = await Albums.find({ _id: req.params.id })
-		res.render('deleteModal', { data: fetchAlbum })
+		res.render('deleteModal', { data: fetchAlbum, userinfo: currentUser })
 	})
-	.get('/add', authorizeUser, (req, res) => {
-		res.render('add', { userinfo: userInfo })
+	.get('/add', authorizeUser, async (req, res) => {
+		const currentUser = await Users.find({ _id: req.session.user.userID })
+		res.render('add', { userinfo: currentUser })
 	})
 	.get('/all', authorizeUser, async (req, res) => {
 		const currentUser = await Users.find({ _id: req.session.user.userID })
 		const favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
 
 		const fetchAlbums = await Albums.find({}).sort({ _id: -1 })
-		res.render('all', { data: fetchAlbums, user: favoriteAlbumTitles, userinfo: userInfo })
+		res.render('all', { data: fetchAlbums, user: favoriteAlbumTitles, userinfo: currentUser })
 	})
 	.get('/update', async (req, res) => {
 		const fetchOneUser = await Users.find({ _id: req.session.user.userID })
@@ -193,7 +198,11 @@ app.post('/home', async (req, res) => {
 		const favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
 
 		const fetchAlbums = await Albums.find({ Year: req.body.year, Genre: req.body.genre })
-		res.render('results', { data: fetchAlbums, user: favoriteAlbumTitles, userinfo: userInfo })
+		res.render('results', {
+			data: fetchAlbums,
+			user: favoriteAlbumTitles,
+			userinfo: currentUser,
+		})
 	})
 	.post('/favorites:id', async (req, res) => {
 		const currentUser = await Users.findOne({ _id: req.session.user.userID })
@@ -213,8 +222,8 @@ app.post('/home', async (req, res) => {
 			)
 		}
 	})
-	.post('/add', upload.single('File'), (req, res) => {
-		console.log('req', req.body)
+	.post('/add', upload.single('File'), async (req, res) => {
+		const currentUser = await Users.find({ _id: req.session.user.userID })
 
 		Albums.insertMany([
 			{
@@ -229,7 +238,7 @@ app.post('/home', async (req, res) => {
 			},
 		]).then(() => console.log('user saved'))
 
-		res.render('succesAdd')
+		res.render('succesAdd', { userinfo: currentUser })
 	})
 	.post('/delete:id', async (req, res) => {
 		const currentUser = await Users.find({ _id: req.session.user.userID })
@@ -237,7 +246,7 @@ app.post('/home', async (req, res) => {
 
 		const deleteAlbum = await Albums.find({ _id: req.params.id }).remove()
 		const fetchAlbums = await Albums.find({}).sort({ _id: -1 })
-		res.render('all', { data: fetchAlbums, user: favoriteAlbumTitles })
+		res.render('all', { data: fetchAlbums, user: favoriteAlbumTitles, userinfo: currentUser })
 	})
 	.post('/all', async (req, res) => {
 		const currentUser = await Users.find({ _id: req.session.user.userID })
@@ -251,7 +260,7 @@ app.post('/home', async (req, res) => {
 				{ Genre: req.body.search },
 			],
 		})
-		res.render('all', { data: fetchAlbums, user: favoriteAlbumTitles, userinfo: userInfo })
+		res.render('all', { data: fetchAlbums, user: favoriteAlbumTitles, userinfo: currentUser })
 	})
 
 	.post('/update', upload.single('profilePicture'), async (req, res) => {
@@ -269,7 +278,10 @@ app.post('/home', async (req, res) => {
 				currentUser[0].Password
 			)
 			//hash new password
-			const hashedPwd = req.body.newPassword === '' ? currentUser[0].Password : await bcrypt.hash(req.body.newPassword, saltRounds)
+			const hashedPwd =
+				req.body.newPassword === ''
+					? currentUser[0].Password
+					: await bcrypt.hash(req.body.newPassword, saltRounds)
 			var newPassword = { $set: { Password: hashedPwd } }
 
 			//if profile picture is empty keep current profile picture
