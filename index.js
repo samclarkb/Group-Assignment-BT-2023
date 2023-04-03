@@ -141,7 +141,7 @@ app.get('/', (req, res) => {
 		const currentUser = await Users.find({ _id: fetchOneUser[0]._id })
 		res.render('update', { data: currentUser, passError: 'false' })
 	})
-	.get ('/succesUpdate', (req, res) => {
+	.get('/succesUpdate', (req, res) => {
 		res.render('succesUpdate')
 	})
 
@@ -255,28 +255,40 @@ app.post('/home', async (req, res) => {
 	})
 
 	.post('/update', upload.single('profilePicture'), async (req, res) => {
-		try{
+		try {
 			//fetch user
 			const fetchOneUser = await Users.find({ _id: req.session.user.userID })
 			const currentUser = await Users.find({ _id: fetchOneUser[0]._id })
 
-			var newUsername = { $set: { Username: req.body.newUsername }}
-			var newEmail = { $set: { Email: req.body.newEmail }}
+			var newUsername = { $set: { Username: req.body.newUsername } }
+			var newEmail = { $set: { Email: req.body.newEmail } }
 
 			//current password equals current password in database in hash
-			const hashCheck = await bcrypt.compare(req.body.currentPassword, currentUser[0].Password)
+			const hashCheck = await bcrypt.compare(
+				req.body.currentPassword,
+				currentUser[0].Password
+			)
 			//hash new password
-			const hashedPwd = await bcrypt.hash(req.body.newPassword, saltRounds)
-			var newPassword = { $set: { Password: hashedPwd} }
+			const hashedPwd = req.body.newPassword === '' ? currentUser[0].Password : await bcrypt.hash(req.body.newPassword, saltRounds)
+			var newPassword = { $set: { Password: hashedPwd } }
 
 			//if profile picture is empty keep current profile picture
 			if (req.file == undefined) {
-				var newProfilePic = { $set: { Profilepic: { data: currentUser[0].Profilepic.data, contentType: 'image/png' }}}
+				var newProfilePic = {
+					$set: {
+						Profilepic: {
+							data: currentUser[0].Profilepic.data,
+							contentType: 'image/png',
+						},
+					},
+				}
 				console.log('there is no file uploaded')
 			}
 
 			if (req.file != undefined) {
-				newProfilePic = { $set: { Profilepic: { data: req.file.filename, contentType: 'image/png' }}}
+				newProfilePic = {
+					$set: { Profilepic: { data: req.file.filename, contentType: 'image/png' } },
+				}
 				console.log('there is a file uploaded')
 			}
 
@@ -293,18 +305,20 @@ app.post('/home', async (req, res) => {
 			}
 
 			//if password not empty and current password is not the same as current password in database
-			if ((req.body.currentPassword !== "" && hashCheck === false) || (req.body.currentPassword == '' && req.body.newPassword !== "")){
-				return res.render('update', { data: currentUser, passError: true })
+			if (
+				(req.body.currentPassword !== '' && hashCheck === false) ||
+				(req.body.currentPassword == '' && req.body.newPassword !== '')
+			) {
+				return res.render('update', { data: currentUser[0], passError: true })
 			}
 
 			//update user
-			await Users.findOneAndUpdate( { _id: currentUser[0]._id }, newProfilePic )
-			await Users.findOneAndUpdate( { _id: currentUser[0]._id }, newUsername )
-			await Users.findOneAndUpdate( { _id: currentUser[0]._id }, newEmail )
-			await Users.findOneAndUpdate( { _id: currentUser[0]._id }, newPassword ) 
+			await Users.findOneAndUpdate({ _id: currentUser[0]._id }, newProfilePic)
+			await Users.findOneAndUpdate({ _id: currentUser[0]._id }, newUsername)
+			await Users.findOneAndUpdate({ _id: currentUser[0]._id }, newEmail)
+			await Users.findOneAndUpdate({ _id: currentUser[0]._id }, newPassword)
 
 			res.redirect('/succesUpdate')
-
 		} catch (error) {
 			console.log(error)
 		}
