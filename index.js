@@ -159,16 +159,20 @@ app.get('/', (req, res) => {
 
 // All Post requests
 app.post('/home', async (req, res) => {
+	// check if email exist in database
 	const checkUser = await Users.find({ Email: req.body.email })
+	// if user with this email exist check if given password is correct
 	if (checkUser.length !== 0) {
 		const dbpw = checkUser[0]['Password']
 		const cmp = await bcrypt.compare(req.body.password, dbpw)
+		// when password is identical with the one in the database, create a session with user ID
 		if (cmp) {
 			req.session.user = { userID: checkUser[0]['_id'] }
 			userInfo = await Users.find({ _id: req.session.user.userID })
 			res.render('preference', { userinfo: userInfo })
 		}
 	} else {
+		// show error message when password and email are wrong
 		res.render('inloggen', {
 			errorMessage: 'Combinatie email en wachtwoord onjuist',
 			errorClass: 'errorLogin',
@@ -178,7 +182,9 @@ app.post('/home', async (req, res) => {
 	}
 })
 	.post('/logout', (req, res) => {
+		// when user logs out destroy the session
 		req.session.destroy()
+		// display success message in inlog page 
 		res.render('inloggen', {
 			errorMessage: 'u bent succesvol uitgelogd!',
 			errorClass: 'successLogout',
