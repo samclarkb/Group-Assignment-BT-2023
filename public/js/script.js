@@ -70,14 +70,16 @@ if (window.location.href === 'http://localhost:4444/favorites') {
 	buttonFour.classList.add('inActive')
 }
 
-const likeHandler = async (event) => { // stop refresh 
+// aysync function handeling the like
+const likeHandler = async (event) => { 
+	// stop the refresh 
 	event.preventDefault() 
-	// value van de submit button dat de song id is wss
+	// here the target event is gonna be made as a value
 	 const { value } = event.currentTarget 
 	 console.log('Banaan')
-	 // stop dit in een object
+	 // there a new object is made with a new value
 	 const likeValue = { newLike: value } 
-	 // vul hier je like route in, dus niet /like-game maar de action route van je form
+	 // Here the site is gonna route to the version of the site with the like
 	const response = await fetch(`/favorites${value}`,
 	 { method: 'POST', headers: {
 		 'Content-Type': 'application/json' 
@@ -85,41 +87,9 @@ const likeHandler = async (event) => { // stop refresh
 		body: JSON.stringify(likeValue) }) 
 		return response
 	}
-console.log(form);
 
+
+// eventlistener
 form.forEach(button => button.addEventListener('click', likeHandler))
 
-//async function postData(url = "", data = {}) {
-	//const response = await fetch(url, {
-	  //method: "POST", 
-	  //mode: "cors", 
-	  //cache: "no-cache", 
-	  //credentials: "same-origin", 
-	  //headers: {
-		//"Content-Type": "application/json",
-		
-	  //},
-	  //redirect: "follow", 
-	  //referrerPolicy: "no-referrer", 
-	//});
-	//return response.json(); 
-  //}
-  
-  //postData("http://localhost:3333/favorites:id", { answer: 42 }).then((data) => {
-	//console.log(data); 
-  //});
 
-  //forum.addEventListener("click",postData)
-  
-
-// fetch favorite
-// form.forEach(item => {
-// 	item.addEventListener('submit', event => {
-// 		event.preventDefault()
-// 		const formData = new FormData(event.target)
-// 		fetch('http://localhost:3333/favorites:id', {
-// 			method: 'POST',
-// 			body: formData,
-// 		}).then(res => res.json())
-// 	})
-// })
