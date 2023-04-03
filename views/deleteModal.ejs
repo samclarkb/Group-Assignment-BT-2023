@@ -1,4 +1,6 @@
 <div class="deleteModal">
+    <%- include('partials/header', { image:
+	userinfo[0].Profilepic.data, username: userinfo[0].Username }) %>
 	<form class="deleteForm" action="delete<%= data[0]._id %>" method="POST">
 		<h2>Are you sure you want to delete this Album?</h2>
 		<div>

@@ -9,7 +9,7 @@
 		>
 			<!-- change profilePic -->
 			<fieldset>
-				<legend><h3>Change Profile Picture</h3></legend>
+				<legend><h3>Profile</h3></legend>
 				<figure>
 					<img src="/images/<%= data[0].Profilepic.data %>" alt="profilePic" />
 				</figure>
@@ -20,7 +20,7 @@
 			<!-- change username -->
 			<fieldset>
 				<legend><h3>Change Username</h3></legend>
-				<h4> <%= data[0].Username %></h4>
+				<h4><%= data[0].Username %></h4>
 				<div class="formText">
 					<label for="newUsername"><h4>New Username:</h4></label>
 					<input id="newUsername" type="text" name="newUsername" />
@@ -29,7 +29,7 @@
 			<!-- change email -->
 			<fieldset>
 				<legend><h3>Change Email</h3></legend>
-				<h4> <%= data[0].Email %></h4>
+				<h4><%= data[0].Email %></h4>
 				<div class="formText">
 					<label for="newEmail"><h4>New Email:</h4></label>
 					<input id="newEmail" type="email" name="newEmail" />
@@ -45,7 +45,7 @@
 					<label for="newPassword"><h4>New Password:</h4></label>
 					<input id="newPassword" type="password" name="newPassword" />
 
-					<% if (passError == "true") { %>
+					<% if (passError === true) { %>
 					<p class="passError">Incorrect Password</p>
 					<% } %>
 				</div>
