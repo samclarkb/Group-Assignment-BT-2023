@@ -5,12 +5,11 @@ const expressLayouts = require('express-ejs-layouts')
 const dotenv = require('dotenv').config()
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 const session = require('express-session')
 //Album en user model met hashpassword in db
 const { Albums, Users } = require('./models/models')
 const saltRounds = 10
-let userInfo
 
 // Defining express as app
 const app = express()
@@ -94,10 +93,15 @@ app.get('/', (req, res) => {
 		const currentUser = await Users.find({ _id: req.session.user.userID })
 		const favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
 		const fetchAlbums = await Albums.find({})
-		res.render('results', { data: fetchAlbums, user: favoriteAlbumTitles, userinfo: userInfo })
+		res.render('results', {
+			data: fetchAlbums,
+			user: favoriteAlbumTitles,
+			userinfo: currentUser,
+		})
 	})
 	.get('/preference', authorizeUser, async (req, res) => {
-		res.render('preference', { userinfo: userInfo })
+		const currentUser = await Users.find({ _id: req.session.user.userID })
+		res.render('preference', { userinfo: currentUser })
 	})
 	.get('/results:id', authorizeUser, async (req, res) => {
 		const fetchOneAlbum = await Albums.find({ _id: req.params.id })
@@ -118,29 +122,34 @@ app.get('/', (req, res) => {
 		res.render('favorites', {
 			data: favoriteAlbums,
 			user: favoriteAlbumTitles,
-			userinfo: userInfo,
+			userinfo: currentUser,
 		})
 	})
 	.get('/deleteModal:id', authorizeUser, async (req, res) => {
-		console.log('req', req.params.id)
+		const currentUser = await Users.find({ _id: req.session.user.userID })
 		const fetchAlbum = await Albums.find({ _id: req.params.id })
-		res.render('deleteModal', { data: fetchAlbum })
+		res.render('deleteModal', { data: fetchAlbum, userinfo: currentUser })
 	})
-	.get('/add', authorizeUser, (req, res) => {
-		res.render('add', { userinfo: userInfo })
+	.get('/add', authorizeUser, async (req, res) => {
+		const currentUser = await Users.find({ _id: req.session.user.userID })
+		res.render('add', { userinfo: currentUser })
 	})
 	.get('/all', authorizeUser, async (req, res) => {
 		const currentUser = await Users.find({ _id: req.session.user.userID })
 		const favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
 
 		const fetchAlbums = await Albums.find({}).sort({ _id: -1 })
-		res.render('all', { data: fetchAlbums, user: favoriteAlbumTitles, userinfo: userInfo })
+		res.render('all', { data: fetchAlbums, user: favoriteAlbumTitles, userinfo: currentUser })
 	})
 	.get('/update', async (req, res) => {
-		const currentUser = await Users.find({ _id: req.session.user.userID })
-		const fetchOneUser = await Users.find({ _id: currentUser[0]._id })
-		res.render('update', { data: fetchOneUser, passError: 'false' })
+		const fetchOneUser = await Users.find({ _id: req.session.user.userID })
+		const currentUser = await Users.find({ _id: fetchOneUser[0]._id })
+		res.render('update', { data: currentUser, passError: 'false' })
 	})
+	.get('/succesUpdate', (req, res) => {
+		res.render('succesUpdate')
+	})
+
 	.get('/register', async (req, res) => {
 		res.render('register', {
 			errorMessage: '',
@@ -205,7 +214,11 @@ app.post('/home', async (req, res) => {
 		const favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
 
 		const fetchAlbums = await Albums.find({ Year: req.body.year, Genre: req.body.genre })
-		res.render('results', { data: fetchAlbums, user: favoriteAlbumTitles, userinfo: userInfo })
+		res.render('results', {
+			data: fetchAlbums,
+			user: favoriteAlbumTitles,
+			userinfo: currentUser,
+		})
 	})
 	.post('/favorites:id', async (req, res) => {
 		const currentUser = await Users.findOne({ _id: req.session.user.userID })
@@ -225,8 +238,8 @@ app.post('/home', async (req, res) => {
 			)
 		}
 	})
-	.post('/add', upload.single('File'), (req, res) => {
-		console.log('req', req.body)
+	.post('/add', upload.single('File'), async (req, res) => {
+		const currentUser = await Users.find({ _id: req.session.user.userID })
 
 		Albums.insertMany([
 			{
@@ -241,7 +254,7 @@ app.post('/home', async (req, res) => {
 			},
 		]).then(() => console.log('user saved'))
 
-		res.render('succesAdd')
+		res.render('succesAdd', { userinfo: currentUser })
 	})
 	.post('/delete:id', async (req, res) => {
 		const currentUser = await Users.find({ _id: req.session.user.userID })
@@ -249,7 +262,7 @@ app.post('/home', async (req, res) => {
 
 		const deleteAlbum = await Albums.find({ _id: req.params.id }).remove()
 		const fetchAlbums = await Albums.find({}).sort({ _id: -1 })
-		res.render('all', { data: fetchAlbums, user: favoriteAlbumTitles })
+		res.render('all', { data: fetchAlbums, user: favoriteAlbumTitles, userinfo: currentUser })
 	})
 	.post('/all', async (req, res) => {
 		const currentUser = await Users.find({ _id: req.session.user.userID })
@@ -263,63 +276,79 @@ app.post('/home', async (req, res) => {
 				{ Genre: req.body.search },
 			],
 		})
-		res.render('all', { data: fetchAlbums, user: favoriteAlbumTitles, userinfo: userInfo })
+		res.render('all', { data: fetchAlbums, user: favoriteAlbumTitles, userinfo: currentUser })
 	})
+
 	.post('/update', upload.single('profilePicture'), async (req, res) => {
-		let currentUser = await Users.find({ _id: req.session.user.userID })
 		try {
 			//fetch user
-			const fetchOneUser = await Users.find({ _id: currentUser._id })
-			currentUser = { _id: currentUser._id }
+			const fetchOneUser = await Users.find({ _id: req.session.user.userID })
+			const currentUser = await Users.find({ _id: fetchOneUser[0]._id })
+
+			var newUsername = { $set: { Username: req.body.newUsername } }
+			var newEmail = { $set: { Email: req.body.newEmail } }
+
+			//current password equals current password in database in hash
+			const hashCheck = await bcrypt.compare(
+				req.body.currentPassword,
+				currentUser[0].Password
+			)
+			//hash new password
+			const hashedPwd =
+				req.body.newPassword === ''
+					? currentUser[0].Password
+					: await bcrypt.hash(req.body.newPassword, saltRounds)
+			var newPassword = { $set: { Password: hashedPwd } }
 
 			//if profile picture is empty keep current profile picture
 			if (req.file == undefined) {
-				req.file = { filename: fetchOneUser[0].Profilepic.data }
-			} else {
-				//profile picture
-				const newProfilePic = {
+				var newProfilePic = {
+					$set: {
+						Profilepic: {
+							data: currentUser[0].Profilepic.data,
+							contentType: 'image/png',
+						},
+					},
+				}
+				console.log('there is no file uploaded')
+			}
+
+			if (req.file != undefined) {
+				newProfilePic = {
 					$set: { Profilepic: { data: req.file.filename, contentType: 'image/png' } },
 				}
-				changeProfilePic = await Users.findOneAndUpdate(currentUser, newProfilePic)
+				console.log('there is a file uploaded')
 			}
 
 			//if username is empty keep current username
 			if (req.body.newUsername == '') {
-				req.body.newUsername = fetchOneUser[0].Username
-			} else {
-				//change username
-				const newUsername = { $set: { Username: req.body.newUsername } }
-				changeUsername = await Users.findOneAndUpdate(currentUser, newUsername)
+				newUsername = currentUser[0].Username
+				console.log('there is no new username')
 			}
 
 			//if email is empty keep current email
 			if (req.body.newEmail == '') {
-				req.body.newEmail = fetchOneUser[0].Email
-			} else {
-				// change email
-				const newEmail = { $set: { Email: req.body.newEmail } }
-				changeEmail = await Users.findOneAndUpdate(currentUser, newEmail)
+				newEmail = currentUser[0].Email
+				console.log('there is no new email')
 			}
 
-			//if password is empty keep current password
-			if (req.body.newPassword == '') {
-				req.body.newPassword = fetchOneUser[0].Password
-			}
-			if (req.body.currentPassword != fetchOneUser[0].Password) {
-				//if current password is not the same as the password of user give error
-				console.log('error')
-				res.render('update', { data: fetchOneUser, passError: 'true' })
-			} else {
-				// change password
-				const newPassword = { $set: { Password: req.body.newPassword } }
-				changePassword = await Users.findOneAndUpdate(currentUser, newPassword)
+			//if password not empty and current password is not the same as current password in database
+			if (
+				(req.body.currentPassword !== '' && hashCheck === false) ||
+				(req.body.currentPassword == '' && req.body.newPassword !== '')
+			) {
+				return res.render('update', { data: currentUser[0], passError: true })
 			}
 
-			res.render('succesUpdate', { data: fetchOneUser, passError: 'false' })
+			//update user
+			await Users.findOneAndUpdate({ _id: currentUser[0]._id }, newProfilePic)
+			await Users.findOneAndUpdate({ _id: currentUser[0]._id }, newUsername)
+			await Users.findOneAndUpdate({ _id: currentUser[0]._id }, newEmail)
+			await Users.findOneAndUpdate({ _id: currentUser[0]._id }, newPassword)
 
-			console.log(req.file.filename, req.body)
-		} catch (err) {
-			console.log(err)
+			res.redirect('/succesUpdate')
+		} catch (error) {
+			console.log(error)
 		}
 	})
 

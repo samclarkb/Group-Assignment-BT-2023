@@ -1,3 +1,14 @@
-<h2>U heeft succesvol een account aangemaakt. </h2>
-<h2><a href="/">Ga direct aan de slag</a></h2>
+<img src="../images/succes.png" alt="Succes" id="succesimg">
+
+<h2>Registratie succesvol!<br>
+    U word automatisch doorgestuurd naar het inloggen  </h2>
+
+<h3>Word u niet doorgestuurd?<br>
+    <a href="/"><span class="logintext">Klik hier om verder te gaan</span></h3>
+<script>
+    setTimeout( () => {
+        // na een timeout van 5 sec doorsturen
+        window.location = "/";
+    }, 5000)
+</script>
 
