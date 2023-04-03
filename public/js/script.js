@@ -71,15 +71,3 @@ if (window.location.href === 'http://localhost:4444/favorites') {
 	buttonThree.classList.add('inActive')
 	buttonFour.classList.add('inActive')
 }
-
-// fetch favorite
-// form.forEach(item => {
-// 	item.addEventListener('submit', event => {
-// 		event.preventDefault()
-// 		const formData = new FormData(event.target)
-// 		fetch('http://localhost:3333/favorites:id', {
-// 			method: 'POST',
-// 			body: formData,
-// 		}).then(res => res.json())
-// 	})
-// })
