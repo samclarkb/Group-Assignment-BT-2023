@@ -565,3 +565,11 @@ div>h2 {
 .unauthorized img {
 	width: 9em;
 }
+
+#succesimg {
+	width:10em;
+	margin-top:50%;
+}
+.logintext {
+text-decoration: underline
+}
