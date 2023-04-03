@@ -141,6 +141,10 @@ app.get('/', (req, res) => {
 		const currentUser = await Users.find({ _id: fetchOneUser[0]._id })
 		res.render('update', { data: currentUser, passError: 'false' })
 	})
+	.get ('/succesUpdate', (req, res) => {
+		res.render('succesUpdate')
+	})
+
 	.get('/register', async (req, res) => {
 		res.render('register', {
 			errorMessage: '',
@@ -260,7 +264,7 @@ app.post('/home', async (req, res) => {
 			var newEmail = { $set: { Email: req.body.newEmail }}
 
 			//current password equals current password in database in hash
-			const currentPassword = await bcrypt.compare(req.body.currentPassword, currentUser[0].Password)
+			const hashCheck = await bcrypt.compare(req.body.currentPassword, currentUser[0].Password)
 			//hash new password
 			const hashedPwd = await bcrypt.hash(req.body.newPassword, saltRounds)
 			var newPassword = { $set: { Password: hashedPwd} }
@@ -288,33 +292,18 @@ app.post('/home', async (req, res) => {
 				console.log('there is no new email')
 			}
 
-			// if password is nog the same as current password give error
-			if (currentPassword === false) {
-				console.log('password is not the same as current password')
-
-				//if password is empty keep current password
-				if (req.body.newPassword == '') {
-					newPassword = currentUser[0].Password
-					console.log('there is no new password')
-					res.render('update', { data: currentUser, passError: false })
-				} else {
-					res.render('update', { data: currentUser, passError: true })
-					console.log('current password is incorrect')
-					newPassword = currentUser[0].Password
-				}
+			//if password not empty and current password is not the same as current password in database
+			if ((req.body.currentPassword !== "" && hashCheck === false) || (req.body.currentPassword == '' && req.body.newPassword !== "")){
+				return res.render('update', { data: currentUser, passError: true })
 			}
 
 			//update user
-			changeProfilePic = await Users.findOneAndUpdate( { _id: currentUser[0]._id }, newProfilePic )
-			changeUsername = await Users.findOneAndUpdate( { _id: currentUser[0]._id }, newUsername )
-			changeEmail = await Users.findOneAndUpdate( { _id: currentUser[0]._id }, newEmail )
-			changePassword = await Users.findOneAndUpdate( { _id: currentUser[0]._id }, newPassword )
-	
-			res.render('update', { data: currentUser, passError: false})
-			console.log(req.file)
+			await Users.findOneAndUpdate( { _id: currentUser[0]._id }, newProfilePic )
+			await Users.findOneAndUpdate( { _id: currentUser[0]._id }, newUsername )
+			await Users.findOneAndUpdate( { _id: currentUser[0]._id }, newEmail )
+			await Users.findOneAndUpdate( { _id: currentUser[0]._id }, newPassword ) 
 
-
-
+			res.redirect('/succesUpdate')
 
 		} catch (error) {
 			console.log(error)
