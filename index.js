@@ -166,6 +166,15 @@ app.get('/', (req, res) => {
 		res.status(404).render('404')
 	})
 
+const errorLogin = (req) => {
+	return {
+		errorMessage: 'Combinatie email en wachtwoord onjuist',
+		errorClass: 'errorLogin',
+		emailInput: req.body.email,
+		passwordInput: req.body.password
+	}
+}
+
 // All Post requests
 app.post('/home', async (req, res) => {
 	// check if email exist in database
@@ -181,21 +190,11 @@ app.post('/home', async (req, res) => {
 			res.render('preference', { userinfo: currentUser })
 		} else {
 			// show error message when password is wrong
-			res.render('inloggen', {
-				errorMessage: 'Combinatie email en wachtwoord onjuist',
-				errorClass: 'errorLogin',
-				emailInput: req.body.email,
-				passwordInput: req.body.password
-			})
+			res.render('inloggen', errorLogin(req))
 		}
 	} else {
 		// show error message when email is wrong
-		res.render('inloggen', {
-			errorMessage: 'Combinatie email en wachtwoord onjuist',
-			errorClass: 'errorLogin',
-			emailInput: req.body.email,
-			passwordInput: req.body.password
-		})
+		res.render('inloggen', errorLogin(req))
 	}
 })
 	.post('/logout', (req, res) => {
