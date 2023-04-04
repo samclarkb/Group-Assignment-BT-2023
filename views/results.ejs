@@ -1,7 +1,7 @@
 <div>
-	<% if(data.length > 0){ %>
-	<h2>Results</h2>
-	<% } else{ %> <% } %> <% if(data.length > 0){ %> <% for(let i = 0; i < data.length; i++){ %>
+	<% if(data.length > 0){ %> <%- include('partials/header', {title: 'Results', image:
+	userinfo[0].Profilepic.data, username: userinfo[0].Username }) %> <% } else{ %> <% } %> <%
+	if(data.length > 0){ %> <% for(let i = 0; i < data.length; i++){ %>
 
 	<a class="albumCard" id="albumcard" href="results<%= data[i]._id %>">
 		<% if( typeof data[i].Image.data != 'undefined' ){ %>
@@ -24,7 +24,7 @@
 		<div class="heart">
 			<form action="favorites<%= data[i]._id %>" method="POST">
 				<label for="<%= data[i]._id %>">
-					<% if(data[i].Like === true > 0){ %>
+					<% if(user.includes(data[i].Title)){ %>
 					<i onclick="toggle(this)" class="fa fa-heart"></i>
 					<% } else{ %>
 					<i onclick="toggle(this)" class="fa fa-heart-o"></i>
@@ -43,10 +43,11 @@
 	<% } %>
 	<div class="goBack"><a href="/">Go Back</a></div>
 
-	<% } else{ %>
+	<% } else{ %> <%- include('partials/header', {title: 'Results', image:
+	userinfo[0].Profilepic.data, username: userinfo[0].Username }) %>
 	<div class="noData">
 		<p>There are no albums that matches your preferences</p>
-		<a href="/">Go Back</a>
+		<a href="/preference">Go Back</a>
 	</div>
 
 	<% } %> <%- include('partials/navigation') %>

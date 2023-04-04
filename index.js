@@ -5,11 +5,33 @@ const expressLayouts = require('express-ejs-layouts')
 const dotenv = require('dotenv').config()
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
-const Albums = require('./models/models')
-const Users = require('./models/models')
+const bcrypt = require('bcryptjs')
+const session = require('express-session')
+//Album en user model met hashpassword in db
+const { Albums, Users } = require('./models/models')
+const saltRounds = 10
 
 // Defining express as app
 const app = express()
+
+// creating a session
+app.use(
+	session({
+		secret: process.env.SESSION_KEY,
+		resave: true,
+		saveUninitialized: true,
+		cookie: { maxAge: 600000 },
+	})
+)
+
+// check if user is authorized (logged in) to visit a page
+const authorizeUser = (req, res, next) => {
+	if (!req.session.user) {
+		res.status(401).render('401')
+	} else {
+		next()
+	}
+}
 
 // env variables
 const userName = process.env.USERNAME
@@ -20,6 +42,7 @@ const port = process.env.PORT
 const url = `mongodb+srv://${userName}:${passWord}@Database.ymup0ov.mongodb.net/?retryWrites=true&w=majority`
 
 // Making connection with Mongodb
+mongoose.set('strictQuery', false)
 mongoose
 	.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
 	.then(() => {
@@ -59,57 +82,148 @@ app.use(express.static(__dirname + '/public'))
 
 // All Get requests
 app.get('/', (req, res) => {
-	res.render('preference')
-})
-	.get('/results', async (req, res) => {
-		const fetchAlbums = await Albums.find({})
-		res.render('results', { data: fetchAlbums })
+	res.render('inloggen', {
+		errorMessage: '',
+		errorClass: '',
+		emailInput: '',
+		passwordInput: '',
 	})
-	.get('/results:id', async (req, res) => {
+})
+	.get('/results', authorizeUser, async (req, res) => {
+		const currentUser = await Users.find({ _id: req.session.user.userID })
+		const favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
+		const fetchAlbums = await Albums.find({})
+		res.render('results', {
+			data: fetchAlbums,
+			user: favoriteAlbumTitles,
+			userinfo: currentUser,
+		})
+	})
+	.get('/preference', authorizeUser, async (req, res) => {
+		const currentUser = await Users.find({ _id: req.session.user.userID })
+		res.render('preference', { userinfo: currentUser })
+	})
+	.get('/results:id', authorizeUser, async (req, res) => {
 		const fetchOneAlbum = await Albums.find({ _id: req.params.id })
 		res.render('detailPageResults', { data: fetchOneAlbum })
 	})
-	.get('/favorites:id', async (req, res) => {
+	.get('/favorites:id', authorizeUser, async (req, res) => {
 		const fetchOneAlbum = await Albums.find({ _id: req.params.id })
 		res.render('detailPageFavorites', { data: fetchOneAlbum })
 	})
-	.get('/all:id', async (req, res) => {
+	.get('/all:id', authorizeUser, async (req, res) => {
 		const fetchOneAlbum = await Albums.find({ _id: req.params.id })
 		res.render('detailPageAll', { data: fetchOneAlbum })
 	})
-	.get('/favorites', async (req, res) => {
-		const fetchFavorite = await Albums.find({ Like: true })
-		res.render('favorites', { data: fetchFavorite })
+	.get('/favorites', authorizeUser, async (req, res) => {
+		const currentUser = await Users.find({ _id: req.session.user.userID })
+		const favoriteAlbums = currentUser[0].Like
+		const favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
+		res.render('favorites', {
+			data: favoriteAlbums,
+			user: favoriteAlbumTitles,
+			userinfo: currentUser,
+		})
 	})
-	.get('/deleteModal:id', async (req, res) => {
-		console.log('req', req.params.id)
+	.get('/deleteModal:id', authorizeUser, async (req, res) => {
+		const currentUser = await Users.find({ _id: req.session.user.userID })
 		const fetchAlbum = await Albums.find({ _id: req.params.id })
-		res.render('deleteModal', { data: fetchAlbum })
+		res.render('deleteModal', { data: fetchAlbum, userinfo: currentUser })
 	})
-	.get('/add', (req, res) => {
-		res.render('add')
+	.get('/add', authorizeUser, async (req, res) => {
+		const currentUser = await Users.find({ _id: req.session.user.userID })
+		res.render('add', { userinfo: currentUser })
 	})
-	.get('/all', async (req, res) => {
+	.get('/all', authorizeUser, async (req, res) => {
+		const currentUser = await Users.find({ _id: req.session.user.userID })
+		const favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
+
 		const fetchAlbums = await Albums.find({}).sort({ _id: -1 })
-		res.render('all', { data: fetchAlbums })
+		res.render('all', { data: fetchAlbums, user: favoriteAlbumTitles, userinfo: currentUser })
+	})
+	.get('/update', async (req, res) => {
+		const fetchOneUser = await Users.find({ _id: req.session.user.userID })
+		const currentUser = await Users.find({ _id: fetchOneUser[0]._id })
+		res.render('update', { data: currentUser, passError: 'false' })
+	})
+	.get('/succesUpdate', (req, res) => {
+		res.render('succesUpdate')
+	})
+
+	.get('/register', async (req, res) => {
+		res.render('register', {
+			errorMessage: '',
+			errorClass: '',
+		})
+	})
+	.get('/register-failed', async (req, res) => {
+		res.render('register-failed')
+	})
+	.get('/register-succes', async (req, res) => {
+		res.render('register-succes')
 	})
 	.get('*', (req, res) => {
 		res.status(404).render('404')
 	})
 
 // All Post requests
-app.post('/results', async (req, res) => {
-	const fetchAlbums = await Albums.find({ Year: req.body.year, Genre: req.body.genre })
-	res.render('results', { data: fetchAlbums })
+app.post('/home', async (req, res) => {
+	const checkUser = await Users.find({ Email: req.body.email })
+	if (checkUser.length !== 0) {
+		const dbpw = checkUser[0]['Password']
+		const cmp = await bcrypt.compare(req.body.password, dbpw)
+		if (cmp) {
+			req.session.user = { userID: checkUser[0]['_id'] }
+			userInfo = await Users.find({ _id: req.session.user.userID })
+			res.render('preference', { userinfo: userInfo })
+		}
+	} else {
+		res.render('inloggen', {
+			errorMessage: 'Combinatie email en wachtwoord onjuist',
+			errorClass: 'errorLogin',
+		})
+	}
 })
-	.post('/favorites:id', async (req, res) => {
-		const updateFavorite = await Albums.findOneAndUpdate({ _id: req.params.id }, [
-			{ $set: { Like: { $eq: [false, '$Like'] } } },
-		])
-		// res.redirect(`/${req.originalUrl}}`, { data: updateFavorite })
+	.post('/logout', (req, res) => {
+		req.session.destroy()
+		res.render('inloggen', {
+			errorMessage: 'u bent succesvol uitgelogd!',
+			errorClass: 'successLogout',
+			emailInput: '',
+			passwordInput: '',
+		})
 	})
-	.post('/add', upload.single('File'), (req, res) => {
-		console.log('req', req.body)
+	.post('/results', async (req, res) => {
+		const currentUser = await Users.find({ _id: req.session.user.userID })
+		const favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
+
+		const fetchAlbums = await Albums.find({ Year: req.body.year, Genre: req.body.genre })
+		res.render('results', {
+			data: fetchAlbums,
+			user: favoriteAlbumTitles,
+			userinfo: currentUser,
+		})
+	})
+	.post('/favorites:id', async (req, res) => {
+		const currentUser = await Users.findOne({ _id: req.session.user.userID })
+		const currentAlbum = await Albums.findOne({ _id: req.params.id })
+
+		const albumTitle = currentUser.Like.map(item => item.Title)
+
+		if (albumTitle.includes(currentAlbum.Title)) {
+			const updateFavorite = await Users.findOneAndUpdate(
+				{ _id: currentUser.id },
+				{ $pull: { Like: currentAlbum } }
+			)
+		} else {
+			const updateFavorite = await Users.findOneAndUpdate(
+				{ _id: currentUser.id },
+				{ $push: { Like: currentAlbum } }
+			)
+		}
+	})
+	.post('/add', upload.single('File'), async (req, res) => {
+		const currentUser = await Users.find({ _id: req.session.user.userID })
 
 		Albums.insertMany([
 			{
@@ -120,17 +234,24 @@ app.post('/results', async (req, res) => {
 				Like: false,
 				Description: req.body.Description,
 				Image: { data: req.file.filename, contentType: 'image/png' },
+				SpotifyLink: req.body.SpotifyLink,
 			},
 		]).then(() => console.log('user saved'))
 
-		res.render('succesAdd')
+		res.render('succesAdd', { userinfo: currentUser })
 	})
 	.post('/delete:id', async (req, res) => {
+		const currentUser = await Users.find({ _id: req.session.user.userID })
+		const favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
+
 		const deleteAlbum = await Albums.find({ _id: req.params.id }).remove()
 		const fetchAlbums = await Albums.find({}).sort({ _id: -1 })
-		res.render('all', { data: fetchAlbums })
+		res.render('all', { data: fetchAlbums, user: favoriteAlbumTitles, userinfo: currentUser })
 	})
 	.post('/all', async (req, res) => {
+		const currentUser = await Users.find({ _id: req.session.user.userID })
+		const favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
+
 		const fetchAlbums = await Albums.find({
 			$or: [
 				{ Title: req.body.search },
@@ -139,7 +260,108 @@ app.post('/results', async (req, res) => {
 				{ Genre: req.body.search },
 			],
 		})
-		res.render('all', { data: fetchAlbums })
+		res.render('all', { data: fetchAlbums, user: favoriteAlbumTitles, userinfo: currentUser })
+	})
+
+	.post('/update', upload.single('profilePicture'), async (req, res) => {
+		try {
+			//fetch user
+			const fetchOneUser = await Users.find({ _id: req.session.user.userID })
+			const currentUser = await Users.find({ _id: fetchOneUser[0]._id })
+
+			var newUsername = { $set: { Username: req.body.newUsername } }
+			var newEmail = { $set: { Email: req.body.newEmail } }
+
+			//current password equals current password in database in hash
+			const hashCheck = await bcrypt.compare(
+				req.body.currentPassword,
+				currentUser[0].Password
+			)
+			//hash new password
+			const hashedPwd =
+				req.body.newPassword === ''
+					? currentUser[0].Password
+					: await bcrypt.hash(req.body.newPassword, saltRounds)
+			var newPassword = { $set: { Password: hashedPwd } }
+
+			//if profile picture is empty keep current profile picture
+			if (req.file == undefined) {
+				var newProfilePic = {
+					$set: {
+						Profilepic: {
+							data: currentUser[0].Profilepic.data,
+							contentType: 'image/png',
+						},
+					},
+				}
+				console.log('there is no file uploaded')
+			}
+
+			if (req.file != undefined) {
+				newProfilePic = {
+					$set: { Profilepic: { data: req.file.filename, contentType: 'image/png' } },
+				}
+				console.log('there is a file uploaded')
+			}
+
+			//if username is empty keep current username
+			if (req.body.newUsername == '') {
+				newUsername = currentUser[0].Username
+				console.log('there is no new username')
+			}
+
+			//if email is empty keep current email
+			if (req.body.newEmail == '') {
+				newEmail = currentUser[0].Email
+				console.log('there is no new email')
+			}
+
+			//if password not empty and current password is not the same as current password in database
+			if (
+				(req.body.currentPassword !== '' && hashCheck === false) ||
+				(req.body.currentPassword == '' && req.body.newPassword !== '')
+			) {
+				return res.render('update', { data: currentUser[0], passError: true })
+			}
+
+			//update user
+			await Users.findOneAndUpdate({ _id: currentUser[0]._id }, newProfilePic)
+			await Users.findOneAndUpdate({ _id: currentUser[0]._id }, newUsername)
+			await Users.findOneAndUpdate({ _id: currentUser[0]._id }, newEmail)
+			await Users.findOneAndUpdate({ _id: currentUser[0]._id }, newPassword)
+
+			res.redirect('/succesUpdate')
+		} catch (error) {
+			console.log(error)
+		}
+	})
+
+	.post('/register', upload.single('Profilepic'), async (req, res) => {
+		const checkUser = await Users.find({ Email: req.body.email })
+		const uname = checkUser['Username']
+		Users.findOne({ Email: req.body.email }, async function (err, result) {
+			if (err) throw err
+			if (result) {
+				// doe hier iets om te melden dat het e-mailadres al in gebruik is
+				console.log('email komt al voor')
+				res.render('register', {
+					errorMessage: 'Email al in gebruik',
+					errorClass: 'errorLogin',
+				})
+			} else {
+				// als de email niet in gebruik is, voor onderstaande commando uit
+				const hashedPwd = await bcrypt.hash(req.body.password, saltRounds)
+				Users.insertMany([
+					{
+						Username: req.body.username,
+						Password: hashedPwd,
+						Email: req.body.email,
+						Profilepic: { data: req.file.filename, contentType: 'image/png' },
+					},
+				]).then(() => console.log('user saved'))
+				res.redirect('register-succes')
+			}
+		})
 	})
 
 // Making sure the application is running on the port I defined in the env file

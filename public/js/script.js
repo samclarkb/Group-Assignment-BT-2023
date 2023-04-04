@@ -56,8 +56,9 @@ if (window.location.href === 'http://localhost:4444/favorites') {
 	buttonThree.classList.add('inActive')
 	buttonFour.classList.add('inActive')
 } else if (
-	window.location.href === 'http://localhost:4444/' ||
-	window.location.href === 'http://localhost:4444/results'
+	window.location.href === 'http://localhost:4444/preference' ||
+	window.location.href === 'http://localhost:4444/results' ||
+	window.location.href === 'http://localhost:4444/home'
 ) {
 	buttonTwo.classList.add('inActive')
 	buttonThree.classList.add('inActive')
@@ -69,7 +70,6 @@ if (window.location.href === 'http://localhost:4444/favorites') {
 	buttonThree.classList.add('inActive')
 	buttonFour.classList.add('inActive')
 }
-
 // aysync function handeling the like
 const likeHandler = async (event) => { 
 	// stop the refresh 
@@ -86,10 +86,8 @@ const likeHandler = async (event) => {
 		},
 		body: JSON.stringify(likeValue) }) 
 		return response
-	}
+	};
 
 
 // eventlistener
-form.forEach(button => button.addEventListener('click', likeHandler))
-
-
+form.forEach(button => button.addEventListener('click', likeHandler));
