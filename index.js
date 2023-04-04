@@ -141,12 +141,12 @@ app.get('/', (req, res) => {
 		const fetchAlbums = await Albums.find({}).sort({ _id: -1 })
 		res.render('all', { data: fetchAlbums, user: favoriteAlbumTitles, userinfo: currentUser })
 	})
-	.get('/update', async (req, res) => {
+	.get('/update', authorizeUser, async (req, res) => {
 		const fetchOneUser = await Users.find({ _id: req.session.user.userID })
 		const currentUser = await Users.find({ _id: fetchOneUser[0]._id })
 		res.render('update', { data: currentUser, passError: 'false' })
 	})
-	.get('/succesUpdate', (req, res) => {
+	.get('/succesUpdate', authorizeUser, (req, res) => {
 		res.render('succesUpdate')
 	})
 
@@ -166,26 +166,41 @@ app.get('/', (req, res) => {
 		res.status(404).render('404')
 	})
 
+const errorLogin = (req) => {
+	return {
+		errorMessage: 'Combinatie email en wachtwoord onjuist',
+		errorClass: 'errorLogin',
+		emailInput: req.body.email,
+		passwordInput: req.body.password
+	}
+}
+
 // All Post requests
 app.post('/home', async (req, res) => {
+	// check if email exist in database
 	const checkUser = await Users.find({ Email: req.body.email })
+	// if user with this email exist check if given password is correct
 	if (checkUser.length !== 0) {
 		const dbpw = checkUser[0]['Password']
 		const cmp = await bcrypt.compare(req.body.password, dbpw)
+		// when password is identical with the one in the database, create a session with user ID
 		if (cmp) {
 			req.session.user = { userID: checkUser[0]['_id'] }
-			userInfo = await Users.find({ _id: req.session.user.userID })
-			res.render('preference', { userinfo: userInfo })
+			const currentUser = await Users.find({ _id: req.session.user.userID })
+			res.render('preference', { userinfo: currentUser })
+		} else {
+			// show error message when password is wrong
+			res.render('inloggen', errorLogin(req))
 		}
 	} else {
-		res.render('inloggen', {
-			errorMessage: 'Combinatie email en wachtwoord onjuist',
-			errorClass: 'errorLogin',
-		})
+		// show error message when email is wrong
+		res.render('inloggen', errorLogin(req))
 	}
 })
 	.post('/logout', (req, res) => {
+		// when user logs out destroy the session
 		req.session.destroy()
+		// display success message in inlog page 
 		res.render('inloggen', {
 			errorMessage: 'u bent succesvol uitgelogd!',
 			errorClass: 'successLogout',
