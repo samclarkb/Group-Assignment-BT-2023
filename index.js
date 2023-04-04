@@ -339,7 +339,7 @@ app.post('/home', async (req, res) => {
 	.post('/register', upload.single('Profilepic'), async (req, res) => {
 		const checkUser = await Users.find({ Email: req.body.email })
 		const uname = checkUser['Username']
-		Users.findOne({ Email: req.body.email }, async function (err, result) {
+		Users.findOne({ Email: req.body.email }, async (err, result) => {
 			if (err) throw err
 			if (result) {
 				// doe hier iets om te melden dat het e-mailadres al in gebruik is

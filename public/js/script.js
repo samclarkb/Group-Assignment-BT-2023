@@ -71,23 +71,23 @@ if (window.location.href === 'http://localhost:4444/favorites') {
 	buttonFour.classList.add('inActive')
 }
 // aysync function handeling the like
-const likeHandler = async (event) => { 
-	// stop the refresh 
-	event.preventDefault() 
+const likeHandler = async event => {
+	// stop the refresh
+	event.preventDefault()
 	// here the target event is gonna be made as a value
-	 const { value } = event.currentTarget 
-	 console.log('Banaan')
-	 // there a new object is made with a new value
-	 const likeValue = { newLike: value } 
-	 // Here the site is gonna route to the version of the site with the like
-	const response = await fetch(`/favorites${value}`,
-	 { method: 'POST', headers: {
-		 'Content-Type': 'application/json' 
+	const { value } = event.currentTarget
+	// there a new object is made with a new value
+	const likeValue = { newLike: value }
+	// Here the site is gonna route to the version of the site with the like
+	const response = await fetch(`/favorites${value}`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
 		},
-		body: JSON.stringify(likeValue) }) 
-		return response
-	};
-
+		body: JSON.stringify(likeValue),
+	})
+	return response
+}
 
 // eventlistener
-form.forEach(button => button.addEventListener('click', likeHandler));
+form.forEach(button => button.addEventListener('click', likeHandler))
