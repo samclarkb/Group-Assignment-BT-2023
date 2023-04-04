@@ -222,7 +222,6 @@ app.post('/home', async (req, res) => {
 	.post('/favorites:id', async (req, res) => {
 		const currentUser = await Users.findOne({ _id: req.session.user.userID })
 		const currentAlbum = await Albums.findOne({ _id: req.params.id })
-
 		const albumTitle = currentUser.Like.map(item => item.Title)
 
 		if (albumTitle.includes(currentAlbum.Title)) {
