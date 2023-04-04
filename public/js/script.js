@@ -3,12 +3,11 @@ const buttonOne = document.querySelector('#linkOne')
 const buttonTwo = document.querySelector('#linkTwo')
 const buttonThree = document.querySelector('#linkThree')
 const buttonFour = document.querySelector('#linkFour')
-
 // Fallback image of the albumcards
 const lazyBackgrounds = [].slice.call(document.querySelectorAll('.lazy-background'))
 
 // Favorite form/button
-const form = document.querySelectorAll('.likeForm')
+const form = document.querySelectorAll('.likeButton')
 
 // Using the intersection observer to implement lazy loading
 // Resource: https://web.dev/lazy-loading-images/
@@ -71,3 +70,24 @@ if (window.location.href === 'http://localhost:4444/favorites') {
 	buttonThree.classList.add('inActive')
 	buttonFour.classList.add('inActive')
 }
+// aysync function handeling the like
+const likeHandler = async event => {
+	// stop the refresh
+	event.preventDefault()
+	// here the target event is gonna be made as a value
+	const { value } = event.currentTarget
+	// there a new object is made with a new value
+	const likeValue = { newLike: value }
+	// Here the site is gonna route to the version of the site with the like
+	const response = await fetch(`/favorites${value}`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(likeValue),
+	})
+	return response
+}
+
+// eventlistener
+form.forEach(button => button.addEventListener('click', likeHandler))

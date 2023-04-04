@@ -1,3 +1,4 @@
+
 <div class="all">
 	<% if(data.length > 0){ %>
         <%- include('partials/header', {title: 'Latest', image: userinfo[0].Profilepic.data, username: userinfo[0].Username}) %>
@@ -37,6 +38,7 @@
 					<% } %>
 				</label>
 				<input
+				class="likeButton"
 					id="<%= data[i]._id %>"
 					name="Like"
 					type="submit"
@@ -55,4 +57,3 @@
 		<a href="/all">Go Back</a>
 	</div>
 	<% } %> <%- include('partials/navigation') %>
-</div>
