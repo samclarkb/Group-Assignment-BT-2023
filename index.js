@@ -334,7 +334,9 @@ app.post('/home', async (req, res) => {
 			) {
 				return res.render('update', { data: currentUser, passError: true })
 			} 
-			else if (hashCheck === true && req.body.newPassword == '') {
+			else if (
+				hashCheck === true && req.body.newPassword == ''
+				) {
 				return res.render('update', { data: currentUser, passError: true })
 			}
 
