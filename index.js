@@ -335,7 +335,7 @@ app.post('/home', async (req, res) => {
 				(req.body.currentPassword !== '' && hashCheck === false) ||
 				(req.body.currentPassword == '' && req.body.newPassword !== '')
 			) {
-				return res.render('update', { data: currentUser[0], passError: true })
+				return res.render('update', { data: currentUser, passError: true })
 			}
 
 			//update user
