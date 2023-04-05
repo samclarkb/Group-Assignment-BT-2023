@@ -292,10 +292,7 @@ app.post('/home', async (req, res) => {
 				currentUser[0].Password
 			)
 			//hash new password
-			const hashedPwd =
-				req.body.newPassword === ''
-					? currentUser[0].Password
-					: await bcrypt.hash(req.body.newPassword, saltRounds)
+			const hashedPwd = await bcrypt.hash(req.body.newPassword, saltRounds)
 			var newPassword = { $set: { Password: hashedPwd } }
 
 			//if profile picture is empty keep current profile picture
@@ -335,7 +332,12 @@ app.post('/home', async (req, res) => {
 				(req.body.currentPassword !== '' && hashCheck === false) ||
 				(req.body.currentPassword == '' && req.body.newPassword !== '')
 			) {
-				return res.render('update', { data: currentUser[0], passError: true })
+				return res.render('update', { data: currentUser, passError: true })
+			} 
+			else if (
+				hashCheck === true && req.body.newPassword == ''
+				) {
+				return res.render('update', { data: currentUser, passError: true })
 			}
 
 			//update user
