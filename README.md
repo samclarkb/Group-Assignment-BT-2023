@@ -25,9 +25,9 @@ The application mainly focuses on enable users to find their favorite hip-hop al
   </tr>
   </tr>
     <tr>
-    <td align="center" align="top"><h3>Register</h3><p>Only users with an account are able to use the application. The register function enable users to make an account. </p></td>
-    <td align="center" align="top"><h3>Log In</h3><p>In order to use the app, the user first have to log in into his/hers account.</p></td>
-    <td align="center" align="top"><h3>Update Profile</h3><p>The user is able to change all the information in his account. This includes: password, email, image and username.</p>  </td>
+    <td align="center" align="top"><h3>Register</h3><p>Only users with an account are able to use the application. The register function enable users to make an account. </p><img width='247px' src='https://github.com/samclarkb/Group-Assignment-BT-2023/blob/main/public/images/register.gif'></td>
+    <td align="center" align="top"><h3>Log In</h3><p>In order to use the app, the user first have to log in into his/hers account.</p><img width='247px' src='https://github.com/samclarkb/Group-Assignment-BT-2023/blob/main/public/images/login.gif'></td>
+    <td align="center" align="top"><h3>Update Profile</h3><p>The user is able to change all the information in his account. This includes: password, email, image and username.</p> <img width='247px' src='https://github.com/samclarkb/Group-Assignment-BT-2023/blob/main/public/images/update.gif'>  </td>
   </tr>
 </table>
 
