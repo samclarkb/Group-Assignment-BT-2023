@@ -23,12 +23,6 @@ The application mainly focuses on enable users to find their favorite hip-hop al
     <td align="center" align="top"><h3>Filter</h3><p>Here the user can filter by genre and year of origin. When the data is filtered the user get an overview of albums that corresponds with the user preverences. </p><img width='247px' src='https://github.com/samclarkb/BT-2023-Project-Tech/blob/main/public/gif/filter.gif'></td>
     <td align="center" align="top"><h3>Search</h3><p>Here the user can search by ablum title, artist name, genre and year. When the user search for something that doesn't correspond with data from the database, the app will give the user feedback. The user is also able to clear the search results by pressing the cross. </p>  <img width='247px' src='https://github.com/samclarkb/BT-2023-Project-Tech/blob/main/public/gif/search.gif'></td>
   </tr>
-  </tr>
-    <tr>
-    <td align="center" align="top"><h3>Register</h3><p>Only users with an account are able to use the application. The register function enable users to make an account. </p><img width='247px' src='https://github.com/samclarkb/Group-Assignment-BT-2023/blob/main/public/images/register.gif'></td>
-    <td align="center" align="top"><h3>Log In</h3><p>In order to use the app, the user first have to log in into his/hers account.</p><img width='247px' src='https://github.com/samclarkb/Group-Assignment-BT-2023/blob/main/public/images/login.gif'></td>
-    <td align="center" align="top"><h3>Update Profile</h3><p>The user is able to change all the information in his account. This includes: password, email, image and username.</p> <img width='247px' src='https://github.com/samclarkb/Group-Assignment-BT-2023/blob/main/public/images/update.gif'>  </td>
-  </tr>
 </table>
 
 ## :wrench: Installation 
@@ -40,9 +34,9 @@ Then install al the dependancies
 
 `npm install`
 
-After that you can run the project with the folowing command:
+After that you can run the project with the foolowing command:
 
-`npm run dev`
+`npm start`
 
 ## :mag_right: Recources 
 * EJS -- Embedded JavaScript templates. (z.d.). https://ejs.co/

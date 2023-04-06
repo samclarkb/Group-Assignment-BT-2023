@@ -7,12 +7,16 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
 const session = require('express-session')
+const compression = require('compression');
 //Album en user model met hashpassword in db
 const { Albums, Users } = require('./models/models')
 const saltRounds = 10
 
 // Defining express as app
 const app = express()
+
+// Compress all HTTP responses
+app.use(compression());
 
 // creating a session
 app.use(
@@ -82,7 +86,7 @@ app.use(express.static(__dirname + '/public'))
 
 // All Get requests
 app.get('/', (req, res) => {
-	res.render('login', {
+	res.render('inloggen', {
 		errorMessage: '',
 		errorClass: '',
 		emailInput: '',
@@ -156,11 +160,11 @@ app.get('/', (req, res) => {
 			errorClass: '',
 		})
 	})
-	.get('/registerSucces', async (req, res) => {
-		res.render('registerSucces',     setTimeout( () => {
-			// na een timeout van 5 sec doorsturen
-			res.redirect = "/";
-		}, 5000));
+	.get('/register-failed', async (req, res) => {
+		res.render('register-failed')
+	})
+	.get('/register-succes', async (req, res) => {
+		res.render('register-succes')
 	})
 	.get('*', (req, res) => {
 		res.status(404).render('404')
@@ -193,15 +197,14 @@ app.post('/home', async (req, res) => {
 			res.render('login', errorLogin(req))
 		}
 	} else {
-		res.render('login', {
-			errorMessage: 'Email or password not correct',
-			errorClass: 'errorLogin',
-		})
+		// show error message when email is wrong
+		res.render('inloggen', errorLogin(req))
 	}
 })
 	.post('/logout', (req, res) => {
 		// when user logs out destroy the session
 		req.session.destroy()
+		// display success message in inlog page 
 		res.render('login', {
 			errorMessage: 'You are logged out',
 			errorClass: 'successLogout',
@@ -354,13 +357,15 @@ app.post('/home', async (req, res) => {
 	})
 
 	.post('/register', upload.single('Profilepic'), async (req, res) => {
-		Users.findOne({ Email: req.body.email }, async function (err, result) {
-
+		const checkUser = await Users.find({ Email: req.body.email })
+		const uname = checkUser['Username']
+		Users.findOne({ Email: req.body.email }, async (err, result) => {
 			if (err) throw err
 			if (result) {
 				// doe hier iets om te melden dat het e-mailadres al in gebruik is
+				console.log('email komt al voor')
 				res.render('register', {
-					errorMessage: 'Email allready exists',
+					errorMessage: 'Email al in gebruik',
 					errorClass: 'errorLogin',
 				})
 			} else {
@@ -374,7 +379,7 @@ app.post('/home', async (req, res) => {
 						Profilepic: { data: req.file.filename, contentType: 'image/png' },
 					},
 				]).then(() => console.log('user saved'))
-				res.redirect('registerSucces')
+				res.redirect('register-succes')
 			}
 		})
 	})
