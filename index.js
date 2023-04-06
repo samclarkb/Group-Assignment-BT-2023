@@ -7,7 +7,7 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
 const session = require('express-session')
-const compression = require('compression');
+const compression = require('compression')
 //Album en user model met hashpassword in db
 const { Albums, Users } = require('./models/models')
 const saltRounds = 10
@@ -16,7 +16,7 @@ const saltRounds = 10
 const app = express()
 
 // Compress all HTTP responses
-app.use(compression());
+app.use(compression())
 
 // creating a session
 app.use(
@@ -86,7 +86,7 @@ app.use(express.static(__dirname + '/public'))
 
 // All Get requests
 app.get('/', (req, res) => {
-	res.render('inloggen', {
+	res.render('logIn', {
 		errorMessage: '',
 		errorClass: '',
 		emailInput: '',
@@ -160,22 +160,25 @@ app.get('/', (req, res) => {
 			errorClass: '',
 		})
 	})
-	.get('/register-failed', async (req, res) => {
-		res.render('register-failed')
-	})
-	.get('/register-succes', async (req, res) => {
-		res.render('register-succes')
+	.get('/registerSucces', async (req, res) => {
+		res.render(
+			'registerSucces',
+			setTimeout(() => {
+				// na een timeout van 5 sec doorsturen
+				window.location = '/'
+			}, 5000)
+		)
 	})
 	.get('*', (req, res) => {
 		res.status(404).render('404')
 	})
 
-const errorLogin = (req) => {
+const errorLogin = req => {
 	return {
 		errorMessage: 'Email or password incorrect',
 		errorClass: 'errorLogin',
 		emailInput: req.body.email,
-		passwordInput: req.body.password
+		passwordInput: req.body.password,
 	}
 }
 
@@ -198,13 +201,13 @@ app.post('/home', async (req, res) => {
 		}
 	} else {
 		// show error message when email is wrong
-		res.render('inloggen', errorLogin(req))
+		res.render('logIn', errorLogin(req))
 	}
 })
 	.post('/logout', (req, res) => {
 		// when user logs out destroy the session
 		req.session.destroy()
-		// display success message in inlog page 
+		// display success message in inlog page
 		res.render('login', {
 			errorMessage: 'You are logged out',
 			errorClass: 'successLogout',
@@ -337,10 +340,7 @@ app.post('/home', async (req, res) => {
 				(req.body.currentPassword == '' && req.body.newPassword !== '')
 			) {
 				return res.render('update', { data: currentUser, passError: true })
-			} 
-			else if (
-				hashCheck === true && req.body.newPassword == ''
-				) {
+			} else if (hashCheck === true && req.body.newPassword == '') {
 				return res.render('update', { data: currentUser, passError: true })
 			}
 
@@ -363,9 +363,8 @@ app.post('/home', async (req, res) => {
 			if (err) throw err
 			if (result) {
 				// doe hier iets om te melden dat het e-mailadres al in gebruik is
-				console.log('email komt al voor')
 				res.render('register', {
-					errorMessage: 'Email al in gebruik',
+					errorMessage: 'Email allready exist',
 					errorClass: 'errorLogin',
 				})
 			} else {
@@ -379,7 +378,7 @@ app.post('/home', async (req, res) => {
 						Profilepic: { data: req.file.filename, contentType: 'image/png' },
 					},
 				]).then(() => console.log('user saved'))
-				res.redirect('register-succes')
+				res.redirect('registerSucces')
 			}
 		})
 	})
