@@ -359,7 +359,7 @@ app.post('/home', async (req, res) => {
 				// doe hier iets om te melden dat het e-mailadres al in gebruik is
 				res.render('register', {
 					errorMessage: 'Email allready exist',
-					errorClass: 'errorlogin',
+					errorClass: 'errorLogin',
 				})
 			} else {
 				// als de email niet in gebruik is, voor onderstaande commando uit
