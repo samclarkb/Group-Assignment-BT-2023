@@ -141,12 +141,12 @@ app.get('/', (req, res) => {
 		const fetchAlbums = await Albums.find({}).sort({ _id: -1 })
 		res.render('all', { data: fetchAlbums, user: favoriteAlbumTitles, userinfo: currentUser })
 	})
-	.get('/update', async (req, res) => {
+	.get('/update', authorizeUser, async (req, res) => {
 		const fetchOneUser = await Users.find({ _id: req.session.user.userID })
 		const currentUser = await Users.find({ _id: fetchOneUser[0]._id })
 		res.render('update', { data: currentUser, passError: 'false' })
 	})
-	.get('/succesUpdate', (req, res) => {
+	.get('/succesUpdate', authorizeUser, (req, res) => {
 		res.render('succesUpdate')
 	})
 
@@ -169,16 +169,31 @@ app.get('/', (req, res) => {
 		res.status(404).render('404')
 	})
 
+const errorLogin = (req) => {
+	return {
+		errorMessage: 'Combinatie email en wachtwoord onjuist',
+		errorClass: 'errorLogin',
+		emailInput: req.body.email,
+		passwordInput: req.body.password
+	}
+}
+
 // All Post requests
 app.post('/home', async (req, res) => {
+	// check if email exist in database
 	const checkUser = await Users.find({ Email: req.body.email })
+	// if user with this email exist check if given password is correct
 	if (checkUser.length !== 0) {
 		const dbpw = checkUser[0]['Password']
 		const cmp = await bcrypt.compare(req.body.password, dbpw)
+		// when password is identical with the one in the database, create a session with user ID
 		if (cmp) {
 			req.session.user = { userID: checkUser[0]['_id'] }
-			userInfo = await Users.find({ _id: req.session.user.userID })
-			res.render('preference', { userinfo: userInfo })
+			const currentUser = await Users.find({ _id: req.session.user.userID })
+			res.render('preference', { userinfo: currentUser })
+		} else {
+			// show error message when password is wrong
+			res.render('inloggen', errorLogin(req))
 		}
 	} else {
 		res.render('login', {
@@ -188,6 +203,7 @@ app.post('/home', async (req, res) => {
 	}
 })
 	.post('/logout', (req, res) => {
+		// when user logs out destroy the session
 		req.session.destroy()
 		res.render('login', {
 			errorMessage: 'u bent succesvol uitgelogd!',
@@ -210,7 +226,6 @@ app.post('/home', async (req, res) => {
 	.post('/favorites:id', async (req, res) => {
 		const currentUser = await Users.findOne({ _id: req.session.user.userID })
 		const currentAlbum = await Albums.findOne({ _id: req.params.id })
-
 		const albumTitle = currentUser.Like.map(item => item.Title)
 
 		if (albumTitle.includes(currentAlbum.Title)) {
@@ -281,10 +296,7 @@ app.post('/home', async (req, res) => {
 				currentUser[0].Password
 			)
 			//hash new password
-			const hashedPwd =
-				req.body.newPassword === ''
-					? currentUser[0].Password
-					: await bcrypt.hash(req.body.newPassword, saltRounds)
+			const hashedPwd = await bcrypt.hash(req.body.newPassword, saltRounds)
 			var newPassword = { $set: { Password: hashedPwd } }
 
 			//if profile picture is empty keep current profile picture
@@ -324,7 +336,12 @@ app.post('/home', async (req, res) => {
 				(req.body.currentPassword !== '' && hashCheck === false) ||
 				(req.body.currentPassword == '' && req.body.newPassword !== '')
 			) {
-				return res.render('update', { data: currentUser[0], passError: true })
+				return res.render('update', { data: currentUser, passError: true })
+			} 
+			else if (
+				hashCheck === true && req.body.newPassword == ''
+				) {
+				return res.render('update', { data: currentUser, passError: true })
 			}
 
 			//update user
@@ -341,6 +358,7 @@ app.post('/home', async (req, res) => {
 
 	.post('/register', upload.single('Profilepic'), async (req, res) => {
 		Users.findOne({ Email: req.body.email }, async function (err, result) {
+
 			if (err) throw err
 			if (result) {
 				// doe hier iets om te melden dat het e-mailadres al in gebruik is
