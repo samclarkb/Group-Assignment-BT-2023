@@ -437,20 +437,16 @@ i {
 }
 
 .update figure {
-	width: 15em;
-	height: 15em;
-	clip-path: circle(40%);
-	padding: 0;
-	margin: 0;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+	width: 13em;
+	height: 13em;
 	margin-bottom: 1em;
+	clip-path: circle();
 }
 
 .update figure img {
-	max-height: 25em;
-	max-width: 25em;
+	height: 100%;
+	width: 100%;
+	object-fit: cover;
 }
 
 .update .passError {
@@ -662,7 +658,9 @@ iFrame {
 .header img {
 	border-radius: 50%;
 	width: 3em;
+	height: 3em;
 	margin-left: 0.9em;
+	object-fit: cover;
 }
 
 .header p {
