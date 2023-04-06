@@ -172,7 +172,7 @@ app.get('/', (req, res) => {
 
 const errorLogin = (req) => {
 	return {
-		errorMessage: 'Combinatie email en wachtwoord onjuist',
+		errorMessage: 'Email or password incorrect',
 		errorClass: 'errorLogin',
 		emailInput: req.body.email,
 		passwordInput: req.body.password
@@ -194,7 +194,7 @@ app.post('/home', async (req, res) => {
 			res.render('preference', { userinfo: currentUser })
 		} else {
 			// show error message when password is wrong
-			res.render('inloggen', errorLogin(req))
+			res.render('login', errorLogin(req))
 		}
 	} else {
 		// show error message when email is wrong
@@ -205,8 +205,8 @@ app.post('/home', async (req, res) => {
 		// when user logs out destroy the session
 		req.session.destroy()
 		// display success message in inlog page 
-		res.render('inloggen', {
-			errorMessage: 'u bent succesvol uitgelogd!',
+		res.render('login', {
+			errorMessage: 'You are logged out',
 			errorClass: 'successLogout',
 			emailInput: '',
 			passwordInput: '',
