@@ -8,12 +8,10 @@ body {
 	margin: 0;
 	padding: 0;
 }
-
 a {
 	color: black;
 	text-decoration: none;
 }
-
 body div,
 .unauthorized {
 	font-family: Arial, Helvetica, sans-serif;
@@ -25,16 +23,13 @@ body div,
 	margin: 0;
 	align-items: center;
 }
-
 .unauthorized {
 	height: 100vh !important;
 	justify-content: center;
 }
-
 section h1 {
 	color: white;
 }
-
 body div div {
 	position: relative;
 	width: 100%;
@@ -42,7 +37,6 @@ body div div {
 	justify-self: center;
 	align-items: center;
 }
-
 section {
 	position: absolute;
 	display: flex;
@@ -53,7 +47,6 @@ section {
 	height: 100%;
 	width: 100%;
 }
-
 section a,
 .noData a,
 .goBack a {
@@ -68,7 +61,6 @@ section a,
 	padding: 1em 0;
 	border-radius: 5em;
 }
-
 .navigation {
 	background-color: white;
 	border: 0.25 solid transparent;
@@ -82,13 +74,11 @@ section a,
 	width: 100%;
 	border-top: 0.1em solid rgba(0, 0, 0, 0.1);
 }
-
 .navigation li {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 }
-
 .navigation li a {
 	padding: 1em 0;
 	text-decoration: none;
@@ -99,12 +89,10 @@ section a,
 	color: black;
 	font-size: 0.75em;
 }
-
 .navigation li img {
 	width: 25%;
 	padding-bottom: 0.25em;
 }
-
 .albumCard {
 	width: 85%;
 	background-color: white;
@@ -114,12 +102,10 @@ section a,
 	text-decoration: none;
 	color: rgba(0, 0, 0, 0.75);
 }
-
 .albumCard h2,
 .albumCard p {
 	text-align: left;
 }
-
 .albumCard > div p:first-of-type {
 	margin-top: 0.5em;
 	margin-bottom: 0.5em;
@@ -128,13 +114,11 @@ section a,
 	opacity: 100;
 	margin-left: 1.5em;
 }
-
 .albumCard > p {
 	font-weight: thin;
 	opacity: 50%;
 	margin: 0 0 0 1.5em;
 }
-
 .albumImage {
 	border-top-left-radius: 1em;
 	border-top-right-radius: 1em;
@@ -143,7 +127,6 @@ section a,
 	background-position: center;
 	background-size: inherit;
 }
-
 .albumCard div:nth-of-type(2),
 .detailPage > div {
 	display: flex;
@@ -152,11 +135,9 @@ section a,
 	justify-content: space-between;
 	flex-direction: row;
 }
-
 .detailPage > div {
 	margin-top: 0.5em;
 }
-
 .detailPage > div h1 {
 	max-width: 70%;
 	text-align: left;
@@ -164,7 +145,6 @@ section a,
 	margin-left: 0.75em;
 	font-size: 1.5em;
 }
-
 .albumCard > div:nth-of-type(2) p:nth-of-type(2),
 .detailPage > div > p:last-of-type {
 	opacity: 50%;
@@ -173,22 +153,18 @@ section a,
 	font-size: 0.65em;
 	margin-right: 1em;
 }
-
 .detailPage > div > p:last-of-type {
 	font-size: 1em;
 }
-
 input[type='radio'],
 .deleteForm input[type='submit'] {
 	display: none;
 }
-
 input[type='file'] {
 	margin-bottom: 1em;
 	font-size: 0.75em;
 	bottom: 10%;
 }
-
 input[type='file'] + label {
 	border: 0.15em solid black;
 	padding: 4em 0;
@@ -197,14 +173,11 @@ input[type='file'] + label {
 	justify-content: center;
 	width: 75%;
 	border-radius: 1.5em;
-
 	background-color: white;
 }
-
 input[type='file'] + label img {
 	width: 2em;
 }
-
 fieldset {
 	margin-top: 1em;
 	display: flex;
@@ -217,11 +190,9 @@ fieldset {
 	width: 100%;
 	padding: 0;
 }
-
 fieldset:last-of-type {
 	flex-direction: column;
 }
-
 form {
 	width: 100%;
 	display: flex;
@@ -230,7 +201,6 @@ form {
 	justify-content: center;
 	height: 100%;
 }
-
 input[type='radio'] + label {
 	border: 0.15em solid black;
 	margin: 0.5em 0.75em;
@@ -240,24 +210,20 @@ input[type='radio'] + label {
 	padding: 0.5em;
 	border-radius: 5em;
 }
-
 fieldset:first-of-type input[type='radio'] + label {
 	margin: 0.5em 0.75em;
 	width: 27.5%;
 }
-
 input[type='radio']:checked + label {
 	border: 0.15em solid black;
 	background-color: rgba(0, 0, 0, 0.05);
 	color: black;
 	opacity: 100%;
 }
-
 legend {
 	margin-bottom: 0.5em;
 	width: 75%;
 }
-
 input[type='submit'],
 .unauthorized a {
 	border: solid 0.1em rgba(0, 0, 0, 0.1);
@@ -269,7 +235,6 @@ input[type='submit'],
 	background-color: white;
 	margin-top: 2em;
 }
-
 .noData {
 	height: 75vh;
 	display: flex;
@@ -278,11 +243,9 @@ input[type='submit'],
 	width: 65%;
 	text-align: center;
 }
-
 .goBack {
 	padding: 1em 0 5em 0;
 }
-
 .detailPage {
 	display: flex;
 	flex-direction: column;
@@ -291,13 +254,11 @@ input[type='submit'],
 	width: 100vw;
 	position: relative;
 }
-
 .detailPage img {
 	max-height: 300px;
 	object-fit: cover;
 	width: 100%;
 }
-
 .detailPage > p:first-of-type {
 	display: block;
 	text-align: left;
@@ -305,14 +266,12 @@ input[type='submit'],
 	margin: 0;
 	margin-top: 0.5em;
 }
-
 .detailPage > p:last-of-type {
 	padding-bottom: 1em;
 	width: 90%;
 	font-size: 0.9em;
 	opacity: 50%;
 }
-
 .detailPage > a {
 	border: none;
 	background-color: rgba(250, 250, 250, 1);
@@ -323,33 +282,26 @@ input[type='submit'],
 	padding: 1em;
 	padding-bottom: 5em;
 }
-
 .detailPage > a img {
 	width: 1.25em;
 	transform: translate(-0.25em, -0.25em);
 }
-
 .active {
 	opacity: 100%;
 }
-
 .inActive {
 	opacity: 25%;
 }
-
 legend h2 {
 	margin-bottom: 0;
 	text-align: center;
 }
-
 .favoriteForm input {
 	display: none;
 }
-
 .heart > form > input {
 	display: none;
 }
-
 .heart > form {
 	display: flex;
 	align-items: flex-end;
@@ -357,18 +309,15 @@ legend h2 {
 	transform: translatey(-1em);
 	height: inherit;
 }
-
 i {
 	font-size: 2em !important;
 	color: rgba(215, 1, 29, 1);
 	margin: 0;
 }
-
 .preference,
 .all {
 	padding-bottom: 5em;
 }
-
 .formText {
 	display: flex;
 	margin: 1em 0;
@@ -377,8 +326,6 @@ i {
 	align-items: center;
 	position: relative;
 }
-
-/* niels add: input type email and password */
 .formText > input[type='text'],
 .formText > input[type='email'],
 .formText > input[type='password'],
@@ -392,7 +339,6 @@ i {
 	text-align: center;
 	margin: 0;
 }
-
 .formText > textarea {
 	border: 0.1em solid black;
 	border-radius: 0.5em;
@@ -400,69 +346,53 @@ i {
 	margin-top: 0.25em;
 	text-align: left;
 }
-
 .formText > Label > h2 {
 	margin: 0.5em 0;
 }
-
 .addForm {
 	padding-bottom: 5em;
 }
-
-/* Niels */
 .update {
 	margin-bottom: 2em;
 }
-
 .update fieldset {
 	margin: 1em;
 	margin-bottom: 3em;
 }
-
 .update h3 {
 	font-size: 1.5em;
 	margin: 0;
 }
-
 .update h4 {
 	margin: 0;
 }
-
 .update input[type='password'] {
 	margin-bottom: 1em;
 }
-
 .update input[type='submit'] {
 	margin: 0;
 }
-
 .update figure {
 	width: 13em;
 	height: 13em;
 	margin-bottom: 1em;
 	clip-path: circle();
 }
-
 .update figure img {
 	height: 100%;
 	width: 100%;
 	object-fit: cover;
 }
-
 .update .passError {
 	color: red;
 	font-weight: 700;
 	margin: 0;
 }
-
-/* niels end */
-
 .search {
 	display: flex;
 	flex-direction: row;
 	margin: 0 0.25em 0.5em 0;
 }
-
 .search input[type='text'] {
 	padding: 0.6em 0.5em;
 	margin-left: 1em;
@@ -470,42 +400,34 @@ i {
 	border: 0.1em solid black;
 	border-radius: 0.5em;
 }
-
 .search button {
 	border: none;
 	background-color: transparent;
 }
-
 .search img {
 	width: 1.75em;
 	margin-left: -0.5em;
 }
-
 .clearSearch {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	transform: translateX(-150%);
 }
-
 .clearSearch img {
 	width: 1.15em;
 }
-
 .deleteModal {
 	text-align: center;
 	height: 100vh;
 }
-
 .deleteModal h2 {
 	width: 80%;
 	margin: 2.5em 0 0 0;
 }
-
 .deleteModal form {
 	height: 65%;
 }
-
 .deleteModal form > div {
 	width: 80%;
 	display: flex;
@@ -513,7 +435,6 @@ i {
 	justify-content: space-evenly;
 	flex-direction: row;
 }
-
 .deleteModal form a,
 .deleteModal form label {
 	padding: 0.5em 1.25em;
@@ -525,39 +446,30 @@ i {
 	background-color: white;
 	margin: 1em 0;
 }
-
 .deleteModal .albumCard > p {
 	margin: 0 0 1em 1.5em;
 }
-
 .all .albumCard {
 	margin-bottom: -2em;
 }
-
 .delete {
 	width: 2.25em;
 	transform: translate(250%, -55%);
 }
-
 div > h2 {
 	width: 100%;
 	text-align: center;
 	padding: 1em 0 0 0;
 	margin-top: 0;
 }
-
 .lazy-background.fallback {
 	background-image: url('../images/fallback.png') !important;
 }
-
-/* Supports */
-
 @supports (background-size: cover) {
 	.albumImage {
 		background-size: cover;
 	}
 }
-
 @supports (position: absolute) {
 	.detailPage > a {
 		position: absolute;
@@ -565,28 +477,22 @@ div > h2 {
 		top: 0;
 		padding-bottom: 1em;
 	}
-
 	.detailPage > p:last-of-type {
 		padding-bottom: 2em;
 	}
-
 	input[type='file'] {
 		position: absolute;
 		margin-bottom: 0;
 	}
 }
-
-/* Spotify Embed Styling */
 #titleImg {
 	max-height: 300px;
 	object-fit: cover;
 }
-
 #embed-frame {
 	width: 90%;
 	margin-bottom: 7.5em;
 }
-
 iFrame {
 	height: 500px;
 	border-radius: 0;
@@ -599,7 +505,6 @@ iFrame {
 	align-items: center;
 	position: relative;
 }
-
 .formLogin > label {
 	display: block;
 	font-size: 1.2em;
@@ -609,7 +514,6 @@ iFrame {
 	margin-inline-end: 0px;
 	font-weight: bold;
 }
-
 .formLogin > input[type='password'],
 .formLogin > input[type='email'],
 .formLogin > input[type='text'] {
@@ -622,21 +526,18 @@ iFrame {
 	text-align: center;
 	margin: 0;
 }
-
 .errorLogin {
 	color: red;
 	background-color: rgba(255, 0, 0, 0.108);
 	padding: 1em;
 	font-weight: bold;
 }
-
 .successLogout {
 	color: #008722;
 	background-color: #00872229;
 	padding: 1em;
 	font-weight: bold;
 }
-
 .header {
 	display: grid;
 	background-color: white;
@@ -650,11 +551,9 @@ iFrame {
 	left: 0;
 	z-index: 99;
 }
-
 .header div:first-child {
 	flex-direction: row;
 }
-
 .header img {
 	border-radius: 50%;
 	width: 3em;
@@ -662,20 +561,16 @@ iFrame {
 	margin-left: 0.9em;
 	object-fit: cover;
 }
-
 .header p {
 	margin-left: 0.6em;
 	width: max-content;
 }
-
 .header h2 {
 	grid-column: 2;
 }
-
 .header form {
 	grid-column: 3;
 }
-
 .header form input[value='logout'] {
 	background-color: transparent;
 	box-shadow: none;
@@ -685,16 +580,13 @@ iFrame {
 	margin-top: 0;
 	color: rgb(139, 0, 0);
 }
-
 .unauthorized img {
 	width: 9em;
 }
-
 #succesimg {
-	width:10em;
-	margin-top:50%;
+	width: 10em;
+	margin-top: 50%;
 }
 .logintext {
-text-decoration: underline
+	text-decoration: underline;
 }
-
