@@ -207,7 +207,7 @@ app.post('/home', async (req, res) => {
 	.post('/logout', (req, res) => {
 		// when user logs out destroy the session
 		req.session.destroy()
-		// display success message in inlog page
+		// display success message in log in page
 		res.render('login', {
 			errorMessage: 'You are logged out',
 			errorClass: 'successLogout',
