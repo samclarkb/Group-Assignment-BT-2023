@@ -181,8 +181,8 @@ app.post('/home', async (req, res) => {
 			res.render('preference', { userinfo: userInfo })
 		}
 	} else {
-		res.render('inloggen', {
-			errorMessage: 'Combinatie email en wachtwoord onjuist',
+		res.render('login', {
+			errorMessage: 'Email or password not correct',
 			errorClass: 'errorLogin',
 		})
 	}
@@ -340,14 +340,12 @@ app.post('/home', async (req, res) => {
 	})
 
 	.post('/register', upload.single('Profilepic'), async (req, res) => {
-		const checkUser = await Users.find({ Email: req.body.email })
 		Users.findOne({ Email: req.body.email }, async function (err, result) {
 			if (err) throw err
 			if (result) {
 				// doe hier iets om te melden dat het e-mailadres al in gebruik is
-				console.log('email komt al voor')
 				res.render('register', {
-					errorMessage: 'Email al in gebruik',
+					errorMessage: 'Email allready exists',
 					errorClass: 'errorLogin',
 				})
 			} else {
