@@ -161,13 +161,7 @@ app.get('/', (req, res) => {
 		})
 	})
 	.get('/registerSucces', async (req, res) => {
-		res.render(
-			'registerSucces',
-			setTimeout(() => {
-				// na een timeout van 5 sec doorsturen
-				window.location = '/'
-			}, 5000)
-		)
+		res.render('registerSucces')
 	})
 	.get('*', (req, res) => {
 		res.status(404).render('404')
@@ -176,7 +170,7 @@ app.get('/', (req, res) => {
 const errorlogin = req => {
 	return {
 		errorMessage: 'Email or password incorrect',
-		errorClass: 'errorlogin',
+		errorClass: 'errorLogin',
 		emailInput: req.body.email,
 		passwordInput: req.body.password,
 	}

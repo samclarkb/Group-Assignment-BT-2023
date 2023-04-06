@@ -9,6 +9,13 @@ const lazyBackgrounds = [].slice.call(document.querySelectorAll('.lazy-backgroun
 // Favorite form/button
 const form = document.querySelectorAll('.likeButton')
 
+// na een timeout van 5 sec doorsturen
+if (window.location.pathname === '/registerSucces') {
+	setTimeout(() => {
+		window.location = '/'
+	}, 5000)
+}
+
 // Using the intersection observer to implement lazy loading
 // Resource: https://web.dev/lazy-loading-images/
 document.addEventListener('DOMContentLoaded', () => {
