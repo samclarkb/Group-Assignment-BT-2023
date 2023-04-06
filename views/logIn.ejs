@@ -1,0 +1,9 @@
+<p class="<%" ="errorClass" %>> <%= errorMessage %></p>
+<form action="/home" method="post" class="formLogin">
+	<label for="email">email</label>
+	<input type="text" name="email" id="email" value="<%= emailInput %>" autofocus required />
+	<label for="password">password</label>
+	<input type="password" name="password" id="password" value="<%= passwordInput %>" required />
+	<input type="submit" value="login" />
+	<label>Not an account yet? <a href="register" class="logintext">Registreer now!</a></label>
+</form>
