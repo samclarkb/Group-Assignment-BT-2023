@@ -86,7 +86,7 @@ app.use(express.static(__dirname + '/public'))
 
 // All Get requests
 app.get('/', (req, res) => {
-	res.render('logIn', {
+	res.render('login', {
 		errorMessage: '',
 		errorClass: '',
 		emailInput: '',
@@ -173,10 +173,10 @@ app.get('/', (req, res) => {
 		res.status(404).render('404')
 	})
 
-const errorLogin = req => {
+const errorlogin = req => {
 	return {
 		errorMessage: 'Email or password incorrect',
-		errorClass: 'errorLogin',
+		errorClass: 'errorlogin',
 		emailInput: req.body.email,
 		passwordInput: req.body.password,
 	}
@@ -197,11 +197,11 @@ app.post('/home', async (req, res) => {
 			res.render('preference', { userinfo: currentUser })
 		} else {
 			// show error message when password is wrong
-			res.render('login', errorLogin(req))
+			res.render('login', errorlogin(req))
 		}
 	} else {
 		// show error message when email is wrong
-		res.render('logIn', errorLogin(req))
+		res.render('login', errorlogin(req))
 	}
 })
 	.post('/logout', (req, res) => {
@@ -365,7 +365,7 @@ app.post('/home', async (req, res) => {
 				// doe hier iets om te melden dat het e-mailadres al in gebruik is
 				res.render('register', {
 					errorMessage: 'Email allready exist',
-					errorClass: 'errorLogin',
+					errorClass: 'errorlogin',
 				})
 			} else {
 				// als de email niet in gebruik is, voor onderstaande commando uit
