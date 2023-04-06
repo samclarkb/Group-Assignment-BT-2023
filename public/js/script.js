@@ -71,3 +71,5 @@ if (window.location.href === 'http://localhost:4444/favorites') {
 	buttonThree.classList.add('inActive')
 	buttonFour.classList.add('inActive')
 }
+
+

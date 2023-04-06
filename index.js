@@ -160,7 +160,14 @@ app.get('/', (req, res) => {
 		res.render('register-failed')
 	})
 	.get('/register-succes', async (req, res) => {
-		res.render('register-succes')
+		res.render('register-succes',     setTimeout( () => {
+			// na een timeout van 5 sec doorsturen
+			res.redirect = "/";
+		}, 5000));
+		// setTimeout( () => {
+		// 	// na een timeout van 5 sec doorsturen
+		// 	res.redirect = "/";
+		// }, 5000)
 	})
 	.get('*', (req, res) => {
 		res.status(404).render('404')
