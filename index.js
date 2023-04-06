@@ -7,12 +7,16 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
 const session = require('express-session')
+const compression = require('compression');
 //Album en user model met hashpassword in db
 const { Albums, Users } = require('./models/models')
 const saltRounds = 10
 
 // Defining express as app
 const app = express()
+
+// Compress all HTTP responses
+app.use(compression());
 
 // creating a session
 app.use(
