@@ -82,7 +82,7 @@ app.use(express.static(__dirname + '/public'))
 
 // All Get requests
 app.get('/', (req, res) => {
-	res.render('inloggen', {
+	res.render('login', {
 		errorMessage: '',
 		errorClass: '',
 		emailInput: '',
@@ -159,15 +159,11 @@ app.get('/', (req, res) => {
 	.get('/register-failed', async (req, res) => {
 		res.render('register-failed')
 	})
-	.get('/register-succes', async (req, res) => {
-		res.render('register-succes',     setTimeout( () => {
+	.get('/registerSucces', async (req, res) => {
+		res.render('registerSucces',     setTimeout( () => {
 			// na een timeout van 5 sec doorsturen
 			res.redirect = "/";
 		}, 5000));
-		// setTimeout( () => {
-		// 	// na een timeout van 5 sec doorsturen
-		// 	res.redirect = "/";
-		// }, 5000)
 	})
 	.get('*', (req, res) => {
 		res.status(404).render('404')
@@ -193,7 +189,7 @@ app.post('/home', async (req, res) => {
 })
 	.post('/logout', (req, res) => {
 		req.session.destroy()
-		res.render('inloggen', {
+		res.render('login', {
 			errorMessage: 'u bent succesvol uitgelogd!',
 			errorClass: 'successLogout',
 			emailInput: '',
@@ -345,7 +341,6 @@ app.post('/home', async (req, res) => {
 
 	.post('/register', upload.single('Profilepic'), async (req, res) => {
 		const checkUser = await Users.find({ Email: req.body.email })
-		const uname = checkUser['Username']
 		Users.findOne({ Email: req.body.email }, async function (err, result) {
 			if (err) throw err
 			if (result) {
@@ -366,7 +361,7 @@ app.post('/home', async (req, res) => {
 						Profilepic: { data: req.file.filename, contentType: 'image/png' },
 					},
 				]).then(() => console.log('user saved'))
-				res.redirect('register-succes')
+				res.redirect('registerSucces')
 			}
 		})
 	})
