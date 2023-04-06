@@ -162,12 +162,7 @@ app.get('/', (req, res) => {
 	})
 	.get('/registerSucces', async (req, res) => {
 		res.render(
-			'registerSucces',
-			setTimeout(() => {
-				// na een timeout van 5 sec doorsturen
-				window.location = '/'
-			}, 5000)
-		)
+			'registerSucces')
 	})
 	.get('*', (req, res) => {
 		res.status(404).render('404')
