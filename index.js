@@ -156,9 +156,6 @@ app.get('/', (req, res) => {
 			errorClass: '',
 		})
 	})
-	.get('/register-failed', async (req, res) => {
-		res.render('register-failed')
-	})
 	.get('/registerSucces', async (req, res) => {
 		res.render('registerSucces',     setTimeout( () => {
 			// na een timeout van 5 sec doorsturen
