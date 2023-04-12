@@ -1,0 +1,27 @@
+
+<div class="all">
+	<% if(data.length > 0){ %>
+        <%- include('partials/header', {title: 'Latest', image: userinfo[0].Profilepic.data, username: userinfo[0].Username}) %>
+        <h3>Current Users</h3>
+	
+		<% } else{ %> <% } %> <% if(data.length > 0){ %> <% for(let i = 0; i < data.length; i++){ %>
+			<% if (data[i]._id != userinfo[0]._id) { %>
+				<div class="userCard">
+					<img src="/images/<%= data[i].Profilepic.data %>" alt="profilePic" />
+					<div>
+						<p><%= data[i].Username %></p>
+						<p><%= data[i].Email %></p>
+					</div>
+					<a class="deleteBtn" href="/deleteUser<%= data[i]._id %>">
+						<img class="delete" src="../images/delete.png" alt=""
+					/></a>
+				</div>
+				
+			</a>
+	<% }} %> <% } else{ %>
+        <%- include('partials/header', {title: 'Latest', image: userinfo[0].Profilepic.data, username: userinfo[0].Username}) %>
+	<div class="noData">
+		<p>There are no results that matches your search</p>
+		<a href="/all">Go Back</a>
+	</div>
+	<% } %> <%- include('partials/navigation') %>

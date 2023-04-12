@@ -2,13 +2,7 @@
 <div class="all">
 	<% if(data.length > 0){ %>
         <%- include('partials/header', {title: 'Latest', image: userinfo[0].Profilepic.data, username: userinfo[0].Username}) %>
-        <h3>Latest</h3>
-	<form action="/all" method="post" class="search">
-		<label for="search"></label>
-		<input type="text" id="search" name="search" placeholder="Search" /><a class="clearSearch" href="/all"><img src="../images/clear.png" alt=""
-            /></a></input>
-		<button type="submit"><img src="../images/search.png" alt="" /></button>
-	</form>
+        <h3>My Albums</h3>
 	
 	<% } else{ %> <% } %> <% if(data.length > 0){ %> <% for(let i = 0; i < data.length; i++){ %>
 	<a class="albumCard" id="albumcard" href="all<%= data[i]._id %>">
@@ -46,11 +40,9 @@
 				/>
 			</form>
 		</div>
-		<% if (data[i].ownerID == userinfo[0]._id || userinfo[0].devUser === true){ %>
 		<a class="deleteBtn" href="/deleteModal<%= data[i]._id %>">
 			<img class="delete" src="../images/delete.png" alt=""
 		/></a>
-		<% } %>
 	</a>
 	<% } %> <% } else{ %>
         <%- include('partials/header', {title: 'Latest', image: userinfo[0].Profilepic.data, username: userinfo[0].Username}) %>

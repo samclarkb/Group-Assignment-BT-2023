@@ -12,6 +12,7 @@ const albumSchema = new mongoose.Schema({
 	Description: String,
 	Like: Boolean,
 	SpotifyLink: String,
+	ownerID: String,
 })
 
 const userSchema = new mongoose.Schema({
@@ -23,6 +24,7 @@ const userSchema = new mongoose.Schema({
 		contentType: String,
 	},
 	Username: String,
+	devUser: Boolean,
 })
 
 const Albums = mongoose.model('Albums', albumSchema, 'Albums')

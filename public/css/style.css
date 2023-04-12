@@ -93,6 +93,36 @@ section a,
 	width: 25%;
 	padding-bottom: 0.25em;
 }
+.userCard {
+	width: 85%;
+	max-height: 70px;
+	background-color: white;
+	margin: 0.5em 0;
+	border: 0.1em solid rgba(242, 242, 242, 0.8);
+	border-radius: 1.5em;
+	text-decoration: none;
+	color: rgba(0, 0, 0, 0.75);
+	padding: 0.5em;
+	display: flex;
+	flex-direction: row;
+}
+.userCard p {
+	align-self: flex-start;
+	margin: 0.5em;
+}
+.userCard img {
+	width: 3em;
+	height: 3em;
+	border-radius: 50%;
+	object-fit: cover;
+}
+.userCard a {
+	justify-content: flex-end;
+	margin-bottom: 0;
+}
+.userCard a .delete {
+	transform: translate(0);
+}
 .albumCard {
 	width: 85%;
 	background-color: white;
@@ -118,6 +148,9 @@ section a,
 	font-weight: thin;
 	opacity: 50%;
 	margin: 0 0 0 1.5em;
+}
+.deleteBtn {
+	margin-bottom: -2.5em;
 }
 .albumImage {
 	border-top-left-radius: 1em;
@@ -450,11 +483,11 @@ i {
 	margin: 0 0 1em 1.5em;
 }
 .all .albumCard {
-	margin-bottom: -2em;
+	margin-bottom: 0;
 }
 .delete {
 	width: 2.25em;
-	transform: translate(250%, -55%);
+	transform: translate(250%, -140%);
 }
 div > h2 {
 	width: 100%;

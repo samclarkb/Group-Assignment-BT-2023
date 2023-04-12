@@ -3,6 +3,7 @@ const buttonOne = document.querySelector('#linkOne')
 const buttonTwo = document.querySelector('#linkTwo')
 const buttonThree = document.querySelector('#linkThree')
 const buttonFour = document.querySelector('#linkFour')
+const buttonFive = document.querySelector('#linkFive')
 // Fallback image of the albumcards
 const lazyBackgrounds = [].slice.call(document.querySelectorAll('.lazy-background'))
 
@@ -52,16 +53,25 @@ if (window.location.href === 'http://localhost:4444/favorites') {
 	buttonOne.classList.add('inActive')
 	buttonThree.classList.add('inActive')
 	buttonFour.classList.add('active')
+	buttonFive.classList.add('inActive')
 } else if (window.location.href === 'http://localhost:4444/all') {
 	buttonTwo.classList.add('inActive')
 	buttonThree.classList.add('active')
 	buttonOne.classList.add('inActive')
 	buttonFour.classList.add('inActive')
+	buttonFive.classList.add('inActive')
 } else if (window.location.href === 'http://localhost:4444/add') {
 	buttonTwo.classList.add('active')
 	buttonOne.classList.add('inActive')
 	buttonThree.classList.add('inActive')
 	buttonFour.classList.add('inActive')
+	buttonFive.classList.add('inActive')
+} else if (window.location.href === 'http://localhost:4444/userAlbums') {
+	buttonTwo.classList.add('inActive')
+	buttonOne.classList.add('inActive')
+	buttonThree.classList.add('inActive')
+	buttonFour.classList.add('inActive')
+	buttonFive.classList.add('active')
 } else if (
 	window.location.href === 'http://localhost:4444/preference' ||
 	window.location.href === 'http://localhost:4444/results' ||
@@ -71,11 +81,13 @@ if (window.location.href === 'http://localhost:4444/favorites') {
 	buttonThree.classList.add('inActive')
 	buttonOne.classList.add('active')
 	buttonFour.classList.add('inActive')
+	buttonFive.classList.add('inActive')
 } else {
 	buttonTwo.classList.add('inActive')
 	buttonOne.classList.add('inActive')
 	buttonThree.classList.add('inActive')
 	buttonFour.classList.add('inActive')
+	buttonFive.classList.add('inActive')
 }
 // aysync function handeling the like
 const likeHandler = async event => {

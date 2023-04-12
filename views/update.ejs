@@ -52,6 +52,11 @@
 			</fieldset>
 			<input type="submit" value="Save Changes" />
 		</form>
+		<% if (data[0].devUser === true) { %>
+		<a href="/usersDev">
+			<button>Users</button>
+		</a>
+		<% } else { } %>
 	</div>
 	<%- include('partials/navigation') %>
 </div>

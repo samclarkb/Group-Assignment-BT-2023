@@ -134,6 +134,11 @@ app.get('/', (req, res) => {
 		const fetchAlbum = await Albums.find({ _id: req.params.id })
 		res.render('deleteModal', { data: fetchAlbum, userinfo: currentUser })
 	})
+	.get('/deleteUser:id', authorizeUser, async (req, res) => {
+		const currentUser = await Users.find({ _id: req.session.user.userID })
+		const fetchUser = await Users.find({ _id: req.params.id })
+		res.render('deleteUser', { data: fetchUser, userinfo: currentUser })
+	})
 	.get('/add', authorizeUser, async (req, res) => {
 		const currentUser = await Users.find({ _id: req.session.user.userID })
 		res.render('add', { userinfo: currentUser })
@@ -145,10 +150,24 @@ app.get('/', (req, res) => {
 		const fetchAlbums = await Albums.find({}).sort({ _id: -1 })
 		res.render('all', { data: fetchAlbums, user: favoriteAlbumTitles, userinfo: currentUser })
 	})
+	.get('/userAlbums', authorizeUser, async (req, res) => {
+		const currentUser = await Users.find({ _id: req.session.user.userID })
+		const favoriteAlbumTitles = currentUser[0].Like.map(item => item.Title)
+
+		const fetchAlbums = await Albums.find({ownerID: req.session.user.userID}).sort({ _id: -1 })
+		res.render('userAlbums', { data: fetchAlbums, user: favoriteAlbumTitles, userinfo: currentUser })
+	})
+	.get('/usersDev', authorizeUser, async (req, res) => {
+		const currentUser = await Users.find({ _id: req.session.user.userID })
+		const fetchUsers = await Users.find({}).sort({ _id: -1 })
+
+		res.render('usersDev', { data: fetchUsers, userinfo: currentUser })
+	})
 	.get('/update', authorizeUser, async (req, res) => {
 		const fetchOneUser = await Users.find({ _id: req.session.user.userID })
 		const currentUser = await Users.find({ _id: fetchOneUser[0]._id })
 		res.render('update', { data: currentUser, passError: 'false' })
+		console.log(currentUser.devUser);
 	})
 	.get('/succesUpdate', authorizeUser, (req, res) => {
 		res.render('succesUpdate')
@@ -250,6 +269,7 @@ app.post('/home', async (req, res) => {
 				Description: req.body.Description,
 				Image: { data: req.file.filename, contentType: 'image/png' },
 				SpotifyLink: req.body.SpotifyLink,
+				ownerID: req.session.user.userID,
 			},
 		]).then(() => console.log('user saved'))
 
@@ -262,6 +282,13 @@ app.post('/home', async (req, res) => {
 		const deleteAlbum = await Albums.find({ _id: req.params.id }).remove()
 		const fetchAlbums = await Albums.find({}).sort({ _id: -1 })
 		res.render('all', { data: fetchAlbums, user: favoriteAlbumTitles, userinfo: currentUser })
+	})
+	.post('/delUser:id', async (req, res) => {
+		const currentUser = await Users.find({ _id: req.session.user.userID })
+
+		const deleteUserOne = await Users.find({ _id: req.params.id }).remove()
+		const fetchUsers= await Users.find({}).sort({ _id: -1 })
+		res.render('usersDev', { data: fetchUsers, userinfo: currentUser })
 	})
 	.post('/all', async (req, res) => {
 		const currentUser = await Users.find({ _id: req.session.user.userID })
